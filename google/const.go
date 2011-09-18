@@ -28,6 +28,24 @@ const (
     REL_WORK_MOBILE = "http://schemas.google.com/g/2005#work_mobile"
     REL_WORK_PAGER = "http://schemas.google.com/g/2005#work_pager"
     
+    REL_WHO_EVENT_ATTENDEE = "http://schemas.google.com/g/2005#event.attendee"
+    REL_WHO_EVENT_ORGANIZER = "http://schemas.google.com/g/2005#event.organizer"
+    REL_WHO_EVENT_PERFORMER = "http://schemas.google.com/g/2005#event.performer"
+    REL_WHO_EVENT_SPEAKER = "http://schemas.google.com/g/2005#event.speaker"
+    REL_WHO_MESSAGE_BCC = "http://schemas.google.com/g/2005#message.bcc"
+    REL_WHO_MESSAGE_CC = "http://schemas.google.com/g/2005#message.cc"
+    REL_WHO_MESSAGE_FROM = "http://schemas.google.com/g/2005#message.from"
+    REL_WHO_MESSAGE_REPLY_TO = "http://schemas.google.com/g/2005#message.reply-to"
+    REL_WHO_MESSAGE_TO = "http://schemas.google.com/g/2005#message.to"
+    
+    REL_ATTENDEE_TYPE_OPTIONAL = "http://schemas.google.com/g/2005#event.optional"
+    REL_ATTENDEE_TYPE_REQUIRED = "http://schemas.google.com/g/2005#event.required"
+    
+    REL_ATTENDEE_STATUS_EVENT_ACCEPTED = "http://schemas.google.com/g/2005#event.accepted"
+    REL_ATTENDEE_STATUS_EVENT_DECLINED = "http://schemas.google.com/g/2005#event.declined"
+    REL_ATTENDEE_STATUS_EVENT_INVITED = "http://schemas.google.com/g/2005#event.invited"
+    REL_ATTENDEE_STATUS_EVENT_TENTATIVE = "http://schemas.google.com/g/2005#event.tentative"
+    
     REL_EVENT_ANNIVERSARY = "anniversary"
     REL_EVENT_OTHER = "other"
     

@@ -11,6 +11,11 @@ type AtomText struct {
     Value           string  `json:"$t"`
 }
 
+type AtomName struct {
+    Value           string  `json:"$t"`
+    Yomi            string  `json:"yomi"`
+}
+
 type AtomId AtomText
 type AtomUpdated AtomText
 
@@ -39,6 +44,13 @@ type AtomContent struct {
 type AtomAuthor struct {
     Name            AtomText    `json:"name"`
     Email           AtomText    `json:""`
+}
+
+type AtomFeed struct {
+    Id              AtomText    `json:"id"`
+    Title           AtomText    `json:"title"`
+    Content         AtomContent `json:"content"`
+    Entries         []AtomEntry `json:"entry"`
 }
 
 type AtomGenerator struct {
@@ -113,12 +125,69 @@ type Contact struct {
     Websites        []Website          `json:"gContact$website"`
 }
 
+type AdditionalName AtomName
+
+type Comments struct {
+    Rel             string              `json:"rel"`
+    FeedLink        FeedLink            `json:"gd$feedLink"`
+}
+
+type Country struct {
+    Value           string              `json:"$t"`
+    Code            string              `json:"code"`
+}
+
 type DeletedMarker struct {}
 
+type Email struct {
+    Address         string              `json:"address"`
+    DisplayName     string              `json:"displayName"`
+    Label           string              `json:"label"`
+    Rel             string              `json:"rel"`
+    Primary         string              `json:"primary"`
+}
+
+type EntryLink struct {
+    Href            string              `json:"href"`
+    ReadOnly        string              `json:"readOnly"`
+    Rel             string              `json:"rel"`
+    Entry           AtomEntry           `json:"entry"`
+}
+
+type ExtendedProperty struct {
+    Name            string              `json:"name"`
+    Description     AtomText            `json:"description"`
+}
+
+type FamilyName AtomName
+
+type FeedLink struct {
+    CountHint       string              `json:"countHint"`
+    Href            string              `json:"href"`
+    ReadOnly        string              `json:"readOnly"`
+    Rel             string              `json:"rel"`
+    AtomFeed        AtomFeed            `json:"feed"`
+}
+
+type GivenName AtomName
+
+type Im struct {
+    Address         string              `json:"address"`
+    Label           string              `json:"label"`
+    Rel             string              `json:"rel"`
+    Protocol        string              `json:"protocol"`
+    Primary         string              `json:"primary"`
+}
+
+type Money struct {
+    Amount          float64             `json:"amount"`
+    CurrencyCode    string              `json:"currencyCode"`
+}
+
 type Name struct {
-    GivenName       AtomText            `json:"gd$givenName"`
-    AdditionalName  AtomText            `json:"gd$additionalName"`
-    FamilyName      AtomText            `json:"gd$familyName"`
+    GivenName       GivenName           `json:"gd$givenName"`
+    AdditionalName  AdditionalName      `json:"gd$additionalName"`
+    FamilyName      FamilyName          `json:"gd$familyName"`
     NamePrefix      AtomText            `json:"gd$namePrefix"`
     NameSuffix      AtomText            `json:"gd$nameSuffix"`
     FullName        AtomText            `json:"gd$fullName"`
@@ -142,20 +211,10 @@ type OrgName AtomText
 type OrgSymbol AtomText
 type OrgTitle AtomText
 
-type Email struct {
-    Address         string              `json:"address"`
-    DisplayName     string              `json:"displayName"`
-    Label           string              `json:"label"`
-    Rel             string              `json:"rel"`
-    Primary         string              `json:"primary"`
-}
-
-type Im struct {
-    Address         string              `json:"address"`
-    Label           string              `json:"label"`
-    Rel             string              `json:"rel"`
-    Protocol        string              `json:"protocol"`
-    Primary         string              `json:"primary"`
+type OriginalEvent struct {
+    Id              string              `json:"id"`
+    Href            string              `json:"href"`
+    When            When                `json:"gd$when"`
 }
 
 type PhoneNumber struct {
@@ -172,6 +231,33 @@ type PostalAddress struct {
     Rel             string              `json:"rel"`
     Primary         string              `json:"primary"`
 }
+
+type Rating struct {
+    Average         float64             `json:"average"`
+    Max             int                 `json:"max"`
+    Min             int                 `json:"min"`
+    NumRaters       int                 `json:"numRaters"`
+    Rel             string              `json:"rel"`
+    Value           int                 `json:"value"`
+}
+
+type Recurrence AtomText
+
+type RecurrenceException struct {
+    Specialized     string              `json:"specialized"`
+    EntryLink       EntryLink           `json:"gd$entryLink"`
+    OriginalEvent   OriginalEvent       `json:"gd$originalEvent"`
+}
+
+type Reminder struct {
+    AbsoluteTime    string              `json:"absoluteTime"`
+    Method          string              `json:"method"`
+    Days            string              `json:"days"`
+    Hours           string              `json:"hours"`
+    Minutes         string              `json:"minutes"`
+}
+
+type ResourceId AtomText
 
 type StructuredPostalAddress struct {
     Rel             string              `json:"rel"`
@@ -192,6 +278,28 @@ type StructuredPostalAddress struct {
     FormattedAddress    FormattedAddress    `json:"gd$formattedAddress"`
 }
 
+type When struct {
+    EndTime         string              `json:"endTime"`
+    StartTime       string              `json:"startTime"`
+    ValueString     string              `json:"valueString"`
+    Reminders       []*Reminder         `json:"gd$reminder"`
+}
+
+type Where struct {
+    Label           string              `json:"label"`
+    Rel             string              `json:"rel"`
+    ValueString     string              `json:"valueString"`
+    EntryLink       EntryLink           `json:"gd$entryLink"`
+}
+
+type Who struct {
+    Email           string              `json:"email"`
+    Rel             string              `json:"rel"`
+    ValueString     string              `json:"valueString"`
+    AttendeeStatus  AtomText            `json:"gd$attendeeStatus"`
+    AttendeeType    AtomText            `json:"gd$attendeeType"`
+    EntryLink       EntryLink           `json:"gd$entryLink"`
+}
 type Agent AtomText
 type HouseName AtomText
 type Street AtomText
@@ -202,57 +310,6 @@ type Subregion AtomText
 type Region AtomText
 type Postcode AtomText
 type FormattedAddress AtomText
-
-type Country struct {
-    Value           string              `json:"$t"`
-    Code            string              `json:"code"`
-}
-
-type Where struct {
-    Label           string              `json:"label"`
-    Rel             string              `json:"rel"`
-    ValueString     string              `json:"valueString"`
-    EntryLink       EntryLink           `json:"gd$entryLink"`
-}
-
-type When struct {
-    EndTime         string              `json:"endTime"`
-    StartTime       string              `json:"startTime"`
-    ValueString     string              `json:"valueString"`
-}
-
-type GroupMembershipInfo struct {
-    Href            string              `json:"href"`
-    Deleted         string              `json:"deleted"`
-}
-
-type Money struct {
-    Amount          float64             `json:"amount"`
-    CurrencyCode    string              `json:"currencyCode"`
-}
-
-type EntryLink struct {
-    Href            string              `json:"href"`
-    ReadOnly        string              `json:"readOnly"`
-    Rel             string              `json:"rel"`
-    Entry           AtomEntry           `json:"entry"`
-}
-
-type Rating struct {
-    Average         float64             `json:"average"`
-    Max             int                 `json:"max"`
-    Min             int                 `json:"min"`
-    NumRaters       int                 `json:"numRaters"`
-    Rel             string              `json:"rel"`
-    Value           int                 `json:"value"`
-}
-
-type ResourceId AtomText
-
-type ExtendedProperty struct {
-    Name            string              `json:"name"`
-    Description     AtomText            `json:"description"`
-}
 
 type ContactGroup struct {
     Category        AtomCategory        `json:"category"`
@@ -293,6 +350,11 @@ type ExternalId struct {
 
 type Gender struct {
     Value           string              `json:"value"`
+}
+
+type GroupMembershipInfo struct {
+    Href            string              `json:"href"`
+    Deleted         string              `json:"deleted"`
 }
 
 type Hobby AtomText
