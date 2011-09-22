@@ -12,9 +12,9 @@ type ContactsResponse struct {
 }
 
 type ContactsList struct {
-    Start           int                 `json:"start"`
-    Count           int                 `json:"count"`
-    Total           int                 `json:"total"`
+    Start           int64               `json:"start"`
+    Count           int64               `json:"count"`
+    Total           int64               `json:"total"`
     Uri             string              `json:"uri"`
     Contacts        []Contact           `json:"contact"`
 }
