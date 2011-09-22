@@ -312,10 +312,13 @@ type Postcode AtomText
 type FormattedAddress AtomText
 
 type ContactGroup struct {
-    Category        AtomCategory        `json:"category"`
-    Updated         AtomText            `json:"updated"`
+    Etag            string              `json:"gd$etag"`
+    Id              AtomId              `json:"id"`
+    Updated         AtomUpdated         `json:"updated"`
+    Category        []AtomCategory      `json:"category"`
     Title           AtomText            `json:"title"`
     Content         AtomContent         `json:"content"`
+    Links           []AtomLink          `json:"link"`
     Deleted         *DeletedMarker      `json:"gd$deleted"`
     ExtendedProperties  []ExtendedProperty `json:"gd$extendedProperty"`
     SystemGroup     SystemGroup         `json:"gContact$systemGroup"`
@@ -406,3 +409,31 @@ type Website struct {
     Primary         string              `json:"primary"`
     Rel             string              `json:"rel"`
 }
+
+type GroupsFeedResponse struct {
+    Version         string              `json:"version"`
+    Encoding        string              `json:"encoding"`
+    Feed            *GroupsFeed         `json:"feed"`
+}
+
+type GroupsFeed struct {
+    Id              AtomId              `json:"id"`
+    Updated         AtomUpdated         `json:"updated"`
+    Category        []AtomCategory      `json:"category"`
+    Title           AtomTitle           `json:"title"`
+    Link            []AtomLink          `json:"link"`
+    Author          AtomAuthor          `json:"author"`
+    Generator       AtomGenerator       `json:"generator"`
+    TotalResults    AtomText            `json:"openSearch$totalResults"`
+    StartIndex      AtomText            `json:"openSearch$startIndex"`
+    ItemsPerPage    AtomText            `json:"openSearch$itemsPerPage"`
+    Entries         []ContactGroup      `json:"entry"`
+}
+
+type GroupResponse struct {
+    Version         string              `json:"version"`
+    Encoding        string              `json:"encoding"`
+    Entry           *ContactGroup       `json:"entry"`
+}
+
+
