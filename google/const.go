@@ -115,4 +115,28 @@ const (
     SYSTEM_GROUP_COWORKERS = "Coworkers"
     
     GOOGLE_DATETIME_FORMAT = "2006-01-02T15:04:05.000Z"
+    GOOGLE_DEFAULT_USER_ID = "default"
+    GOOGLE_DEFAULT_PROJECTION = "full"
+    
+    GOOGLE_FEEDS_API_ENDPOINT = "https://www.google.com/m8/feeds/"
+    
+    GOOGLE_CONTACTS_SCOPE = "contacts"
+    GOOGLE_GROUPS_SCOPE = "groups"
+    GOOGLE_PHOTOS_SCOPE = "photos/media"
+    
+    GOOGLE_CONTACTS_API_ENDPOINT = "https://www.google.com/m8/feeds/contacts/"
+    GOOGLE_GROUPS_API_ENDPOINT = "https://www.google.com/m8/feeds/groups/"
+    GOOGLE_PHOTOS_API_ENDPOINT = "https://www.google.com/m8/feeds/photos/"
+    
+    CONTACTS_ALT_PARAM = "alt"
+    CONTACTS_QUERY_PARAM = "q"
+    CONTACTS_MAX_RESULTS_PARAM = "max-results"
+    CONTACTS_START_INDEX_PARAM = "start-index"
+    CONTACTS_UPDATED_MIN_PARAM = "updated-min"
+    
+    CONTACTS_ORDERBY_PARAM = "orderby"
+    CONTACTS_SHOWDELETED_PARAM = "showdeleted"
+    CONTACTS_REQUIREALLDELETED_PARAM = "requirealldeleted"
+    CONTACTS_SORTORDER_PARAM = "sortorder"
+    CONTACTS_GROUP_PARAM = "group"
 )
