@@ -3,6 +3,7 @@ include $(GOROOT)/src/Make.inc
 TARG=github.com/pomack/contacts.go/linkedin
 GOFILES=\
     const.go\
+    service.go\
     structs.go\
 
 

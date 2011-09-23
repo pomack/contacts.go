@@ -163,4 +163,15 @@ type TwitterAccount struct {
     ProviderAccountName string          `json:"providerAccountName"`
 }
 
+type ContactList struct {
+    Total               int             `json:"_total"`
+    Values              []Contact       `json:"contact"`
+}
 
+type ErrorResponse struct {
+    ErrorCode           int             `json:"errorCode"`
+    Message             string          `json:"message"`
+    RequestId           string          `json:"requestId"`
+    Status              int             `json:"status"`
+    Timestamp           int64           `json:"timestamp"`
+}
