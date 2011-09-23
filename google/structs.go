@@ -422,7 +422,7 @@ type GroupsFeed struct {
     Category        []AtomCategory      `json:"category"`
     Title           AtomTitle           `json:"title"`
     Link            []AtomLink          `json:"link"`
-    Author          AtomAuthor          `json:"author"`
+    Author          []AtomAuthor        `json:"author"`
     Generator       AtomGenerator       `json:"generator"`
     TotalResults    AtomText            `json:"openSearch$totalResults"`
     StartIndex      AtomText            `json:"openSearch$startIndex"`
