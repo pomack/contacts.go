@@ -323,5 +323,12 @@ type TelevisionResponse struct {
 type TVShow StandardMedia
 
 
+type ErrorResponse struct {
+    Error               Error               `json:"error"`
+}
 
+type Error struct {
+    Message             string              `json:"message"`
+    Type                string              `json:"type"`
+}
 

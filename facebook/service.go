@@ -2,18 +2,32 @@ package facebook
 
 import (
     "github.com/pomack/oauth2_client"
+    "io/ioutil"
     "json"
     "os"
-    "strings"
 )
 
 func retrieveInfo(client oauth2_client.OAuth2Client, id, scope string, value interface{}) (err os.Error) {
-    resp, _, err := oauth2_client.AuthorizedGetRequest(client, nil, strings.Join([]string{FACEBOOK_GRAPH_API_ENDPOINT, id, scope}, "/"), nil)
+    uri := FACEBOOK_GRAPH_API_ENDPOINT
+    for _, s := range []string{id, scope} {
+        if len(s) > 0 {
+            if uri[len(uri) - 1] != '/' {
+                uri += "/"
+            }
+            uri += s
+        }
+    }
+    resp, _, err := oauth2_client.AuthorizedGetRequest(client, nil, uri, nil)
     if err != nil {
         return err
     }
     if resp != nil {
-        err = json.NewDecoder(resp.Body).Decode(value)
+        if resp.StatusCode >= 400 {
+            b, _ := ioutil.ReadAll(resp.Body)
+            err = os.NewError(string(b))
+        } else {
+            err = json.NewDecoder(resp.Body).Decode(value)
+        }
     }
     return err
 }
