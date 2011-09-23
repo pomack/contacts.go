@@ -28,7 +28,15 @@ func retrieveInfo(client oauth2_client.OAuth2Client, scope, userId, projection, 
     if len(m.Get(CONTACTS_ALT_PARAM)) <= 0 {
         m.Set(CONTACTS_ALT_PARAM, "json")
     }
-    uri := GOOGLE_FEEDS_API_ENDPOINT + strings.Replace(strings.Join([]string{scope, useUserId, projection, id}, "/"), "//", "/", -1)
+    uri := GOOGLE_FEEDS_API_ENDPOINT
+    for _, s := range []string{scope, useUserId, projection, id} {
+        if len(s) > 0 {
+            if uri[len(uri) - 1] != "/" {
+                uri += "/"
+            }
+            uri += s
+        }
+    }
     resp, _, err := oauth2_client.AuthorizedGetRequest(client, headers, uri, m)
     if err != nil {
         return err
