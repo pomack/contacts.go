@@ -364,3 +364,35 @@ type Choice struct {
     UrlTemplate         string              `json:"urltemplate"`
 }
 
+type ConnectionsResponse struct {
+    Connections         ConnectionList      `json:"connections"`
+}
+
+type ConnectionList struct {
+    Start               int64               `json:"start"`
+    Count               int64               `json:"count"`
+    Total               int64               `json:"total"`
+    Connection          []Connection        `json:"connection"`
+}
+
+type ConnectionResponse struct {
+    Connection          Connection          `json:"connection"`
+}
+
+type Connection struct {
+    ContactId           int64               `json:"contactid"`
+    Guid                string              `json:"guid"`
+    Uri                 string              `json:"uri"`
+    Created             string              `json:"created"`
+    Updated             string              `json:"updated"`
+}
+
+type ErrorResponse struct {
+    Error               Error               `json:"error"`
+}
+
+type Error struct {
+    Uri                 string              `json:"uri"`
+    Lang                string              `json:"lang"`
+    Description         string              `json:"description"`
+}

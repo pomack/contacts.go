@@ -3,6 +3,7 @@ package yahoo
 import (
     "github.com/pomack/oauth2_client"
     "http"
+    "io/ioutil"
     "json"
     "os"
     "strconv"
@@ -59,7 +60,18 @@ func retrieveInfo(client oauth2_client.OAuth2Client, scope, userId, resourceName
         return err
     }
     if resp != nil {
-        err = json.NewDecoder(resp.Body).Decode(value)
+        if resp.StatusCode >= 400 {
+            var e ErrorResponse
+            b, _ := ioutil.ReadAll(resp.Body)
+            json.Unmarshal(b, &e)
+            if len(e.Error.Description) > 0 {
+                err = os.NewError(e.Error.Description)
+            } else {
+                err = os.NewError(string(b))
+            }
+        } else {
+            err = json.NewDecoder(resp.Body).Decode(value)
+        }
     }
     return err
 }
@@ -164,6 +176,34 @@ func RetrieveNotificationsForUser(client oauth2_client.OAuth2Client, userId stri
 func RetrieveNotification(client oauth2_client.OAuth2Client, id string, m url.Values) (*NotificationResponse, os.Error) {
     resp := new(NotificationResponse)
     err := retrieveInfo(client, "notification", id, "", "", "", "", m, resp)
+    return resp, err
+}
+
+func RetrieveConnections(client oauth2_client.OAuth2Client, m url.Values) (*ConnectionsResponse, os.Error) {
+    guid, err := getGuid(client)
+    if err != nil {
+        return nil, err
+    }
+    return RetrieveConnectionsForUser(client, guid, m)
+}
+
+func RetrieveConnectionsForUser(client oauth2_client.OAuth2Client, userId string, m url.Values) (*ConnectionsResponse, os.Error) {
+    resp := new(ConnectionsResponse)
+    err := retrieveInfo(client, "user", userId, "connections", "", "", "", m, resp)
+    return resp, err
+}
+
+func RetrieveConnection(client oauth2_client.OAuth2Client, connectionId string, m url.Values) (*ConnectionResponse, os.Error) {
+    guid, err := getGuid(client)
+    if err != nil {
+        return nil, err
+    }
+    return RetrieveConnectionForUser(client, guid, connectionId, m)
+}
+
+func RetrieveConnectionForUser(client oauth2_client.OAuth2Client, userId, connectionId string, m url.Values) (*ConnectionResponse, os.Error) {
+    resp := new(ConnectionResponse)
+    err := retrieveInfo(client, "user", userId, "connection", connectionId, "", "", m, resp)
     return resp, err
 }
 
