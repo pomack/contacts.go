@@ -23,8 +23,13 @@ func retrieveInfo(client oauth2_client.OAuth2Client, id, scope string, value int
     }
     if resp != nil {
         if resp.StatusCode >= 400 {
+            e := new(ErrorResponse)
             b, _ := ioutil.ReadAll(resp.Body)
-            err = os.NewError(string(b))
+            if err = json.Unmarshal(b, e); err != nil {
+                err = os.NewError(string(b))
+            } else {
+                err = e
+            }
         } else {
             err = json.NewDecoder(resp.Body).Decode(value)
         }

@@ -326,9 +326,11 @@ type TVShow StandardMedia
 type ErrorResponse struct {
     Error               Error               `json:"error"`
 }
+func (p *ErrorResponse) String() string { return p.Error.Message }
 
 type Error struct {
     Message             string              `json:"message"`
     Type                string              `json:"type"`
 }
+func (p *Error) String() string { return p.Message }
 
