@@ -390,9 +390,11 @@ type Connection struct {
 type ErrorResponse struct {
     Error               Error               `json:"error"`
 }
+func (p *ErrorResponse) String() string { return p.Error.Description }
 
 type Error struct {
     Uri                 string              `json:"uri"`
     Lang                string              `json:"lang"`
     Description         string              `json:"description"`
 }
+func (p *Error) String() string { return p.Description }

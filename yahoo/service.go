@@ -61,11 +61,11 @@ func retrieveInfo(client oauth2_client.OAuth2Client, scope, userId, resourceName
     }
     if resp != nil {
         if resp.StatusCode >= 400 {
-            var e ErrorResponse
+            e := new(ErrorResponse)
             b, _ := ioutil.ReadAll(resp.Body)
-            json.Unmarshal(b, &e)
+            json.Unmarshal(b, e)
             if len(e.Error.Description) > 0 {
-                err = os.NewError(e.Error.Description)
+                err = e
             } else {
                 err = os.NewError(string(b))
             }
