@@ -44,14 +44,8 @@ func retrieveInfo(client oauth2_client.OAuth2Client, scope, userId, projection, 
     }
     if resp != nil {
         if resp.StatusCode >= 400 {
-            var e ErrorResponse
             b, _ := ioutil.ReadAll(resp.Body)
-            json.Unmarshal(b, &e)
-            if len(e.Error.Description) > 0 {
-                err = os.NewError(e.Error.Message)
-            } else {
-                err = os.NewError(string(b))
-            }
+            err = os.NewError(string(b))
         } else {
             err = json.NewDecoder(resp.Body).Decode(value)
         }
