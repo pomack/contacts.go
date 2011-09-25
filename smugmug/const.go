@@ -1,5 +1,5 @@
 package smugmug
 
 const (
-	SMUGMUG_API_ENDPOINT = "https://secure.smugmug.com/services/api/json/1.3.0/"
+    SMUGMUG_API_ENDPOINT = "https://secure.smugmug.com/services/api/json/1.3.0/"
 )
