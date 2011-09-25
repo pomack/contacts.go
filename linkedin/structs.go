@@ -175,3 +175,6 @@ type ErrorResponse struct {
     Status              int             `json:"status"`
     Timestamp           int64           `json:"timestamp"`
 }
+func (p *ErrorResponse) String() string {
+    return p.Message
+}
