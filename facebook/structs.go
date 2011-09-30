@@ -7,7 +7,7 @@ type Contact struct {
     MiddleName          string             `json:"middle_name"`
     LastName            string             `json:"last_name"`
     Link                string             `json:"link"`
-    Username            string             `json:"pomack"`
+    Username            string             `json:"username"`
     Hometown            Location           `json:"hometown"`
     Location            Location           `json:"location"`
     Bio                 string             `json:"bio"`
