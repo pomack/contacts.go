@@ -269,7 +269,7 @@ type StructuredPostalAddress struct {
     HouseName        HouseName        `json:"gd$housename"`
     Street           Street           `json:"gd$street"`
     POBox            POBox            `json:"gd$pobox"`
-    Neighborhoood    Neighborhood     `json:"gd$neighborhood"`
+    Neighborhood     Neighborhood     `json:"gd$neighborhood"`
     City             City             `json:"gd$city"`
     Subregion        Subregion        `json:"gd$subregion"`
     Region           Region           `json:"gd$region"`
