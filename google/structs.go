@@ -114,7 +114,7 @@ type Contact struct {
     Languages                 []Language                `json:"gContact$language"`
     MaidenName                MaidenName                `json:"gContact$maidenName"`
     Mileage                   Mileage                   `json:"gContact$mileage"`
-    Nicnkame                  Nickname                  `json:"gContact$nickname"`
+    Nickname                  Nickname                  `json:"gContact$nickname"`
     Occupation                Occupation                `json:"gContact$occupation"`
     Priority                  Priority                  `json:"gContact$priority"`
     Relationships             []Relation                `json:"gContact$relation"`
