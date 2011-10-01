@@ -1,119 +1,119 @@
 package smugmug
 
 type GetFamilyResponse struct {
-    Stat   string            `json:"stat"`
-    Method string            `json:"method"`
-    Family []PersonReference `json:"Family"`
+    Stat   string            `json:"stat,omitempty"`
+    Method string            `json:"method,omitempty"`
+    Family []PersonReference `json:"Family,omitempty"`
 }
 
 type GetUserInfoResponse struct {
-    Stat   string          `json:"stat"`
-    Method string          `json:"method"`
-    User   PersonReference `json:"User"`
+    Stat   string          `json:"stat,omitempty"`
+    Method string          `json:"method,omitempty"`
+    User   PersonReference `json:"User,omitempty"`
 }
 
 type PersonReference struct {
-    Name     string `json:"Name"`
-    NickName string `json:"NickName"`
-    Url      string `json:"URL"`
+    Name     string `json:"Name,omitempty"`
+    NickName string `json:"NickName,omitempty"`
+    Url      string `json:"URL,omitempty"`
 }
 
 type GetFansResponse struct {
-    Stat   string            `json:"stat"`
-    Method string            `json:"method"`
-    Fans   []PersonReference `json:"Fans"`
+    Stat   string            `json:"stat,omitempty"`
+    Method string            `json:"method,omitempty"`
+    Fans   []PersonReference `json:"Fans,omitempty"`
 }
 
 type GetFriendsResponse struct {
-    Stat    string            `json:"stat"`
-    Method  string            `json:"method"`
-    Friends []PersonReference `json:"Friends"`
+    Stat    string            `json:"stat,omitempty"`
+    Method  string            `json:"method,omitempty"`
+    Friends []PersonReference `json:"Friends,omitempty"`
 }
 
 type GetFeaturedAlbumsResponse struct {
-    Stat     string         `json:"stat"`
-    Method   string         `json:"method"`
-    Featured FeaturedAlbums `json:"Featured"`
+    Stat     string         `json:"stat,omitempty"`
+    Method   string         `json:"method,omitempty"`
+    Featured FeaturedAlbums `json:"Featured,omitempty"`
 }
 
 type FeaturedAlbums struct {
-    Albums []AlbumReference `json:"Albums"`
+    Albums []AlbumReference `json:"Albums,omitempty"`
 }
 
 type AlbumReference struct {
-    Id  int64  `json:"id"`
-    Key string `json:"Key"`
+    Id  int64  `json:"id,omitempty"`
+    Key string `json:"Key,omitempty"`
 }
 
 type ImagesResponse struct {
-    Stat   string `json:"stat"`
-    Method string `json:"method"`
-    Album  Album  `json:"Album"`
+    Stat   string `json:"stat,omitempty"`
+    Method string `json:"method,omitempty"`
+    Album  Album  `json:"Album,omitempty"`
 }
 
 type Album struct {
-    Id                int64             `json:"id"`
-    Key               string            `json:"Key"`
-    Backprinting      *string           `json:"Backprinting"`
-    BoutiquePackaging *int64            `json:"BoutiquePackaging"`
-    CanRank           *bool             `json:"CanRank"`
-    Category          *Category         `json:"Category"`
-    Clean             *bool             `json:"Clean"`
-    ColorCorrection   *int64            `json:"ColorCorrection"`
-    Comments          *bool             `json:"Comments"`
-    Community         *Community        `json:"Community"`
-    Description       *string           `json:"Description"`
-    Exif              *bool             `json:"EXIF"`
-    External          *bool             `json:"External"`
-    FamilyEdit        *bool             `json:"FamilyEdit"`
-    Filenames         *bool             `json:"Filenames"`
-    FriendEdit        *bool             `json:"FriendEdit"`
-    Geography         *bool             `json:"Geography"`
-    Header            *bool             `json:"Header"`
-    HideOwner         *bool             `json:"HideOwner"`
-    Highlight         *Highlight        `json:"Highlight"`
-    ImageCount        *int64            `json:"ImageCount"`
-    InterceptShipping *int64            `json:"InterceptShipping"`
-    Keywords          *string           `json:"Keywords"`
-    Larges            *bool             `json:"Larges"`
-    LastUpdated       *string           `json:"LastUpdated"`
-    NiceName          *string           `json:"NiceName"`
-    Originals         *bool             `json:"Originals"`
-    PackagingBranding *bool             `json:"PackagingBranding"`
-    Password          *string           `json:"Password"`
-    PasswordHint      *string           `json:"PasswordHint"`
-    Passworded        *bool             `json:"Passworded"`
-    Position          *int              `json:"Position"`
-    Printable         *bool             `json:"Printable"`
-    Printmark         *Printmark        `json:"Printmark"`
-    ProofDays         *int64            `json:"ProofDays"`
-    Protected         *bool             `json:"Protected"`
-    Public            *bool             `json:"Public"`
-    Share             *bool             `json:"Share"`
-    SmugSearchable    *bool             `json:"SmugSearchable"`
-    SortDirection     *bool             `json:"SortDirection"`
-    SortMethod        *string           `json:"SortMethod"`
-    SquareThumbs      *bool             `json:"SquareThumbs"`
-    SubCategory       *SubCategory      `json:"SubCategory"`
-    Template          *Template         `json:"Template"`
-    Theme             *Theme            `json:"Theme"`
-    Title             *string           `json:"Title"`
-    Url               *string           `json:"URL"`
-    UnsharpAmount     *float64          `json:"UnsharpAmount"`
-    UnsharpRadius     *float64          `json:"UnsharpRadius"`
-    UnsharpSigma      *float64          `json:"UnsharpSigma"`
-    UnsharpThreshold  *float64          `json:"UnsharpThreshold"`
-    Watermark         *Watermark        `json:"Watermark"`
-    WorldSearchable   *bool             `json:"WorldSearchable"`
-    X2Larges          *bool             `json:"X2Larges"`
-    X3Larges          *bool             `json:"X3Larges"`
-    XLarges           *bool             `json:"XLarges"`
-    Images            *[]ImageReference `json:"Images"`
+    Id                int64             `json:"id,omitempty"`
+    Key               string            `json:"Key,omitempty"`
+    Backprinting      *string           `json:"Backprinting,omitempty"`
+    BoutiquePackaging *int64            `json:"BoutiquePackaging,omitempty"`
+    CanRank           *bool             `json:"CanRank,omitempty"`
+    Category          *Category         `json:"Category,omitempty"`
+    Clean             *bool             `json:"Clean,omitempty"`
+    ColorCorrection   *int64            `json:"ColorCorrection,omitempty"`
+    Comments          *bool             `json:"Comments,omitempty"`
+    Community         *Community        `json:"Community,omitempty"`
+    Description       *string           `json:"Description,omitempty"`
+    Exif              *bool             `json:"EXIF,omitempty"`
+    External          *bool             `json:"External,omitempty"`
+    FamilyEdit        *bool             `json:"FamilyEdit,omitempty"`
+    Filenames         *bool             `json:"Filenames,omitempty"`
+    FriendEdit        *bool             `json:"FriendEdit,omitempty"`
+    Geography         *bool             `json:"Geography,omitempty"`
+    Header            *bool             `json:"Header,omitempty"`
+    HideOwner         *bool             `json:"HideOwner,omitempty"`
+    Highlight         *Highlight        `json:"Highlight,omitempty"`
+    ImageCount        *int64            `json:"ImageCount,omitempty"`
+    InterceptShipping *int64            `json:"InterceptShipping,omitempty"`
+    Keywords          *string           `json:"Keywords,omitempty"`
+    Larges            *bool             `json:"Larges,omitempty"`
+    LastUpdated       *string           `json:"LastUpdated,omitempty"`
+    NiceName          *string           `json:"NiceName,omitempty"`
+    Originals         *bool             `json:"Originals,omitempty"`
+    PackagingBranding *bool             `json:"PackagingBranding,omitempty"`
+    Password          *string           `json:"Password,omitempty"`
+    PasswordHint      *string           `json:"PasswordHint,omitempty"`
+    Passworded        *bool             `json:"Passworded,omitempty"`
+    Position          *int              `json:"Position,omitempty"`
+    Printable         *bool             `json:"Printable,omitempty"`
+    Printmark         *Printmark        `json:"Printmark,omitempty"`
+    ProofDays         *int64            `json:"ProofDays,omitempty"`
+    Protected         *bool             `json:"Protected,omitempty"`
+    Public            *bool             `json:"Public,omitempty"`
+    Share             *bool             `json:"Share,omitempty"`
+    SmugSearchable    *bool             `json:"SmugSearchable,omitempty"`
+    SortDirection     *bool             `json:"SortDirection,omitempty"`
+    SortMethod        *string           `json:"SortMethod,omitempty"`
+    SquareThumbs      *bool             `json:"SquareThumbs,omitempty"`
+    SubCategory       *SubCategory      `json:"SubCategory,omitempty"`
+    Template          *Template         `json:"Template,omitempty"`
+    Theme             *Theme            `json:"Theme,omitempty"`
+    Title             *string           `json:"Title,omitempty"`
+    Url               *string           `json:"URL,omitempty"`
+    UnsharpAmount     *float64          `json:"UnsharpAmount,omitempty"`
+    UnsharpRadius     *float64          `json:"UnsharpRadius,omitempty"`
+    UnsharpSigma      *float64          `json:"UnsharpSigma,omitempty"`
+    UnsharpThreshold  *float64          `json:"UnsharpThreshold,omitempty"`
+    Watermark         *Watermark        `json:"Watermark,omitempty"`
+    WorldSearchable   *bool             `json:"WorldSearchable,omitempty"`
+    X2Larges          *bool             `json:"X2Larges,omitempty"`
+    X3Larges          *bool             `json:"X3Larges,omitempty"`
+    XLarges           *bool             `json:"XLarges,omitempty"`
+    Images            *[]ImageReference `json:"Images,omitempty"`
 }
 
 type IdAndName struct {
-    Id   int64  `json:"id"`
-    Name string `json:"Name"`
+    Id   int64  `json:"id,omitempty"`
+    Name string `json:"Name,omitempty"`
 }
 
 type Category IdAndName
@@ -123,130 +123,130 @@ type Printmark IdAndName
 type Watermark IdAndName
 
 type Template struct {
-    Id int64 `json:"id"`
+    Id int64 `json:"id,omitempty"`
 }
 
 type Theme struct {
-    Id   int64  `json:"id"`
-    Name string `json:"Name"`
-    Type string `json:"Type"`
+    Id   int64  `json:"id,omitempty"`
+    Name string `json:"Name,omitempty"`
+    Type string `json:"Type,omitempty"`
 }
 
 type Highlight struct {
-    Id   int64  `json:"id"`
-    Key  string `json:"Key"`
-    Type string `json:"Type"`
+    Id   int64  `json:"id,omitempty"`
+    Key  string `json:"Key,omitempty"`
+    Type string `json:"Type,omitempty"`
 }
 
 type ImageReference struct {
-    Id  int64  `json:"id"`
-    Key string `json:"Key"`
+    Id  int64  `json:"id,omitempty"`
+    Key string `json:"Key,omitempty"`
 }
 
 type AuthTokenResponse struct {
-    Stat   string     `json:"stat"`
-    Method string     `json:"method"`
-    Auth   AuthObject `json:"Auth"`
+    Stat   string     `json:"stat,omitempty"`
+    Method string     `json:"method,omitempty"`
+    Auth   AuthObject `json:"Auth,omitempty"`
 }
 
 type AuthObject struct {
-    Token TokenObject `json:"Token"`
-    User  UserObject  `json:"User"`
+    Token TokenObject `json:"Token,omitempty"`
+    User  UserObject  `json:"User,omitempty"`
 }
 
 type TokenObject struct {
-    Id          string `json:"id"`
-    Secret      string `json:"Secret"`
-    Access      string `json:"Access"`
-    Permissions string `json:"Permissions"`
+    Id          string `json:"id,omitempty"`
+    Secret      string `json:"Secret,omitempty"`
+    Access      string `json:"Access,omitempty"`
+    Permissions string `json:"Permissions,omitempty"`
 }
 
 type UserObject struct {
-    Id            int64  `json:"id"`
-    AccountStatus string `json:"AccountStatus"`
-    AccountType   string `json:"AccountType"`
-    FileSizeLimit int64  `json:"FileSizeLimit"`
-    Name          string `json:"Name"`
-    NickName      string `json:"NickName"`
-    SmugVault     bool   `json:"SmugVault"`
-    Url           string `json:"URL"`
+    Id            int64  `json:"id,omitempty"`
+    AccountStatus string `json:"AccountStatus,omitempty"`
+    AccountType   string `json:"AccountType,omitempty"`
+    FileSizeLimit int64  `json:"FileSizeLimit,omitempty"`
+    Name          string `json:"Name,omitempty"`
+    NickName      string `json:"NickName,omitempty"`
+    SmugVault     bool   `json:"SmugVault,omitempty"`
+    Url           string `json:"URL,omitempty"`
 }
 
 type GetAlbumInfoResponse struct {
-    Stat   string `json:"stat"`
-    Method string `json:"method"`
-    Album  Album  `json:"Album"`
+    Stat   string `json:"stat,omitempty"`
+    Method string `json:"method,omitempty"`
+    Album  Album  `json:"Album,omitempty"`
 }
 
 type GetAlbumsResponse struct {
-    Stat   string  `json:"stat"`
-    Method string  `json:"method"`
-    Albums []Album `json:"Albums"`
+    Stat   string  `json:"stat,omitempty"`
+    Method string  `json:"method,omitempty"`
+    Albums []Album `json:"Albums,omitempty"`
 }
 
 type AlbumStatsResponse struct {
-    Stat   string     `json:"stat"`
-    Method string     `json:"method"`
-    Album  AlbumStats `json:"Album"`
+    Stat   string     `json:"stat,omitempty"`
+    Method string     `json:"method,omitempty"`
+    Album  AlbumStats `json:"Album,omitempty"`
 }
 
 type AlbumStats struct {
-    Id        int64         `json:"id"`
-    Key       string        `json:"Key"`
-    Bytes     int64         `json:"Bytes"`
-    Hits      int64         `json:"Hits"`
-    Large     int64         `json:"Large"`
-    Medium    int64         `json:"Medium"`
-    Original  int64         `json:"Original"`
-    Small     int64         `json:"Small"`
-    Video1280 *int64        `json:"Video1280"`
-    Video1920 *int64        `json:"Video1920"`
-    Video320  *int64        `json:"Video320"`
-    Video640  *int64        `json:"Video640"`
-    Video960  *int64        `json:"Video960"`
-    X2Large   int64         `json:"X2Large"`
-    X3Large   int64         `json:"X3Large"`
-    XLarge    int64         `json:"XLarge"`
-    Images    *[]ImageStats `json:"Images"`
+    Id        int64         `json:"id,omitempty"`
+    Key       string        `json:"Key,omitempty"`
+    Bytes     int64         `json:"Bytes,omitempty"`
+    Hits      int64         `json:"Hits,omitempty"`
+    Large     int64         `json:"Large,omitempty"`
+    Medium    int64         `json:"Medium,omitempty"`
+    Original  int64         `json:"Original,omitempty"`
+    Small     int64         `json:"Small,omitempty"`
+    Video1280 *int64        `json:"Video1280,omitempty"`
+    Video1920 *int64        `json:"Video1920,omitempty"`
+    Video320  *int64        `json:"Video320,omitempty"`
+    Video640  *int64        `json:"Video640,omitempty"`
+    Video960  *int64        `json:"Video960,omitempty"`
+    X2Large   int64         `json:"X2Large,omitempty"`
+    X3Large   int64         `json:"X3Large,omitempty"`
+    XLarge    int64         `json:"XLarge,omitempty"`
+    Images    *[]ImageStats `json:"Images,omitempty"`
 }
 
 type ImageStats struct {
-    Id        int64  `json:"id"`
-    Key       string `json:"Key"`
-    Bytes     int64  `json:"Bytes"`
-    Hits      int64  `json:"Hits"`
-    Large     int64  `json:"Large"`
-    Medium    int64  `json:"Medium"`
-    Original  int64  `json:"Original"`
-    Small     int64  `json:"Small"`
-    Video1280 int64  `json:"Video1280"`
-    Video1920 int64  `json:"Video1920"`
-    Video320  int64  `json:"Video320"`
-    Video640  int64  `json:"Video640"`
-    Video960  int64  `json:"Video960"`
-    X2Large   int64  `json:"X2Large"`
-    X3Large   int64  `json:"X3Large"`
-    XLarge    int64  `json:"XLarge"`
+    Id        int64  `json:"id,omitempty"`
+    Key       string `json:"Key,omitempty"`
+    Bytes     int64  `json:"Bytes,omitempty"`
+    Hits      int64  `json:"Hits,omitempty"`
+    Large     int64  `json:"Large,omitempty"`
+    Medium    int64  `json:"Medium,omitempty"`
+    Original  int64  `json:"Original,omitempty"`
+    Small     int64  `json:"Small,omitempty"`
+    Video1280 int64  `json:"Video1280,omitempty"`
+    Video1920 int64  `json:"Video1920,omitempty"`
+    Video320  int64  `json:"Video320,omitempty"`
+    Video640  int64  `json:"Video640,omitempty"`
+    Video960  int64  `json:"Video960,omitempty"`
+    X2Large   int64  `json:"X2Large,omitempty"`
+    X3Large   int64  `json:"X3Large,omitempty"`
+    XLarge    int64  `json:"XLarge,omitempty"`
 }
 
 type ErrorResponse struct {
-    Stat    string `json:"stat"`
-    Method  string `json:"method"`
-    Code    int    `json:"code"`
-    Message string `json:"message"`
+    Stat    string `json:"stat,omitempty"`
+    Method  string `json:"method,omitempty"`
+    Code    int    `json:"code,omitempty"`
+    Message string `json:"message,omitempty"`
 }
 
 func (p *ErrorResponse) String() string { return p.Message }
 
 type GetCategoriesResponse struct {
-    Stat       string         `json:"stat"`
-    Method     string         `json:"method"`
-    Categories []CategoryInfo `json:"Categories"`
+    Stat       string         `json:"stat,omitempty"`
+    Method     string         `json:"method,omitempty"`
+    Categories []CategoryInfo `json:"Categories,omitempty"`
 }
 
 type CategoryInfo struct {
-    Id       int64  `json:"id"`
-    Name     string `json:"Name"`
-    NiceName string `json:"NiceName"`
-    Type     string `json:"Type"`
+    Id       int64  `json:"id,omitempty"`
+    Name     string `json:"Name,omitempty"`
+    NiceName string `json:"NiceName,omitempty"`
+    Type     string `json:"Type,omitempty"`
 }

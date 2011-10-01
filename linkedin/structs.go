@@ -1,199 +1,199 @@
 package linkedin
 
 type Contact struct {
-    Associations          string             `json:"associations"`
-    Certifications        CertificationList  `json:"certifications"`
-    DateOfBirth           Date               `json:"dateOfBirth"`
-    Educations            EducationList      `json:"educations"`
-    FirstName             string             `json:"firstName"`
-    Headline              string             `json:"headline"`
-    Honors                string             `json:"honors"`
-    Id                    string             `json:"id"`
-    ImAccounts            ImAccountList      `json:"imAccounts"`
-    Industry              string             `json:"industry"`
-    Interests             string             `json:"interests"`
-    Languages             LanguageList       `json:"languages"`
-    LastName              string             `json:"lastName"`
-    Location              Location           `json:"location"`
-    MainAddress           string             `json:"mainAddress"`
-    Urls                  UrlList            `json:"memberUrlResources"`
-    NumConnections        int                `json:"numConnections"`
-    NumConnnectionsCapped bool               `json:"numConnectionsCapped"`
-    PhoneNumbers          PhoneNumberList    `json:"phoneNumbers"`
-    PictureUrl            string             `json:"pictureUrl"`
-    Positions             PositionList       `json:"positions"`
-    PublicProfileUrl      string             `json:"publicProfileUrl"`
-    Skills                SkillList          `json:"skills"`
-    Specialties           string             `json:"specialties"`
-    Summary               string             `json:"summary"`
-    TwitterAccounts       TwitterAccountList `json:"twitterAccounts"`
+    Associations          string             `json:"associations,omitempty"`
+    Certifications        CertificationList  `json:"certifications,omitempty"`
+    DateOfBirth           Date               `json:"dateOfBirth,omitempty"`
+    Educations            EducationList      `json:"educations,omitempty"`
+    FirstName             string             `json:"firstName,omitempty"`
+    Headline              string             `json:"headline,omitempty"`
+    Honors                string             `json:"honors,omitempty"`
+    Id                    string             `json:"id,omitempty"`
+    ImAccounts            ImAccountList      `json:"imAccounts,omitempty"`
+    Industry              string             `json:"industry,omitempty"`
+    Interests             string             `json:"interests,omitempty"`
+    Languages             LanguageList       `json:"languages,omitempty"`
+    LastName              string             `json:"lastName,omitempty"`
+    Location              Location           `json:"location,omitempty"`
+    MainAddress           string             `json:"mainAddress,omitempty"`
+    Urls                  UrlList            `json:"memberUrlResources,omitempty"`
+    NumConnections        int                `json:"numConnections,omitempty"`
+    NumConnnectionsCapped bool               `json:"numConnectionsCapped,omitempty"`
+    PhoneNumbers          PhoneNumberList    `json:"phoneNumbers,omitempty"`
+    PictureUrl            string             `json:"pictureUrl,omitempty"`
+    Positions             PositionList       `json:"positions,omitempty"`
+    PublicProfileUrl      string             `json:"publicProfileUrl,omitempty"`
+    Skills                SkillList          `json:"skills,omitempty"`
+    Specialties           string             `json:"specialties,omitempty"`
+    Summary               string             `json:"summary,omitempty"`
+    TwitterAccounts       TwitterAccountList `json:"twitterAccounts,omitempty"`
 }
 
 type Date struct {
-    Year  int `json:"year"`
-    Month int `json:"month"`
-    Day   int `json:"day"`
+    Year  int `json:"year,omitempty"`
+    Month int `json:"month,omitempty"`
+    Day   int `json:"day,omitempty"`
 }
 
 type CertificationList struct {
-    Total  int             `json:"_total"`
-    Values []Certification `json:"values"`
+    Total  int             `json:"_total,omitempty"`
+    Values []Certification `json:"values,omitempty"`
 }
 
 type Certification struct {
-    Id        int       `json:"id"`
-    Name      string    `json:"name"`
-    Authority Authority `json:"authorityName"`
-    Number    string    `json:"number"`
-    StartDate Date      `json:"startDate"`
-    EndDate   Date      `json:"endDate"`
+    Id        int       `json:"id,omitempty"`
+    Name      string    `json:"name,omitempty"`
+    Authority Authority `json:"authorityName,omitempty"`
+    Number    string    `json:"number,omitempty"`
+    StartDate Date      `json:"startDate,omitempty"`
+    EndDate   Date      `json:"endDate,omitempty"`
 }
 
 type Authority struct {
-    Name string `json:"name"`
+    Name string `json:"name,omitempty"`
 }
 
 type EducationList struct {
-    Total  int         `json:"_total"`
-    Values []Education `json:"values"`
+    Total  int         `json:"_total,omitempty"`
+    Values []Education `json:"values,omitempty"`
 }
 
 type Education struct {
-    Activities   string `json:"activities"`
-    Degree       string `json:"degree"`
-    EndDate      Date   `json:"endDate"`
-    FieldOfStudy string `json:"fieldOfStudy"`
-    Id           int    `json:"id"`
-    Notes        string `json:"notes"`
-    SchoolName   string `json:"schoolName"`
-    StartDate    Date   `json:"startDate"`
+    Activities   string `json:"activities,omitempty"`
+    Degree       string `json:"degree,omitempty"`
+    EndDate      Date   `json:"endDate,omitempty"`
+    FieldOfStudy string `json:"fieldOfStudy,omitempty"`
+    Id           int    `json:"id,omitempty"`
+    Notes        string `json:"notes,omitempty"`
+    SchoolName   string `json:"schoolName,omitempty"`
+    StartDate    Date   `json:"startDate,omitempty"`
 }
 
 type ImAccountList struct {
-    Total  int         `json:"_total"`
-    Values []ImAccount `json:"values"`
+    Total  int         `json:"_total,omitempty"`
+    Values []ImAccount `json:"values,omitempty"`
 }
 
 type ImAccount struct {
-    Name string `json:"imAccountName"`
-    Type string `json:"imAccountType"`
+    Name string `json:"imAccountName,omitempty"`
+    Type string `json:"imAccountType,omitempty"`
 }
 
 type LanguageList struct {
-    Total  int               `json:"_total"`
-    Values []LanguageWrapper `json:"values"`
+    Total  int               `json:"_total,omitempty"`
+    Values []LanguageWrapper `json:"values,omitempty"`
 }
 
 type LanguageWrapper struct {
-    Id          int         `json:"id"`
-    Language    Language    `json:"language"`
-    Proficiency Proficiency `json:"proficiency"`
+    Id          int         `json:"id,omitempty"`
+    Language    Language    `json:"language,omitempty"`
+    Proficiency Proficiency `json:"proficiency,omitempty"`
 }
 
 type Language struct {
-    Name string `json:"name"`
+    Name string `json:"name,omitempty"`
 }
 
 type Location struct {
-    Country Country `json:"country"`
-    Name    string  `json:"name"`
+    Country Country `json:"country,omitempty"`
+    Name    string  `json:"name,omitempty"`
 }
 
 type Country struct {
-    Code string `json:"code"`
+    Code string `json:"code,omitempty"`
 }
 
 type UrlList struct {
-    Total  int   `json:"_total"`
-    Values []Url `json:"values"`
+    Total  int   `json:"_total,omitempty"`
+    Values []Url `json:"values,omitempty"`
 }
 
 type Url struct {
-    Name string `json:"name"`
-    Url  string `json:"url"`
+    Name string `json:"name,omitempty"`
+    Url  string `json:"url,omitempty"`
 }
 
 type PhoneNumberList struct {
-    Total  int           `json:"_total"`
-    Values []PhoneNumber `json:"values"`
+    Total  int           `json:"_total,omitempty"`
+    Values []PhoneNumber `json:"values,omitempty"`
 }
 
 type PhoneNumber struct {
-    Number string `json:"phoneNumber"`
-    Type   string `json:"phoneType"`
+    Number string `json:"phoneNumber,omitempty"`
+    Type   string `json:"phoneType,omitempty"`
 }
 
 type PositionList struct {
-    Total  int        `json:"_total"`
-    Values []Position `json:"values"`
+    Total  int        `json:"_total,omitempty"`
+    Values []Position `json:"values,omitempty"`
 }
 
 type Position struct {
-    Company   Company `json:"company"`
-    EndDate   Date    `json:"endDate"`
-    Id        int64   `json:"id"`
-    IsCurrent bool    `json:"isCurrent"`
-    StartDate Date    `json:"startDate"`
-    Summary   string  `json:"summary"`
-    Title     string  `json:"title"`
+    Company   Company `json:"company,omitempty"`
+    EndDate   Date    `json:"endDate,omitempty"`
+    Id        int64   `json:"id,omitempty"`
+    IsCurrent bool    `json:"isCurrent,omitempty"`
+    StartDate Date    `json:"startDate,omitempty"`
+    Summary   string  `json:"summary,omitempty"`
+    Title     string  `json:"title,omitempty"`
 }
 
 type Company struct {
-    Id       int64  `json:"id"`
-    Industry string `json:"industry"`
-    Name     string `json:"name"`
-    Size     string `json:"size"`
-    Ticker   string `json:"ticker"`
-    Type     string `json:"type"`
+    Id       int64  `json:"id,omitempty"`
+    Industry string `json:"industry,omitempty"`
+    Name     string `json:"name,omitempty"`
+    Size     string `json:"size,omitempty"`
+    Ticker   string `json:"ticker,omitempty"`
+    Type     string `json:"type,omitempty"`
 }
 
 type SkillList struct {
-    Total  int            `json:"_total"`
-    Values []SkillWrapper `json:"values"`
+    Total  int            `json:"_total,omitempty"`
+    Values []SkillWrapper `json:"values,omitempty"`
 }
 
 type SkillWrapper struct {
-    Id          int             `json:"id"`
-    Skill       Skill           `json:"skill"`
-    Proficiency Proficiency     `json:"proficiency"`
-    Years       ExperienceYears `json:"years"`
+    Id          int             `json:"id,omitempty"`
+    Skill       Skill           `json:"skill,omitempty"`
+    Proficiency Proficiency     `json:"proficiency,omitempty"`
+    Years       ExperienceYears `json:"years,omitempty"`
 }
 
 type Skill struct {
-    Name string `json:"name"`
+    Name string `json:"name,omitempty"`
 }
 
 type Proficiency struct {
-    Level string `json:"level"`
-    Name  string `json:"name"`
+    Level string `json:"level,omitempty"`
+    Name  string `json:"name,omitempty"`
 }
 
 type ExperienceYears struct {
-    Id   int    `json:"id"`
-    Name string `json:"name"`
+    Id   int    `json:"id,omitempty"`
+    Name string `json:"name,omitempty"`
 }
 
 type TwitterAccountList struct {
-    Total  int              `json:"_total"`
-    Values []TwitterAccount `json:"values"`
+    Total  int              `json:"_total,omitempty"`
+    Values []TwitterAccount `json:"values,omitempty"`
 }
 
 type TwitterAccount struct {
-    ProviderAccountId   string `json:"providerAccountId"`
-    ProviderAccountName string `json:"providerAccountName"`
+    ProviderAccountId   string `json:"providerAccountId,omitempty"`
+    ProviderAccountName string `json:"providerAccountName,omitempty"`
 }
 
 type ContactList struct {
-    Total  int       `json:"_total"`
-    Values []Contact `json:"contact"`
+    Total  int       `json:"_total,omitempty"`
+    Values []Contact `json:"contact,omitempty"`
 }
 
 type ErrorResponse struct {
-    ErrorCode int    `json:"errorCode"`
-    Message   string `json:"message"`
-    RequestId string `json:"requestId"`
-    Status    int    `json:"status"`
-    Timestamp int64  `json:"timestamp"`
+    ErrorCode int    `json:"errorCode,omitempty"`
+    Message   string `json:"message,omitempty"`
+    RequestId string `json:"requestId,omitempty"`
+    Status    int    `json:"status,omitempty"`
+    Timestamp int64  `json:"timestamp,omitempty"`
 }
 
 func (p *ErrorResponse) String() string {

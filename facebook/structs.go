@@ -1,63 +1,63 @@
 package facebook
 
 type Contact struct {
-    Id                  string             `json:"id"`
-    Name                string             `json:"name"`
-    FirstName           string             `json:"first_name"`
-    MiddleName          string             `json:"middle_name"`
-    LastName            string             `json:"last_name"`
-    Link                string             `json:"link"`
-    Username            string             `json:"username"`
-    Hometown            Location           `json:"hometown"`
-    Location            Location           `json:"location"`
-    Bio                 string             `json:"bio"`
-    Quotes              string             `json:"quotes"`
-    WorkPlaces          []WorkPlace        `json:"work"`
-    InspirationalPeople []ContactReference `json:"inspirational_people"`
-    Educations          []Education        `json:"education"`
-    Gender              string             `json:"gender"`
-    Website             string             `json:"website"`
-    InterestedIn        []string           `json:"interested_in"`
-    RelationshipStatus  string             `json:"relationship_status"`
-    Political           string             `json:"political"`
-    Timezone            int                `json:"timezone"`
-    Locale              string             `json:"locale"`
-    Languages           []Language         `json:"languages"`
-    Verified            bool               `json:"verified"`
-    UpdatedTime         string             `json:"updated_time"`
-    Type                string             `json:"type"`
-    ThirdPartyId        string             `json:"third_party_id"`
-    Birthday            string             `json:"birthday"`
-    Email               string             `json:"email"`
-    FavoriteAthletes    []ContactReference `json:"favorite_athletes"`
-    FavoriteTeams       []ContactReference `json:"favorite_teams"`
-    Religion            string             `json:"religion"`
-    SignificantOther    ContactReference   `json:"significant_other"`
-    VideoUploadLimits   SizeLimit          `json:"video_upload_limits"`
+    Id                  string             `json:"id,omitempty"`
+    Name                string             `json:"name,omitempty"`
+    FirstName           string             `json:"first_name,omitempty"`
+    MiddleName          string             `json:"middle_name,omitempty"`
+    LastName            string             `json:"last_name,omitempty"`
+    Link                string             `json:"link,omitempty"`
+    Username            string             `json:"username,omitempty"`
+    Hometown            Location           `json:"hometown,omitempty"`
+    Location            Location           `json:"location,omitempty"`
+    Bio                 string             `json:"bio,omitempty"`
+    Quotes              string             `json:"quotes,omitempty"`
+    WorkPlaces          []WorkPlace        `json:"work,omitempty"`
+    InspirationalPeople []ContactReference `json:"inspirational_people,omitempty"`
+    Educations          []Education        `json:"education,omitempty"`
+    Gender              string             `json:"gender,omitempty"`
+    Website             string             `json:"website,omitempty"`
+    InterestedIn        []string           `json:"interested_in,omitempty"`
+    RelationshipStatus  string             `json:"relationship_status,omitempty"`
+    Political           string             `json:"political,omitempty"`
+    Timezone            int                `json:"timezone,omitempty"`
+    Locale              string             `json:"locale,omitempty"`
+    Languages           []Language         `json:"languages,omitempty"`
+    Verified            bool               `json:"verified,omitempty"`
+    UpdatedTime         string             `json:"updated_time,omitempty"`
+    Type                string             `json:"type,omitempty"`
+    ThirdPartyId        string             `json:"third_party_id,omitempty"`
+    Birthday            string             `json:"birthday,omitempty"`
+    Email               string             `json:"email,omitempty"`
+    FavoriteAthletes    []ContactReference `json:"favorite_athletes,omitempty"`
+    FavoriteTeams       []ContactReference `json:"favorite_teams,omitempty"`
+    Religion            string             `json:"religion,omitempty"`
+    SignificantOther    ContactReference   `json:"significant_other,omitempty"`
+    VideoUploadLimits   SizeLimit          `json:"video_upload_limits,omitempty"`
 }
 
 type IdAndName struct {
-    Id   string `json:"id"`
-    Name string `json:"name"`
+    Id   string `json:"id,omitempty"`
+    Name string `json:"name,omitempty"`
 }
 
 type StandardMedia struct {
-    Name        string `json:"name"`
-    Category    string `json:"category"`
-    Id          string `json:"id"`
-    CreatedTime string `json:"created_time"`
+    Name        string `json:"name,omitempty"`
+    Category    string `json:"category,omitempty"`
+    Id          string `json:"id,omitempty"`
+    CreatedTime string `json:"created_time,omitempty"`
 }
 
 type Location IdAndName
 
 type WorkPlace struct {
-    Employer    Company            `json:"employer"`
-    Location    Location           `json:"location"`
-    Position    Position           `json:"position"`
-    With        []ContactReference `json:"with"`
-    Description string             `json:"description"`
-    StartDate   string             `json:"start_date"`
-    EndDate     string             `json:"end_date"`
+    Employer    Company            `json:"employer,omitempty"`
+    Location    Location           `json:"location,omitempty"`
+    Position    Position           `json:"position,omitempty"`
+    With        []ContactReference `json:"with,omitempty"`
+    Description string             `json:"description,omitempty"`
+    StartDate   string             `json:"start_date,omitempty"`
+    EndDate     string             `json:"end_date,omitempty"`
 }
 
 type Company IdAndName
@@ -65,12 +65,12 @@ type Position IdAndName
 type ContactReference IdAndName
 
 type Education struct {
-    School         School             `json:"school"`
-    Year           GraduationClass    `json:"year"`
-    Type           string             `json:"type"`
-    Degree         Degree             `json:"degree"`
-    Concentrations []Concentration    `json:"concentration"`
-    With           []ContactReference `json:"with"`
+    School         School             `json:"school,omitempty"`
+    Year           GraduationClass    `json:"year,omitempty"`
+    Type           string             `json:"type,omitempty"`
+    Degree         Degree             `json:"degree,omitempty"`
+    Concentrations []Concentration    `json:"concentration,omitempty"`
+    With           []ContactReference `json:"with,omitempty"`
 }
 
 type School IdAndName
@@ -81,253 +81,253 @@ type Concentration IdAndName
 type Language IdAndName
 
 type SizeLimit struct {
-    Length string `json:"length"`
-    Size   string `json:"size"`
+    Length string `json:"length,omitempty"`
+    Size   string `json:"size,omitempty"`
 }
 
 type ActivitiesResponse struct {
-    Data []Activity `json:"data"`
+    Data []Activity `json:"data,omitempty"`
 }
 
 type Activity StandardMedia
 
 type AlbumsResponse struct {
-    Data   []Album `json:"data"`
-    Paging Paging  `json:"paging"`
+    Data   []Album `json:"data,omitempty"`
+    Paging Paging  `json:"paging,omitempty"`
 }
 
 type Album struct {
-    Id          string           `json:"id"`
-    From        ContactReference `json:"from"`
-    Name        string           `json:"name"`
-    Link        string           `json:"link"`
-    CoverPhoto  string           `json:"cover_photo"`
-    Privacy     string           `json:"privacy"`
-    Count       int              `json:"count"`
-    Type        string           `json:"type"`
-    CreatedTime string           `json:"created_time"`
-    UpdatedTime string           `json:"updated_time"`
+    Id          string           `json:"id,omitempty"`
+    From        ContactReference `json:"from,omitempty"`
+    Name        string           `json:"name,omitempty"`
+    Link        string           `json:"link,omitempty"`
+    CoverPhoto  string           `json:"cover_photo,omitempty"`
+    Privacy     string           `json:"privacy,omitempty"`
+    Count       int              `json:"count,omitempty"`
+    Type        string           `json:"type,omitempty"`
+    CreatedTime string           `json:"created_time,omitempty"`
+    UpdatedTime string           `json:"updated_time,omitempty"`
 }
 
 type Paging struct {
-    Previous string `json:"previous"`
-    Next     string `json:"next"`
+    Previous string `json:"previous,omitempty"`
+    Next     string `json:"next,omitempty"`
 }
 
 type BooksResponse struct {
-    Data []Book `json:"data"`
+    Data []Book `json:"data,omitempty"`
 }
 
 type Book StandardMedia
 
 type CheckinsResponse struct {
-    Data   []Checkin `json:"data"`
-    Paging Paging    `json:"paging"`
+    Data   []Checkin `json:"data,omitempty"`
+    Paging Paging    `json:"paging,omitempty"`
 }
 
 type Checkin struct {
-    Id          string                `json:"id"`
-    From        ContactReference      `json:"from"`
-    Tags        ContactReferenceArray `json:"tags"`
-    Message     string                `json:"message"`
-    Place       CheckinLocation       `json:"place"`
-    Application Application           `json:"application"`
-    CreatedTime string                `json:"created_time"`
-    Likes       LikeArray             `json:"likes"`
-    Comments    CommentArray          `json:"comments"`
+    Id          string                `json:"id,omitempty"`
+    From        ContactReference      `json:"from,omitempty"`
+    Tags        ContactReferenceArray `json:"tags,omitempty"`
+    Message     string                `json:"message,omitempty"`
+    Place       CheckinLocation       `json:"place,omitempty"`
+    Application Application           `json:"application,omitempty"`
+    CreatedTime string                `json:"created_time,omitempty"`
+    Likes       LikeArray             `json:"likes,omitempty"`
+    Comments    CommentArray          `json:"comments,omitempty"`
 }
 
 type ContactReferenceArray struct {
-    Data []ContactReference `json:"data"`
+    Data []ContactReference `json:"data,omitempty"`
 }
 
 type CheckinLocation struct {
-    Id       string                  `json:"id"`
-    Name     string                  `json:"name"`
-    Location CheckinPhysicalLocation `json:"location"`
+    Id       string                  `json:"id,omitempty"`
+    Name     string                  `json:"name,omitempty"`
+    Location CheckinPhysicalLocation `json:"location,omitempty"`
 }
 
 type CheckinPhysicalLocation struct {
-    Street    string  `json:"street"`
-    City      string  `json:"city"`
-    State     string  `json:"state"`
-    Country   string  `json:"country"`
-    Zip       string  `json:"zip"`
-    Latitude  float64 `json:"latitude"`
-    Longitude float64 `json:"longitude"`
+    Street    string  `json:"street,omitempty"`
+    City      string  `json:"city,omitempty"`
+    State     string  `json:"state,omitempty"`
+    Country   string  `json:"country,omitempty"`
+    Zip       string  `json:"zip,omitempty"`
+    Latitude  float64 `json:"latitude,omitempty"`
+    Longitude float64 `json:"longitude,omitempty"`
 }
 
 type Application IdAndName
 
 type LikeArray struct {
-    Data []Like `json:"data"`
+    Data []Like `json:"data,omitempty"`
 }
 
 type Like IdAndName
 
 type CommentArray struct {
-    Data []Comment `json:"data"`
+    Data []Comment `json:"data,omitempty"`
 }
 
 type Comment struct {
-    Id          string           `json:"id"`
-    From        ContactReference `json:"from"`
-    Message     string           `json:"message"`
-    CreatedTime string           `json:"created_time"`
-    Likes       int              `json:"likes"`
+    Id          string           `json:"id,omitempty"`
+    From        ContactReference `json:"from,omitempty"`
+    Message     string           `json:"message,omitempty"`
+    CreatedTime string           `json:"created_time,omitempty"`
+    Likes       int              `json:"likes,omitempty"`
 }
 
 type EventsResponse struct {
-    Data   []Event `json:"data"`
-    Paging Paging  `json:"paging"`
+    Data   []Event `json:"data,omitempty"`
+    Paging Paging  `json:"paging,omitempty"`
 }
 
 type Event struct {
-    Name       string `json:"name"`
-    StartTime  string `json:"start_time"`
-    EndTime    string `json:"end_time"`
-    Location   string `json:"location"`
-    Id         string `json:"id"`
-    RsvpStatus string `json:"rsvp_status"`
+    Name       string `json:"name,omitempty"`
+    StartTime  string `json:"start_time,omitempty"`
+    EndTime    string `json:"end_time,omitempty"`
+    Location   string `json:"location,omitempty"`
+    Id         string `json:"id,omitempty"`
+    RsvpStatus string `json:"rsvp_status,omitempty"`
 }
 
 type FamilyResponse struct {
-    Data []Relationship `json:"data"`
+    Data []Relationship `json:"data,omitempty"`
 }
 
 type Relationship struct {
-    Name         string `json:"name"`
-    Id           string `json:"id"`
-    Relationship string `json:"relationship"`
+    Name         string `json:"name,omitempty"`
+    Id           string `json:"id,omitempty"`
+    Relationship string `json:"relationship,omitempty"`
 }
 
 type FriendsResponse ContactReferenceArray
 
 type GamesResponse struct {
-    Data []Game `json:"data"`
+    Data []Game `json:"data,omitempty"`
 }
 
 type Game StandardMedia
 
 type GroupsResponse struct {
-    Data []Group `json:"data"`
+    Data []Group `json:"data,omitempty"`
 }
 
 type Group struct {
-    Version       int    `json:"version"`
-    Name          string `json:"name"`
-    Id            string `json:"id"`
-    BookmarkOrder int64  `json:"bookmark_order"`
+    Version       int    `json:"version,omitempty"`
+    Name          string `json:"name,omitempty"`
+    Id            string `json:"id,omitempty"`
+    BookmarkOrder int64  `json:"bookmark_order,omitempty"`
 }
 
 type InterestsResponse struct {
-    Data []Interest `json:"data"`
+    Data []Interest `json:"data,omitempty"`
 }
 
 type Interest StandardMedia
 
 type LikesResponse struct {
-    Data []LikeInfo `json:"data"`
+    Data []LikeInfo `json:"data,omitempty"`
 }
 
 type LikeInfo StandardMedia
 
 type MoviesResponse struct {
-    Data []Movie `json:"data"`
+    Data []Movie `json:"data,omitempty"`
 }
 
 type Movie StandardMedia
 
 type MusicResponse struct {
-    Data []Music `json:"data"`
+    Data []Music `json:"data,omitempty"`
 }
 
 type Music StandardMedia
 
 type NotesResponse struct {
-    Data   []Note `json:"data"`
-    Paging Paging `json:"paging"`
+    Data   []Note `json:"data,omitempty"`
+    Paging Paging `json:"paging,omitempty"`
 }
 
 type Note struct {
-    Id          string           `json:"id"`
-    From        ContactReference `json:"from"`
-    Subject     string           `json:"subject"`
-    Message     string           `json:"message"`
-    Icon        string           `json:"icon"`
-    CreatedTime string           `json:"created_time"`
-    UpdatedTime string           `json:"updated_time"`
-    Comments    CommentArray     `json:"comments"`
+    Id          string           `json:"id,omitempty"`
+    From        ContactReference `json:"from,omitempty"`
+    Subject     string           `json:"subject,omitempty"`
+    Message     string           `json:"message,omitempty"`
+    Icon        string           `json:"icon,omitempty"`
+    CreatedTime string           `json:"created_time,omitempty"`
+    UpdatedTime string           `json:"updated_time,omitempty"`
+    Comments    CommentArray     `json:"comments,omitempty"`
 }
 
 type PhotosResponse struct {
-    Data   []Photo `json:"data"`
-    Paging Paging  `json:"paging"`
+    Data   []Photo `json:"data,omitempty"`
+    Paging Paging  `json:"paging,omitempty"`
 }
 
 type Photo struct {
-    Id          string            `json:"id"`
-    From        ContactReference  `json:"from"`
-    Tags        UserPhotoTagArray `json:"tags"`
-    Picture     string            `json:"picture"`
-    Source      string            `json:"source"`
-    Height      int               `json:"height"`
-    Width       int               `json:"width"`
-    Images      []Image           `json:"images"`
-    Link        string            `json:"link"`
-    Icon        string            `json:"icon"`
-    CreatedTime string            `json:"created_time"`
-    Position    int               `json:"position"`
-    UpdatedTime string            `json:"updated_time"`
-    Comments    CommentArray      `json:"comments"`
+    Id          string            `json:"id,omitempty"`
+    From        ContactReference  `json:"from,omitempty"`
+    Tags        UserPhotoTagArray `json:"tags,omitempty"`
+    Picture     string            `json:"picture,omitempty"`
+    Source      string            `json:"source,omitempty"`
+    Height      int               `json:"height,omitempty"`
+    Width       int               `json:"width,omitempty"`
+    Images      []Image           `json:"images,omitempty"`
+    Link        string            `json:"link,omitempty"`
+    Icon        string            `json:"icon,omitempty"`
+    CreatedTime string            `json:"created_time,omitempty"`
+    Position    int               `json:"position,omitempty"`
+    UpdatedTime string            `json:"updated_time,omitempty"`
+    Comments    CommentArray      `json:"comments,omitempty"`
 }
 
 type UserPhotoTagArray struct {
-    Data []UserPhotoTag `json:"data"`
+    Data []UserPhotoTag `json:"data,omitempty"`
 }
 
 type UserPhotoTag struct {
-    Id          string  `json:"id"`
-    Name        string  `json:"name"`
-    X           float64 `json:"x"`
-    Y           float64 `json:"y"`
-    CreatedTime string  `json:"created_time"`
+    Id          string  `json:"id,omitempty"`
+    Name        string  `json:"name,omitempty"`
+    X           float64 `json:"x,omitempty"`
+    Y           float64 `json:"y,omitempty"`
+    CreatedTime string  `json:"created_time,omitempty"`
 }
 
 type Image struct {
-    Height int    `json:"height"`
-    Width  int    `json:"width"`
-    Source string `json:"source"`
+    Height int    `json:"height,omitempty"`
+    Width  int    `json:"width,omitempty"`
+    Source string `json:"source,omitempty"`
 }
 
 type StatusesResponse struct {
-    Data []Status `json:"data"`
+    Data []Status `json:"data,omitempty"`
 }
 
 type Status struct {
-    Id          string           `json:"id"`
-    From        ContactReference `json:"from"`
-    Message     string           `json:"message"`
-    UpdatedTime string           `json:"updated_time"`
-    Likes       LikeArray        `json:"likes"`
-    Comments    CommentArray     `json:"comments"`
+    Id          string           `json:"id,omitempty"`
+    From        ContactReference `json:"from,omitempty"`
+    Message     string           `json:"message,omitempty"`
+    UpdatedTime string           `json:"updated_time,omitempty"`
+    Likes       LikeArray        `json:"likes,omitempty"`
+    Comments    CommentArray     `json:"comments,omitempty"`
 }
 
 type TelevisionResponse struct {
-    Data []TVShow `json:"data"`
+    Data []TVShow `json:"data,omitempty"`
 }
 
 type TVShow StandardMedia
 
 type ErrorResponse struct {
-    Error Error `json:"error"`
+    Error Error `json:"error,omitempty"`
 }
 
 func (p *ErrorResponse) String() string { return p.Error.Message }
 
 type Error struct {
-    Message string `json:"message"`
-    Type    string `json:"type"`
+    Message string `json:"message,omitempty"`
+    Type    string `json:"type,omitempty"`
 }
 
 func (p *Error) String() string { return p.Message }

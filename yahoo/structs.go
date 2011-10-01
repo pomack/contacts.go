@@ -7,73 +7,73 @@ import (
 )
 
 type ContactsResponse struct {
-    Contacts ContactsList `json:"contacts"`
+    Contacts ContactsList `json:"contacts,omitempty"`
 }
 
 type ContactResponse struct {
-    Contact Contact `json:"contact"`
+    Contact Contact `json:"contact,omitempty"`
 }
 
 type CategoriesResponse struct {
-    Categories CategoriesList `json:"categories"`
+    Categories CategoriesList `json:"categories,omitempty"`
 }
 
 type CategoryResponse struct {
-    Category Category `json:"category"`
+    Category Category `json:"category,omitempty"`
 }
 
 type ContactsList struct {
-    Start    int64     `json:"start"`
-    Count    int64     `json:"count"`
-    Total    int64     `json:"total"`
-    Uri      string    `json:"uri"`
-    Contacts []Contact `json:"contact"`
+    Start    int64     `json:"start,omitempty"`
+    Count    int64     `json:"count,omitempty"`
+    Total    int64     `json:"total,omitempty"`
+    Uri      string    `json:"uri,omitempty"`
+    Contacts []Contact `json:"contact,omitempty"`
 }
 
 type CategoriesList struct {
-    Start      int64      `json:"start"`
-    Count      int64      `json:"count"`
-    Total      int64      `json:"total"`
-    Uri        string     `json:"uri"`
-    Categories []Category `json:"category"`
+    Start      int64      `json:"start,omitempty"`
+    Count      int64      `json:"count,omitempty"`
+    Total      int64      `json:"total,omitempty"`
+    Uri        string     `json:"uri,omitempty"`
+    Categories []Category `json:"category,omitempty"`
 }
 
 type Contact struct {
-    Uri          string         `json:"uri"`
-    Created      string         `json:"created"`
-    Updated      string         `json:"updated"`
-    Op           string         `json:"op"`
-    IsConnection bool           `json:"isConnection"`
-    Id           int64          `json:"id"`
-    Fields       []ContactField `json:"fields"`
-    Categories   []Category     `json:"categories"`
+    Uri          string         `json:"uri,omitempty"`
+    Created      string         `json:"created,omitempty"`
+    Updated      string         `json:"updated,omitempty"`
+    Op           string         `json:"op,omitempty"`
+    IsConnection bool           `json:"isConnection,omitempty"`
+    Id           int64          `json:"id,omitempty"`
+    Fields       []ContactField `json:"fields,omitempty"`
+    Categories   []Category     `json:"categories,omitempty"`
 }
 
 type Address struct {
-    Street          string `json:"street"`
-    City            string `json:"city"`
-    StateOrProvince string `json:"stateOrProvince"`
-    PostalCode      string `json:"postalCode"`
-    Country         string `json:"country"`
-    CountryCode     string `json:"countryCode"`
+    Street          string `json:"street,omitempty"`
+    City            string `json:"city,omitempty"`
+    StateOrProvince string `json:"stateOrProvince,omitempty"`
+    PostalCode      string `json:"postalCode,omitempty"`
+    Country         string `json:"country,omitempty"`
+    CountryCode     string `json:"countryCode,omitempty"`
 }
 
 type Anniversary struct {
-    Day   int `json:"day"`
-    Month int `json:"month"`
-    Year  int `json:"year"`
+    Day   int `json:"day,omitempty"`
+    Month int `json:"month,omitempty"`
+    Year  int `json:"year,omitempty"`
 }
 
 type Birthday Anniversary
 
 type Name struct {
-    GivenName       string `json:"givenName"`
-    MiddleName      string `json:"middleName"`
-    FamilyName      string `json:"familyName"`
-    Prefix          string `json:"prefix"`
-    Suffix          string `json:"suffix"`
-    GivenNameSound  string `json:"givenNameSound"`
-    FamilyNameSound string `json:"familyNameSound"`
+    GivenName       string `json:"givenName,omitempty"`
+    MiddleName      string `json:"middleName,omitempty"`
+    FamilyName      string `json:"familyName,omitempty"`
+    Prefix          string `json:"prefix,omitempty"`
+    Suffix          string `json:"suffix,omitempty"`
+    GivenNameSound  string `json:"givenNameSound,omitempty"`
+    FamilyNameSound string `json:"familyNameSound,omitempty"`
 }
 
 func (p *Name) FromJSON(o jsonhelper.JSONObject) {
@@ -87,15 +87,15 @@ func (p *Name) FromJSON(o jsonhelper.JSONObject) {
 }
 
 type ContactField struct {
-    Uri        string      `json:"uri"`
-    Created    string      `json:"created"`
-    Updated    string      `json:"updated"`
-    Id         int64       `json:"id"`
-    Type       string      `json:"type"`
-    EditedBy   string      `json:"editedBy"`
-    Flags      []string    `json:"flags"`
-    Categories []string    `json:"categories"`
-    Value      interface{} `json:"value"`
+    Uri        string      `json:"uri,omitempty"`
+    Created    string      `json:"created,omitempty"`
+    Updated    string      `json:"updated,omitempty"`
+    Id         int64       `json:"id,omitempty"`
+    Type       string      `json:"type,omitempty"`
+    EditedBy   string      `json:"editedBy,omitempty"`
+    Flags      []string    `json:"flags,omitempty"`
+    Categories []string    `json:"categories,omitempty"`
+    Value      interface{} `json:"value,omitempty"`
 }
 
 func (p *ContactField) UnmarshalJSON(data []byte) os.Error {
@@ -130,270 +130,270 @@ func (p *ContactField) UnmarshalJSON(data []byte) os.Error {
 }
 
 type Category struct {
-    Uri     string `json:"uri"`
-    Created string `json:"created"`
-    Updated string `json:"updated"`
-    Id      int64  `json:"id"`
-    Name    string `json:"name"`
+    Uri     string `json:"uri,omitempty"`
+    Created string `json:"created,omitempty"`
+    Updated string `json:"updated,omitempty"`
+    Id      int64  `json:"id,omitempty"`
+    Name    string `json:"name,omitempty"`
 }
 
 type ContactSyncResponse struct {
-    ContactSync ContactSync `json:"contactsync"`
+    ContactSync ContactSync `json:"contactsync,omitempty"`
 }
 
 type ContactSync struct {
-    Rev              int64      `json:"rev"`
-    ClientRev        int64      `json:"clientrev"`
-    AddressBookReset int64      `json:"addressbookreset"`
-    LastModifiedTime string     `json:"lmt"`
-    Categories       []Category `json:"categories"`
-    Contacts         []Contact  `json:"contacts"`
+    Rev              int64      `json:"rev,omitempty"`
+    ClientRev        int64      `json:"clientrev,omitempty"`
+    AddressBookReset int64      `json:"addressbookreset,omitempty"`
+    LastModifiedTime string     `json:"lmt,omitempty"`
+    Categories       []Category `json:"categories,omitempty"`
+    Contacts         []Contact  `json:"contacts,omitempty"`
 }
 
 type Flag string
 
 type MeGuidResponse struct {
-    Guid MeGuid `json:"guid"`
+    Guid MeGuid `json:"guid,omitempty"`
 }
 
 type MeGuid struct {
-    Uri   string `json:"uri"`
-    Value string `json:"value"`
+    Uri   string `json:"uri,omitempty"`
+    Value string `json:"value,omitempty"`
 }
 
 type ProfileResponse struct {
-    Profile *Profile `json:"profile"`
+    Profile *Profile `json:"profile,omitempty"`
 }
 
 type Profile struct {
-    Uri                string          `json:"uri"`
-    Guid               string          `json:"guid"`
-    Nickname           string          `json:"nickname"`
-    Image              ImageInfo       `json:"image"`
-    MemberSince        string          `json:"memberSince"`
-    ProfileUrl         string          `json:"profileUrl"`
-    DisplayAge         int             `json:"displayAge"`
-    BirthYear          int             `json:"birthYear"`
-    Birthdate          string          `json:"birthdate"`
-    Gender             string          `json:"gender"`
-    Location           string          `json:"location"`
-    Status             Status          `json:"status"`
-    IsConnected        bool            `json:"isConnected"`
-    GivenName          string          `json:"givenName"`
-    FamilyName         string          `json:"familyName"`
-    Addresses          []SocialAddress `json:"addresses"`
-    Ims                []IM            `json:"ims"`
-    Emails             []Email         `json:"emails"`
-    WorkPlaces         []WorkObject    `json:"works"`
-    Schools            []SchoolObject  `json:"schools"`
-    Websites           []Website       `json:"websites"`
-    Disclosures        []Disclosure    `json:"disclosures"`
-    TimeZone           string          `json:"timeZone"`
-    Lang               string          `json:"lang"`
-    RelationshipStatus string          `json:"relationshipStatus"`
-    LookingFor         string          `json:"lookingFor"`
-    Interests          []Interest      `json:"interests"`
-    Created            string          `json:"created"`
-    Updated            string          `json:"updated"`
-    Searchable         bool            `json:"searchable"`
+    Uri                string          `json:"uri,omitempty"`
+    Guid               string          `json:"guid,omitempty"`
+    Nickname           string          `json:"nickname,omitempty"`
+    Image              ImageInfo       `json:"image,omitempty"`
+    MemberSince        string          `json:"memberSince,omitempty"`
+    ProfileUrl         string          `json:"profileUrl,omitempty"`
+    DisplayAge         int             `json:"displayAge,omitempty"`
+    BirthYear          int             `json:"birthYear,omitempty"`
+    Birthdate          string          `json:"birthdate,omitempty"`
+    Gender             string          `json:"gender,omitempty"`
+    Location           string          `json:"location,omitempty"`
+    Status             Status          `json:"status,omitempty"`
+    IsConnected        bool            `json:"isConnected,omitempty"`
+    GivenName          string          `json:"givenName,omitempty"`
+    FamilyName         string          `json:"familyName,omitempty"`
+    Addresses          []SocialAddress `json:"addresses,omitempty"`
+    Ims                []IM            `json:"ims,omitempty"`
+    Emails             []Email         `json:"emails,omitempty"`
+    WorkPlaces         []WorkObject    `json:"works,omitempty"`
+    Schools            []SchoolObject  `json:"schools,omitempty"`
+    Websites           []Website       `json:"websites,omitempty"`
+    Disclosures        []Disclosure    `json:"disclosures,omitempty"`
+    TimeZone           string          `json:"timeZone,omitempty"`
+    Lang               string          `json:"lang,omitempty"`
+    RelationshipStatus string          `json:"relationshipStatus,omitempty"`
+    LookingFor         string          `json:"lookingFor,omitempty"`
+    Interests          []Interest      `json:"interests,omitempty"`
+    Created            string          `json:"created,omitempty"`
+    Updated            string          `json:"updated,omitempty"`
+    Searchable         bool            `json:"searchable,omitempty"`
 }
 
 type ImageInfo struct {
-    Size     string `json:"size"`
-    Width    int64  `json:"width"`
-    Height   int64  `json:"height"`
-    ImageUrl string `json:"imageUrl"`
+    Size     string `json:"size,omitempty"`
+    Width    int64  `json:"width,omitempty"`
+    Height   int64  `json:"height,omitempty"`
+    ImageUrl string `json:"imageUrl,omitempty"`
 }
 
 type Status struct {
-    Uri                string `json:"uri"`
-    Message            string `json:"message"`
-    LastStatusModified string `json:"lastStatusModified"`
+    Uri                string `json:"uri,omitempty"`
+    Message            string `json:"message,omitempty"`
+    LastStatusModified string `json:"lastStatusModified,omitempty"`
 }
 
 type WorkObject struct {
-    WorkName   string `json:"workName"`
-    Title      string `json:"title"`
-    Address    string `json:"address"`
-    City       string `json:"city"`
-    State      string `json:"state"`
-    PostalCode string `json:"postalCode"`
-    Country    string `json:"country"`
-    StartDate  string `json:"startDate"`
-    EndDate    string `json:"endDate"`
-    Id         int64  `json:"id"`
-    Current    bool   `json:"current"`
+    WorkName   string `json:"workName,omitempty"`
+    Title      string `json:"title,omitempty"`
+    Address    string `json:"address,omitempty"`
+    City       string `json:"city,omitempty"`
+    State      string `json:"state,omitempty"`
+    PostalCode string `json:"postalCode,omitempty"`
+    Country    string `json:"country,omitempty"`
+    StartDate  string `json:"startDate,omitempty"`
+    EndDate    string `json:"endDate,omitempty"`
+    Id         int64  `json:"id,omitempty"`
+    Current    bool   `json:"current,omitempty"`
 }
 
 type SchoolObject struct {
-    SchoolName  string `json:"schoolName"`
-    SchoolType  string `json:"schoolType"`
-    SchoolMajor string `json:"schoolMajor"`
-    SchoolYear  string `json:"schoolYear"`
-    City        string `json:"city"`
-    State       string `json:"state"`
-    Country     string `json:"country"`
-    StartDate   string `json:"startDate"`
-    EndDate     string `json:"endDate"`
-    Id          int64  `json:"id"`
-    Current     bool   `json:"current"`
+    SchoolName  string `json:"schoolName,omitempty"`
+    SchoolType  string `json:"schoolType,omitempty"`
+    SchoolMajor string `json:"schoolMajor,omitempty"`
+    SchoolYear  string `json:"schoolYear,omitempty"`
+    City        string `json:"city,omitempty"`
+    State       string `json:"state,omitempty"`
+    Country     string `json:"country,omitempty"`
+    StartDate   string `json:"startDate,omitempty"`
+    EndDate     string `json:"endDate,omitempty"`
+    Id          int64  `json:"id,omitempty"`
+    Current     bool   `json:"current,omitempty"`
 }
 
 type Interest struct {
-    InterestCategory  string   `json:"interestCategory"`
-    DeclaredInterests []string `json:"declaredInterests"`
+    InterestCategory  string   `json:"interestCategory,omitempty"`
+    DeclaredInterests []string `json:"declaredInterests,omitempty"`
 }
 
 type Phone struct {
-    Type    string `json:"type"`
-    Number  string `json:"number"`
-    Primary bool   `json:"primary"`
-    Id      int64  `json:"id"`
+    Type    string `json:"type,omitempty"`
+    Number  string `json:"number,omitempty"`
+    Primary bool   `json:"primary,omitempty"`
+    Id      int64  `json:"id,omitempty"`
 }
 
 type UpdateProfileRequest struct {
-    UpdateProfile UpdateProfile `json:"updateprofile"`
+    UpdateProfile UpdateProfile `json:"updateprofile,omitempty"`
 }
 
 type UpdateProfile struct {
-    Nickname           string          `json:"nickname"`
-    DisplayAge         int             `json:"displayAge"`
-    Gender             string          `json:"gender"`
-    Location           string          `json:"location"`
-    GivenName          string          `json:"givenName"`
-    FamilyName         string          `json:"familyName"`
-    Works              []WorkObject    `json:"works"`
-    Schools            []SchoolObject  `json:"schools"`
-    Websites           []string        `json:"websites"`
-    Addresses          []SocialAddress `json:"addresses"`
-    Phones             []Phone         `json:"phones"`
-    Ims                []IM            `json:"ims"`
-    Emails             []Email         `json:"emails"`
-    RelationshipStatus []string        `json:"relationshipStatus"`
-    LookingFor         []string        `json:"lookingFor"`
-    LanguagesSpoken    []string        `json:"languagesSpoken"`
-    Interests          []Interest      `json:"interests"`
-    ProfileMode        string          `json:"profileMode"`
-    ProfileHidden      bool            `json:"profileHidden"`
-    ProfileStatus      string          `json:"profileStatus"`
-    Birthdate          string          `json:"birthdate"`
-    AboutMe            string          `json:"aboutMe"`
+    Nickname           string          `json:"nickname,omitempty"`
+    DisplayAge         int             `json:"displayAge,omitempty"`
+    Gender             string          `json:"gender,omitempty"`
+    Location           string          `json:"location,omitempty"`
+    GivenName          string          `json:"givenName,omitempty"`
+    FamilyName         string          `json:"familyName,omitempty"`
+    Works              []WorkObject    `json:"works,omitempty"`
+    Schools            []SchoolObject  `json:"schools,omitempty"`
+    Websites           []string        `json:"websites,omitempty"`
+    Addresses          []SocialAddress `json:"addresses,omitempty"`
+    Phones             []Phone         `json:"phones,omitempty"`
+    Ims                []IM            `json:"ims,omitempty"`
+    Emails             []Email         `json:"emails,omitempty"`
+    RelationshipStatus []string        `json:"relationshipStatus,omitempty"`
+    LookingFor         []string        `json:"lookingFor,omitempty"`
+    LanguagesSpoken    []string        `json:"languagesSpoken,omitempty"`
+    Interests          []Interest      `json:"interests,omitempty"`
+    ProfileMode        string          `json:"profileMode,omitempty"`
+    ProfileHidden      bool            `json:"profileHidden,omitempty"`
+    ProfileStatus      string          `json:"profileStatus,omitempty"`
+    Birthdate          string          `json:"birthdate,omitempty"`
+    AboutMe            string          `json:"aboutMe,omitempty"`
 }
 
 type SocialAddress struct {
-    Type       string `json:"type"`
-    Street     string `json:"street"`
-    City       string `json:"city"`
-    State      string `json:"state"`
-    PostalCode string `json:"postalCode"`
-    Country    string `json:"country"`
-    Id         int64  `json:"id"`
-    Current    bool   `json:"current"`
+    Type       string `json:"type,omitempty"`
+    Street     string `json:"street,omitempty"`
+    City       string `json:"city,omitempty"`
+    State      string `json:"state,omitempty"`
+    PostalCode string `json:"postalCode,omitempty"`
+    Country    string `json:"country,omitempty"`
+    Id         int64  `json:"id,omitempty"`
+    Current    bool   `json:"current,omitempty"`
 }
 
 type IM struct {
-    Type   string `json:"type"`
-    Handle string `json:"handle"`
-    Id     int64  `json:"id"`
+    Type   string `json:"type,omitempty"`
+    Handle string `json:"handle,omitempty"`
+    Id     int64  `json:"id,omitempty"`
 }
 
 type Email struct {
-    Type    string `json:"type"`
-    Handle  string `json:"handle"`
-    Primary bool   `json:"primary"`
-    Id      int64  `json:"id"`
+    Type    string `json:"type,omitempty"`
+    Handle  string `json:"handle,omitempty"`
+    Primary bool   `json:"primary,omitempty"`
+    Id      int64  `json:"id,omitempty"`
 }
 
 type Website struct {
-    Id  int64  `json:"id"`
-    Url string `json:"url"`
+    Id  int64  `json:"id,omitempty"`
+    Url string `json:"url,omitempty"`
 }
 
 type Disclosure struct {
-    Name    string `json:"name"`
-    Seen    string `json:"seen"`
-    Version string `json:"version"`
+    Name    string `json:"name,omitempty"`
+    Seen    string `json:"seen,omitempty"`
+    Version string `json:"version,omitempty"`
 }
 
 type NotificationsResponse struct {
-    Notifications NotificationList `json:"notifications"`
+    Notifications NotificationList `json:"notifications,omitempty"`
 }
 
 type NotificationList struct {
-    Start        int64          `json:"start"`
-    Count        int64          `json:"count"`
-    Total        int64          `json:"total"`
-    Notification []Notification `json:"notification"`
+    Start        int64          `json:"start,omitempty"`
+    Count        int64          `json:"count,omitempty"`
+    Total        int64          `json:"total,omitempty"`
+    Notification []Notification `json:"notification,omitempty"`
 }
 
 type NotificationResponse struct {
-    Notification Notification `json:"notification"`
+    Notification Notification `json:"notification,omitempty"`
 }
 
 type Notification struct {
-    Id          string    `json:"id"`
-    AppId       string    `json:"appid"`
-    State       string    `json:"string"`
-    Created     string    `json:"created"`
-    Updated     string    `json:"updated"`
-    Recipient   string    `json:"recipient"`
-    Sender      string    `json:"sender"`
-    AppName     string    `json:"appname"`
-    Favicon     string    `json:"favicon"`
-    AppUrl      string    `json:"appurl"`
-    New         bool      `json:"new"`
-    Title       string    `json:"title"`
-    Type        string    `json:"type"`
-    Nfsimple    string    `json:"nfsimple"`
-    AppMsg      string    `json:"appmsg"`
-    Category    string    `json:"category"`
-    UserMessage string    `json:"usrmsg"`
-    Image       ImageInfo `json:"image"`
-    SendMsg     bool      `json:"sendmsg"`
-    Expiry      string    `json:"expiry"`
-    Choice      string    `json:"choice"`
-    Choices     []Choice  `json:"choices"`
-    Uri         string    `json:"uri"`
+    Id          string    `json:"id,omitempty"`
+    AppId       string    `json:"appid,omitempty"`
+    State       string    `json:"string,omitempty"`
+    Created     string    `json:"created,omitempty"`
+    Updated     string    `json:"updated,omitempty"`
+    Recipient   string    `json:"recipient,omitempty"`
+    Sender      string    `json:"sender,omitempty"`
+    AppName     string    `json:"appname,omitempty"`
+    Favicon     string    `json:"favicon,omitempty"`
+    AppUrl      string    `json:"appurl,omitempty"`
+    New         bool      `json:"new,omitempty"`
+    Title       string    `json:"title,omitempty"`
+    Type        string    `json:"type,omitempty"`
+    Nfsimple    string    `json:"nfsimple,omitempty"`
+    AppMsg      string    `json:"appmsg,omitempty"`
+    Category    string    `json:"category,omitempty"`
+    UserMessage string    `json:"usrmsg,omitempty"`
+    Image       ImageInfo `json:"image,omitempty"`
+    SendMsg     bool      `json:"sendmsg,omitempty"`
+    Expiry      string    `json:"expiry,omitempty"`
+    Choice      string    `json:"choice,omitempty"`
+    Choices     []Choice  `json:"choices,omitempty"`
+    Uri         string    `json:"uri,omitempty"`
 }
 
 type Choice struct {
-    Label       string `json:"label"`
-    UrlTemplate string `json:"urltemplate"`
+    Label       string `json:"label,omitempty"`
+    UrlTemplate string `json:"urltemplate,omitempty"`
 }
 
 type ConnectionsResponse struct {
-    Connections ConnectionList `json:"connections"`
+    Connections ConnectionList `json:"connections,omitempty"`
 }
 
 type ConnectionList struct {
-    Start      int64        `json:"start"`
-    Count      int64        `json:"count"`
-    Total      int64        `json:"total"`
-    Connection []Connection `json:"connection"`
+    Start      int64        `json:"start,omitempty"`
+    Count      int64        `json:"count,omitempty"`
+    Total      int64        `json:"total,omitempty"`
+    Connection []Connection `json:"connection,omitempty"`
 }
 
 type ConnectionResponse struct {
-    Connection Connection `json:"connection"`
+    Connection Connection `json:"connection,omitempty"`
 }
 
 type Connection struct {
-    ContactId int64  `json:"contactid"`
-    Guid      string `json:"guid"`
-    Uri       string `json:"uri"`
-    Created   string `json:"created"`
-    Updated   string `json:"updated"`
+    ContactId int64  `json:"contactid,omitempty"`
+    Guid      string `json:"guid,omitempty"`
+    Uri       string `json:"uri,omitempty"`
+    Created   string `json:"created,omitempty"`
+    Updated   string `json:"updated,omitempty"`
 }
 
 type ErrorResponse struct {
-    Error Error `json:"error"`
+    Error Error `json:"error,omitempty"`
 }
 
 func (p *ErrorResponse) String() string { return p.Error.Description }
 
 type Error struct {
-    Uri         string `json:"uri"`
-    Lang        string `json:"lang"`
-    Description string `json:"description"`
+    Uri         string `json:"uri,omitempty"`
+    Lang        string `json:"lang,omitempty"`
+    Description string `json:"description,omitempty"`
 }
 
 func (p *Error) String() string { return p.Description }
