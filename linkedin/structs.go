@@ -41,7 +41,15 @@ type CertificationList struct {
 }
 
 type Certification struct {
-    Id   int    `json:"id"`
+    Id        int       `json:"id"`
+    Name      string    `json:"name"`
+    Authority Authority `json:"authorityName"`
+    Number    string    `json:"number"`
+    StartDate Date      `json:"startDate"`
+    EndDate   Date      `json:"endDate"`
+}
+
+type Authority struct {
     Name string `json:"name"`
 }
 
@@ -77,8 +85,9 @@ type LanguageList struct {
 }
 
 type LanguageWrapper struct {
-    Id       int      `json:"id"`
-    Language Language `json:"language"`
+    Id          int         `json:"id"`
+    Language    Language    `json:"language"`
+    Proficiency Proficiency `json:"proficiency"`
 }
 
 type Language struct {
@@ -144,11 +153,23 @@ type SkillList struct {
 }
 
 type SkillWrapper struct {
-    Id    int   `json:"id"`
-    Skill Skill `json:"skill"`
+    Id          int             `json:"id"`
+    Skill       Skill           `json:"skill"`
+    Proficiency Proficiency     `json:"proficiency"`
+    Years       ExperienceYears `json:"years"`
 }
 
 type Skill struct {
+    Name string `json:"name"`
+}
+
+type Proficiency struct {
+    Level string `json:"level"`
+    Name  string `json:"name"`
+}
+
+type ExperienceYears struct {
+    Id   int    `json:"id"`
     Name string `json:"name"`
 }
 
