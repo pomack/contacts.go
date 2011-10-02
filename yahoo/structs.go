@@ -49,15 +49,6 @@ type Contact struct {
     Categories   []Category     `json:"categories,omitempty"`
 }
 
-type Address struct {
-    Street          string `json:"street,omitempty"`
-    City            string `json:"city,omitempty"`
-    StateOrProvince string `json:"stateOrProvince,omitempty"`
-    PostalCode      string `json:"postalCode,omitempty"`
-    Country         string `json:"country,omitempty"`
-    CountryCode     string `json:"countryCode,omitempty"`
-}
-
 type Anniversary struct {
     Day   int `json:"day,omitempty"`
     Month int `json:"month,omitempty"`
@@ -84,6 +75,36 @@ func (p *Name) FromJSON(o jsonhelper.JSONObject) {
     p.Suffix = o.GetAsString("suffix")
     p.GivenNameSound = o.GetAsString("givenNameSound")
     p.FamilyNameSound = o.GetAsString("familyNameSound")
+}
+
+type Date struct {
+    Year        int `json:"year,omitempty"`
+    Month       int `json:"month,omitempty"`
+    Day         int `json:"day,omitempty"`
+}
+
+func (p *Date) FromJSON(o jsonhelper.JSONObject) {
+    p.Year = o.GetAsInt("year")
+    p.Month = o.GetAsInt("month")
+    p.Day = o.GetAsInt("day")
+}
+
+type Address struct {
+    Street              string `json:"street,omitempty"`
+    City                string `json:"city,omitempty"`
+    StateOrProvince     string `json:"stateOrProvince,omitempty"`
+    PostalCode          string `json:"postalCode,omitempty"`
+    Country             string `json:"country,omitempty"`
+    CountryCode         string `json:"countryCode,omitempty"`
+}
+
+func (p *Address) FromJSON(o jsonhelper.JSONObject) {
+    p.Street = o.GetAsString("street")
+    p.City = o.GetAsString("city")
+    p.StateOrProvince = o.GetAsString("stateOrProvince")
+    p.PostalCode = o.GetAsString("postalCode")
+    p.Country = o.GetAsString("country")
+    p.CountryCode = o.GetAsString("countryCode")
 }
 
 type ContactField struct {
@@ -119,11 +140,20 @@ func (p *ContactField) UnmarshalJSON(data []byte) os.Error {
     for i := 0; i < lc; i++ {
         p.Categories[i] = categories.GetAsString(i)
     }
-    if p.Type == "name" {
+    switch p.Type {
+    case "name":
         var name Name
         name.FromJSON(o.GetAsObject("value"))
         p.Value = name
-    } else {
+    case "birthday", "anniversary":
+        var d Date
+        d.FromJSON(o.GetAsObject("value"))
+        p.Value = d
+    case "address":
+        var addr Address
+        addr.FromJSON(o.GetAsObject("value"))
+        p.Value = addr
+    default:
         p.Value = o.GetAsString("value")
     }
     return err
