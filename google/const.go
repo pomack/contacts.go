@@ -100,6 +100,10 @@ const (
     IM_PROTOCOL_QQ          = "http://schemas.google.com/g/2005#QQ"
     IM_PROTOCOL_SKYPE       = "http://schemas.google.com/g/2005#SKYPE"
     IM_PROTOCOL_YAHOO       = "http://schemas.google.com/g/2005#YAHOO"
+    
+    GENDER_MALE = "male"
+    GENDER_FEMALE = "female"
+    GENDER_OTHER = "other"
 
     MAILCLASS_LETTERS = "http://schemas.google.com/g/2005#letters"
     MAILCLASS_PARCELS = "http://schemas.google.com/g/2005#parcels"
