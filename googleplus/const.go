@@ -20,4 +20,32 @@ const (
     PERSON_ENDPOINT = "https://www.googleapis.com/plus/v1/people/"
     ACTIVITY_LIST_ENDPOINT = "https://www.googleapis.com/plus/v1/people/"
     ACTIVITY_ENDPOINT = "https://www.googleapis.com/plus/v1/activities/"
+    
+    EMAIL_TYPE_HOME = "home"
+    EMAIL_TYPE_WORK = "work"
+    EMAIL_TYPE_OTHER = "other"
+    
+    GENDER_MALE = "male"
+    GENDER_FEMALE = "female"
+    GENDER_OTHER = "other"
+    
+    ORGANIZATION_TYPE_SCHOOL = "school"
+    ORGANIZATION_TYPE_WORK = "work"
+    
+    RELATIONSHIP_STATUS_SINGLE = "single"
+    RELATIONSHIP_STATUS_IN_A_RELATIONSHIP = "in_a_relationship"
+    RELATIONSHIP_STATUS_ENGAGED = "engaged"
+    RELATIONSHIP_STATUS_MARRIED = "married"
+    RELATIONSHIP_STATUS_ITS_COMPLICATED = "its_complicated"
+    RELATIONSHIP_STATUS_OPEN_RELATIONSHIP = "open_relationship"
+    RELATIONSHIP_STATUS_WIDOWED = "widowed"
+    RELATIONSHIP_STATUS_IN_DOMESTIC_PARTNERSHIP = "in_domestic_partnership"
+    RELATIONSHIP_STATUS_IN_CIVIL_UNION = "in_civil_union"
+    
+    URL_TYPE_HOME = "home"
+    URL_TYPE_WORK = "work"
+    URL_TYPE_BLOG = "blog"
+    URL_TYPE_PROFILE = "profile"
+    URL_TYPE_OTHER = "other"
+    
 )
