@@ -1,12 +1,22 @@
 package google
 
 const (
+    XMLNS_ATOM = "http://www.w3.org/2005/Atom"
+    XMLNS_GCONTACT = "http://schemas.google.com/contact/2008"
+    XMLNS_GDATA_BATCH = "http://schemas.google.com/gdata/batch"
+    XMLNS_GD = "http://schemas.google.com/g/2005"
+    XMLNS_OPENSEARCH = "http://a9.com/-/spec/opensearchrss/1.0/"
+    
     ATOM_CATEGORY_SCHEME_KIND  = "http://schemas.google.com/g/2005#kind"
     ATOM_CATEGORY_TERM_CONTACT = "http://schemas.google.com/contact/2008#contact"
 
     REL_WORK  = "http://schemas.google.com/g/2005#work"
     REL_HOME  = "http://schemas.google.com/g/2005#home"
     REL_OTHER = "http://schemas.google.com/g/2005#other"
+    
+    REL_SHORT_WORK = "work"
+    REL_SHORT_HOME = "home"
+    REL_SHORT_OTHER = "other"
 
     REL_MOBILE     = "http://schemas.google.com/g/2005#mobile"
     REL_NETMEETING = "http://schemas.google.com/g/2005#netmeeting"
