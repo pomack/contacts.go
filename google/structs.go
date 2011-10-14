@@ -86,6 +86,11 @@ type ContactFeed struct {
 
 type Contact struct {
     Id                        AtomId                    `json:"id,omitempty"`
+    Xmlns                     string                    `json:"xmlns,omitempty"`
+    XmlnsGcontact             string                    `json:"xmlns$gContact,omitempty"`
+    XmlnsBatch                string                    `json:"xmlns$batch,omitempty"`
+    XmlnsGd                   string                    `json:"xmlns$gd,omitempty"`
+    Etag                      string                    `json:"gd$etag,omitempty"`
     Updated                   AtomUpdated               `json:"updated,omitempty"`
     Categories                []AtomCategory            `json:"category,omitempty"`
     Title                     AtomTitle                 `json:"title,omitempty"`
@@ -417,21 +422,42 @@ type GroupsFeedResponse struct {
 }
 
 type GroupsFeed struct {
-    Id           AtomId         `json:"id,omitempty"`
-    Updated      AtomUpdated    `json:"updated,omitempty"`
-    Category     []AtomCategory `json:"category,omitempty"`
-    Title        AtomTitle      `json:"title,omitempty"`
-    Link         []AtomLink     `json:"link,omitempty"`
-    Author       []AtomAuthor   `json:"author,omitempty"`
-    Generator    AtomGenerator  `json:"generator,omitempty"`
-    TotalResults AtomText       `json:"openSearch$totalResults,omitempty"`
-    StartIndex   AtomText       `json:"openSearch$startIndex,omitempty"`
-    ItemsPerPage AtomText       `json:"openSearch$itemsPerPage,omitempty"`
-    Entries      []ContactGroup `json:"entry,omitempty"`
+    Id              AtomId         `json:"id,omitempty"`
+    Xmlns           string         `json:"xmlns,omitempty"`
+    XmlnsOpenSearch string         `json:"xmlns$openSearch,omitempty"`
+    XmlnsGcontact   string         `json:"xmlns$gContact,omitempty"`
+    XmlnsBatch      string         `json:"xmlns$batch,omitempty"`
+    XmlnsGd         string         `json:"xmlns$gd,omitempty"`
+    Updated         AtomUpdated    `json:"updated,omitempty"`
+    Category        []AtomCategory `json:"category,omitempty"`
+    Title           AtomTitle      `json:"title,omitempty"`
+    Link            []AtomLink     `json:"link,omitempty"`
+    Author          []AtomAuthor   `json:"author,omitempty"`
+    Generator       AtomGenerator  `json:"generator,omitempty"`
+    TotalResults    AtomText       `json:"openSearch$totalResults,omitempty"`
+    StartIndex      AtomText       `json:"openSearch$startIndex,omitempty"`
+    ItemsPerPage    AtomText       `json:"openSearch$itemsPerPage,omitempty"`
+    Entries         []ContactGroup `json:"entry,omitempty"`
 }
+func NewGroupsFeed() *GroupsFeed {
+    return &GroupsFeed{
+        Xmlns:XMLNS_ATOM,
+        XmlnsOpenSearch:XMLNS_OPENSEARCH,
+        XmlnsGcontact:XMLNS_GCONTACT,
+        XmlnsBatch:XMLNS_GDATA_BATCH,
+        XmlnsGd:XMLNS_GD,
+    }
+}
+
 
 type GroupResponse struct {
     Version  string        `json:"version,omitempty"`
     Encoding string        `json:"encoding,omitempty"`
     Entry    *ContactGroup `json:"entry,omitempty"`
 }
+
+
+type ContactEntryInsertRequest ContactEntryResponse
+type ContactEntryUpdateRequest ContactEntryResponse
+
+
