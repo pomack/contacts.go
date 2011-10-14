@@ -198,3 +198,148 @@ func RetrieveConnectionForUser(client oauth2_client.OAuth2Client, userId, connec
     err := retrieveInfo(client, "user", userId, "connection", connectionId, "", "", m, resp)
     return resp, err
 }
+
+
+func CreateContact(client oauth2_client.OAuth2Client, userId, contact *Contact) (err os.Error) {
+    if userId == "" {
+        userId = "me"
+    }
+    var useUserId string
+    if len(userId) <= 0 {
+        useUserId = YAHOO_DEFAULT_USER_ID
+    } else {
+        useUserId = url.QueryEscape(userId)
+    }
+    uri := YAHOO_SOCIAL_API_ENDPOINT
+    scope := "user"
+    resourceName := "contacts"
+    for _, s := range []string{scope, useUserId, resourceName} {
+        if len(s) > 0 {
+            if uri[len(uri)-1] != '/' {
+                uri += "/"
+            }
+            uri += s
+        }
+    }
+    headers := make(http.Header)
+    headers.Set("Accept", "application/json")
+    headers.Set("Content-Type", "application/json; charset=utf-8")
+    m := make(url.Values)
+    m.Add("alt", "json")
+    b, err := json.Marshal(contact)
+    if err != nil {
+        return err
+    }
+    resp, _, err := oauth2_client.AuthorizedPostRequestBytes(client, headers, uri, m, b)
+    if err != nil {
+        return err
+    }
+    if resp != nil {
+        if resp.StatusCode >= 400 {
+            e := new(ErrorResponse)
+            b, _ := ioutil.ReadAll(resp.Body)
+            json.Unmarshal(b, e)
+            if len(e.Error.Description) > 0 {
+                err = e
+            } else {
+                err = os.NewError(string(b))
+            }
+        }
+    }
+    return err
+}
+
+
+func UpdateContact(client oauth2_client.OAuth2Client, userId, contactId string, contact *Contact) (err os.Error) {
+    if userId == "" {
+        userId = "me"
+    }
+    var useUserId string
+    if len(userId) <= 0 {
+        useUserId = YAHOO_DEFAULT_USER_ID
+    } else {
+        useUserId = url.QueryEscape(userId)
+    }
+    uri := YAHOO_SOCIAL_API_ENDPOINT
+    scope := "user"
+    resourceName := "contact"
+    resourceId := contactId
+    for _, s := range []string{scope, useUserId, resourceName, resourceId} {
+        if len(s) > 0 {
+            if uri[len(uri)-1] != '/' {
+                uri += "/"
+            }
+            uri += s
+        }
+    }
+    headers := make(http.Header)
+    headers.Set("Accept", "application/json")
+    headers.Set("Content-Type", "application/json; charset=utf-8")
+    m := make(url.Values)
+    m.Add("alt", "json")
+    b, err := json.Marshal(contact)
+    if err != nil {
+        return err
+    }
+    resp, _, err := oauth2_client.AuthorizedPutRequestBytes(client, headers, uri, m, b)
+    if err != nil {
+        return err
+    }
+    if resp != nil {
+        if resp.StatusCode >= 400 {
+            e := new(ErrorResponse)
+            b, _ := ioutil.ReadAll(resp.Body)
+            json.Unmarshal(b, e)
+            if len(e.Error.Description) > 0 {
+                err = e
+            } else {
+                err = os.NewError(string(b))
+            }
+        }
+    }
+    return err
+}
+
+
+func DeleteContact(client oauth2_client.OAuth2Client, userId, contactId string) (err os.Error) {
+    if userId == "" {
+        userId = "me"
+    }
+    var useUserId string
+    if len(userId) <= 0 {
+        useUserId = YAHOO_DEFAULT_USER_ID
+    } else {
+        useUserId = url.QueryEscape(userId)
+    }
+    uri := YAHOO_SOCIAL_API_ENDPOINT
+    scope := "user"
+    resourceName := "contact"
+    resourceId := contactId
+    for _, s := range []string{scope, useUserId, resourceName, resourceId} {
+        if len(s) > 0 {
+            if uri[len(uri)-1] != '/' {
+                uri += "/"
+            }
+            uri += s
+        }
+    }
+    headers := make(http.Header)
+    headers.Set("Accept", "application/json")
+    resp, _, err := oauth2_client.AuthorizedDeleteRequest(client, headers, uri, nil)
+    if err != nil {
+        return err
+    }
+    if resp != nil {
+        if resp.StatusCode >= 400 {
+            e := new(ErrorResponse)
+            b, _ := ioutil.ReadAll(resp.Body)
+            json.Unmarshal(b, e)
+            if len(e.Error.Description) > 0 {
+                err = e
+            } else {
+                err = os.NewError(string(b))
+            }
+        }
+    }
+    return err
+}
