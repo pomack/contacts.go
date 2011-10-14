@@ -8,6 +8,7 @@ import (
     "json"
     "os"
     "strings"
+    "time"
     "url"
 )
 
@@ -93,6 +94,10 @@ func RetrieveContactPhoto(client oauth2_client.OAuth2Client, id string) (theimag
     return theimage, format, err
 }
 
+func RetrieveAllGroups(client oauth2_client.OAuth2Client) (*GroupsFeedResponse, os.Error) {
+    return RetrieveGroupsWithUserId(client, "", nil)
+}
+
 func RetrieveGroups(client oauth2_client.OAuth2Client, m url.Values) (*GroupsFeedResponse, os.Error) {
     return RetrieveGroupsWithUserId(client, "", m)
 }
@@ -112,3 +117,158 @@ func RetrieveGroupWithUserId(client oauth2_client.OAuth2Client, userId, id strin
     err := retrieveInfo(client, GOOGLE_GROUPS_SCOPE, userId, "", id, m, resp)
     return resp, err
 }
+
+
+func CreateContact(client oauth2_client.OAuth2Client, userId, projection string, value *Contact) (response *ContactEntryResponse, err os.Error) {
+    var useUserId string
+    if len(userId) <= 0 {
+        useUserId = GOOGLE_DEFAULT_USER_ID
+    } else {
+        useUserId = url.QueryEscape(userId)
+    }
+    if len(projection) <= 0 {
+        projection = GOOGLE_DEFAULT_PROJECTION
+    }
+    headers := make(http.Header)
+    headers.Set("GData-Version", "3.0")
+    m := make(url.Values)
+    if len(m.Get(CONTACTS_ALT_PARAM)) <= 0 {
+        m.Set(CONTACTS_ALT_PARAM, "json")
+    }
+    uri := GOOGLE_CONTACTS_API_ENDPOINT
+    for _, s := range []string{useUserId, projection} {
+        if len(s) > 0 {
+            if uri[len(uri)-1] != '/' {
+                uri += "/"
+            }
+            uri += s
+        }
+    }
+    entry := &ContactEntryInsertRequest{Version: "1.0", Encoding: "UTF-8", Entry: value}
+    value.Xmlns = XMLNS_ATOM
+    value.XmlnsGcontact = XMLNS_GCONTACT
+    value.XmlnsBatch = XMLNS_GDATA_BATCH
+    value.XmlnsGd = XMLNS_GD
+    buf, err := json.Marshal(entry)
+    if err != nil {
+        return
+    }
+    resp, _, err := oauth2_client.AuthorizedPostRequestBytes(client, headers, uri, m, buf)
+    if err != nil {
+        return
+    }
+    if resp != nil {
+        if resp.StatusCode >= 400 {
+            b, _ := ioutil.ReadAll(resp.Body)
+            err = os.NewError(string(b))
+        } else {
+            response = new(ContactEntryResponse)
+            err = json.NewDecoder(resp.Body).Decode(response)
+        }
+    }
+    return
+}
+
+
+func UpdateContact(client oauth2_client.OAuth2Client, userId, projection string, original, value *Contact) (response *ContactEntryResponse, err os.Error) {
+    var useUserId string
+    if len(userId) <= 0 {
+        useUserId = GOOGLE_DEFAULT_USER_ID
+    } else {
+        useUserId = url.QueryEscape(userId)
+    }
+    if len(projection) <= 0 {
+        projection = GOOGLE_DEFAULT_PROJECTION
+    }
+    headers := make(http.Header)
+    headers.Set("GData-Version", "3.0")
+    headers.Set("If-Match", original.Etag)
+    m := make(url.Values)
+    if len(m.Get(CONTACTS_ALT_PARAM)) <= 0 {
+        m.Set(CONTACTS_ALT_PARAM, "json")
+    }
+    uri := GOOGLE_CONTACTS_API_ENDPOINT
+    idParts := strings.Split(original.Id.Value, "/")
+    for _, s := range []string{useUserId, projection, idParts[len(idParts)-1]} {
+        if len(s) > 0 {
+            if uri[len(uri)-1] != '/' {
+                uri += "/"
+            }
+            uri += s
+        }
+    }
+    entry := &ContactEntryUpdateRequest{Entry: value}
+    value.Xmlns = XMLNS_ATOM
+    value.XmlnsGcontact = XMLNS_GCONTACT
+    value.XmlnsBatch = XMLNS_GDATA_BATCH
+    value.XmlnsGd = XMLNS_GD
+    value.Etag = original.Etag
+    value.Id = original.Id
+    value.Updated.Value = time.UTC().Format(GOOGLE_DATETIME_FORMAT)
+    value.Categories = make([]AtomCategory, 1)
+    value.Categories[0].Scheme = ATOM_CATEGORY_SCHEME_KIND
+    value.Categories[0].Term = ATOM_CATEGORY_TERM_CONTACT
+    buf, err := json.Marshal(entry)
+    if err != nil {
+        return
+    }
+    resp, _, err := oauth2_client.AuthorizedPutRequestBytes(client, headers, uri, m, buf)
+    if err != nil {
+        return
+    }
+    if resp != nil {
+        if resp.StatusCode >= 400 {
+            b, _ := ioutil.ReadAll(resp.Body)
+            err = os.NewError(string(b))
+        } else {
+            response = new(ContactEntryResponse)
+            err = json.NewDecoder(resp.Body).Decode(response)
+        }
+    }
+    return
+}
+
+
+func DeleteContact(client oauth2_client.OAuth2Client, userId, projection string, original *Contact) (err os.Error) {
+    var useUserId string
+    if len(userId) <= 0 {
+        useUserId = GOOGLE_DEFAULT_USER_ID
+    } else {
+        useUserId = url.QueryEscape(userId)
+    }
+    if len(projection) <= 0 {
+        projection = GOOGLE_DEFAULT_PROJECTION
+    }
+    headers := make(http.Header)
+    headers.Set("GData-Version", "3.0")
+    headers.Set("If-Match", original.Etag)
+    m := make(url.Values)
+    if len(m.Get(CONTACTS_ALT_PARAM)) <= 0 {
+        m.Set(CONTACTS_ALT_PARAM, "json")
+    }
+    uri := GOOGLE_CONTACTS_API_ENDPOINT
+    idParts := strings.Split(original.Id.Value, "/")
+    for _, s := range []string{useUserId, projection, idParts[len(idParts)-1]} {
+        if len(s) > 0 {
+            if uri[len(uri)-1] != '/' {
+                uri += "/"
+            }
+            uri += s
+        }
+    }
+    resp, _, err := oauth2_client.AuthorizedDeleteRequest(client, headers, uri, nil)
+    if err != nil {
+        return
+    }
+    if resp != nil {
+        if resp.StatusCode >= 400 {
+            b, _ := ioutil.ReadAll(resp.Body)
+            err = os.NewError(string(b))
+        }
+    }
+    return
+}
+
+
+
+
