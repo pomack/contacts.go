@@ -1,7 +1,7 @@
 package twitter
 
 import (
-    "github.com/pomack/jsonhelper"
+    "github.com/pomack/jsonhelper.go/jsonhelper"
 )
 
 type User struct {

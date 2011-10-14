@@ -1,7 +1,7 @@
 package yahoo
 
 import (
-    "github.com/pomack/jsonhelper"
+    "github.com/pomack/jsonhelper.go/jsonhelper"
     "json"
     "os"
 )

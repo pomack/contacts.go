@@ -1,7 +1,7 @@
 package facebook
 
 import (
-    "github.com/pomack/oauth2_client"
+    "github.com/pomack/oauth2_client.go/oauth2_client"
     "io/ioutil"
     "json"
     "os"

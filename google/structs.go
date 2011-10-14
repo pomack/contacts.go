@@ -1,10 +1,5 @@
 package google
 
-import (
-//"github.com/pomack/jsonhelper"
-//"github.com/pomack/oauth2_client"
-)
-
 type AtomEntry interface{}
 
 type AtomText struct {

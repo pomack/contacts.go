@@ -1,7 +1,7 @@
 package yahoo
 
 import (
-    "github.com/pomack/oauth2_client"
+    "github.com/pomack/oauth2_client.go/oauth2_client"
     "http"
     "io/ioutil"
     "json"
@@ -200,7 +200,7 @@ func RetrieveConnectionForUser(client oauth2_client.OAuth2Client, userId, connec
 }
 
 
-func CreateContact(client oauth2_client.OAuth2Client, userId, contact *Contact) (err os.Error) {
+func CreateContact(client oauth2_client.OAuth2Client, userId string, contact *Contact) (err os.Error) {
     if userId == "" {
         userId = "me"
     }

@@ -1,7 +1,7 @@
 package smugmug
 
 import (
-    "github.com/pomack/oauth2_client"
+    "github.com/pomack/oauth2_client.go/oauth2_client"
     "http"
     "io/ioutil"
     "json"
