@@ -1,5 +1,10 @@
 package google
 
+import (
+    "strings"
+    "url"
+)
+
 type AtomEntry interface{}
 
 type AtomText struct {
@@ -121,8 +126,18 @@ type Contact struct {
     Sensitivity               Sensitivity               `json:"gContact$sensitivity,omitempty"`
     ShortName                 ShortName                 `json:"gContact$shortName,omitempty"`
     Subject                   Subject                   `json:"gContact$subject,omitempty"`
-    UserDefinedFields         []UserDefinedField        `json:"gContact:$userDefinedField,omitempty"`
+    UserDefinedFields         []UserDefinedField        `json:"gContact$userDefinedField,omitempty"`
     Websites                  []Website                 `json:"gContact$website,omitempty"`
+}
+func (p *Contact) ContactId() string {
+    arr := strings.Split(p.Id.Value, "/")
+    if len(arr) > 0 {
+        return arr[len(arr)-1]
+    }
+    return ""
+}
+func (p *Contact) SetContactId(contactId string) {
+    p.Id.Value = strings.Join([]string{GOOGLE_CONTACTS_API_ENDPOINT, "default/full/", url.QueryEscape(contactId)}, "")
 }
 
 type AdditionalName AtomName
@@ -314,14 +329,28 @@ type FormattedAddress AtomText
 type ContactGroup struct {
     Etag               string             `json:"gd$etag,omitempty"`
     Id                 AtomId             `json:"id,omitempty"`
+    Xmlns              string             `json:"xmlns,omitempty"`
+    XmlnsGcontact      string             `json:"xmlns$gContact,omitempty"`
+    XmlnsBatch         string             `json:"xmlns$batch,omitempty"`
+    XmlnsGd            string             `json:"xmlns$gd,omitempty"`
     Updated            AtomUpdated        `json:"updated,omitempty"`
-    Category           []AtomCategory     `json:"category,omitempty"`
+    Categories         []AtomCategory     `json:"category,omitempty"`
     Title              AtomText           `json:"title,omitempty"`
     Content            AtomContent        `json:"content,omitempty"`
     Links              []AtomLink         `json:"link,omitempty"`
     Deleted            *DeletedMarker     `json:"gd$deleted,omitempty"`
     ExtendedProperties []ExtendedProperty `json:"gd$extendedProperty,omitempty"`
     SystemGroup        SystemGroup        `json:"gContact$systemGroup,omitempty"`
+}
+func (p *ContactGroup) GroupId() string {
+    arr := strings.Split(p.Id.Value, "/")
+    if len(arr) > 0 {
+        return arr[len(arr)-1]
+    }
+    return ""
+}
+func (p *ContactGroup) SetGroupId(groupId string) {
+    p.Id.Value = strings.Join([]string{GOOGLE_GROUPS_API_ENDPOINT, "default/full/", url.QueryEscape(groupId)}, "")
 }
 
 type BillingInformation AtomText
@@ -426,7 +455,7 @@ type GroupsFeed struct {
     Updated         AtomUpdated    `json:"updated,omitempty"`
     Category        []AtomCategory `json:"category,omitempty"`
     Title           AtomTitle      `json:"title,omitempty"`
-    Link            []AtomLink     `json:"link,omitempty"`
+    Links           []AtomLink     `json:"link,omitempty"`
     Author          []AtomAuthor   `json:"author,omitempty"`
     Generator       AtomGenerator  `json:"generator,omitempty"`
     TotalResults    AtomText       `json:"openSearch$totalResults,omitempty"`
@@ -454,5 +483,31 @@ type GroupResponse struct {
 
 type ContactEntryInsertRequest ContactEntryResponse
 type ContactEntryUpdateRequest ContactEntryResponse
+type GroupEntryInsertRequest GroupResponse
+type GroupEntryUpdateRequest GroupResponse
 
+type ContactQuery struct {
+    Alt                 string      `json:"alt,omitempty"`
+    Q                   string      `json:"q,omitempty"`
+    MaxResults          int64       `json:"max-results,omitempty"`
+    StartIndex          int64       `json:"start-index,omitempty"`
+    UpdatedMin          string      `json:"updated-min,omitempty"`
+    OrderBy             string      `json:"orderby,omitempty"`
+    ShowDeleted         bool        `json:"showdeleted,omitempty"`
+    RequireAllDeleted   bool        `json:"requiredalldeleted,omitempty"`
+    SortOrder           string      `json:"sortorder,omitempty"`
+    Group               string      `json:"group,omitempty"`
+}
+
+type GroupQuery struct {
+    Alt                 string      `json:"alt,omitempty"`
+    Q                   string      `json:"q,omitempty"`
+    MaxResults          int64       `json:"max-results,omitempty"`
+    StartIndex          int64       `json:"start-index,omitempty"`
+    UpdatedMin          string      `json:"updated-min,omitempty"`
+    OrderBy             string      `json:"orderby,omitempty"`
+    ShowDeleted         bool        `json:"showdeleted,omitempty"`
+    RequireAllDeleted   bool        `json:"requiredalldeleted,omitempty"`
+    SortOrder           string      `json:"sortorder,omitempty"`
+}
 
