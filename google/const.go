@@ -9,6 +9,7 @@ const (
     
     ATOM_CATEGORY_SCHEME_KIND  = "http://schemas.google.com/g/2005#kind"
     ATOM_CATEGORY_TERM_CONTACT = "http://schemas.google.com/contact/2008#contact"
+    ATOM_CATEGORY_TERM_GROUP = "http://schemas.google.com/contact/2008#group"
 
     REL_WORK  = "http://schemas.google.com/g/2005#work"
     REL_HOME  = "http://schemas.google.com/g/2005#home"
