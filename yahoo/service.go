@@ -199,7 +199,6 @@ func RetrieveConnectionForUser(client oauth2_client.OAuth2Client, userId, connec
     return resp, err
 }
 
-
 func CreateContact(client oauth2_client.OAuth2Client, userId string, contact *Contact) (err os.Error) {
     if userId == "" {
         userId = "me"
@@ -248,7 +247,6 @@ func CreateContact(client oauth2_client.OAuth2Client, userId string, contact *Co
     }
     return err
 }
-
 
 func UpdateContact(client oauth2_client.OAuth2Client, userId, contactId string, contact *Contact) (err os.Error) {
     if userId == "" {
@@ -299,7 +297,6 @@ func UpdateContact(client oauth2_client.OAuth2Client, userId, contactId string, 
     }
     return err
 }
-
 
 func DeleteContact(client oauth2_client.OAuth2Client, userId, contactId string) (err os.Error) {
     if userId == "" {

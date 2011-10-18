@@ -118,7 +118,6 @@ func RetrieveGroupWithUserId(client oauth2_client.OAuth2Client, userId, id strin
     return resp, err
 }
 
-
 func CreateContact(client oauth2_client.OAuth2Client, userId, projection string, value *Contact) (response *ContactEntryResponse, err os.Error) {
     var useUserId string
     if len(userId) <= 0 {
@@ -168,7 +167,6 @@ func CreateContact(client oauth2_client.OAuth2Client, userId, projection string,
     }
     return
 }
-
 
 func UpdateContact(client oauth2_client.OAuth2Client, userId, projection string, original, value *Contact) (response *ContactEntryResponse, err os.Error) {
     var useUserId string
@@ -227,7 +225,6 @@ func UpdateContact(client oauth2_client.OAuth2Client, userId, projection string,
     return
 }
 
-
 func DeleteContact(client oauth2_client.OAuth2Client, userId, projection string, original *Contact) (err os.Error) {
     var useUserId string
     if len(userId) <= 0 {
@@ -266,7 +263,6 @@ func DeleteContact(client oauth2_client.OAuth2Client, userId, projection string,
     }
     return
 }
-
 
 func CreateGroup(client oauth2_client.OAuth2Client, userId, projection string, value *ContactGroup) (response *GroupResponse, err os.Error) {
     var useUserId string
@@ -317,7 +313,6 @@ func CreateGroup(client oauth2_client.OAuth2Client, userId, projection string, v
     }
     return
 }
-
 
 func UpdateGroup(client oauth2_client.OAuth2Client, userId, projection string, original, value *ContactGroup) (response *GroupResponse, err os.Error) {
     var useUserId string
@@ -376,8 +371,6 @@ func UpdateGroup(client oauth2_client.OAuth2Client, userId, projection string, o
     return
 }
 
-
-
 func DeleteGroup(client oauth2_client.OAuth2Client, userId, projection string, original *ContactGroup) (err os.Error) {
     var useUserId string
     if len(userId) <= 0 {
@@ -416,8 +409,3 @@ func DeleteGroup(client oauth2_client.OAuth2Client, userId, projection string, o
     }
     return
 }
-
-
-
-
-

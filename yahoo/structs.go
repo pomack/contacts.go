@@ -78,9 +78,9 @@ func (p *Name) FromJSON(o jsonhelper.JSONObject) {
 }
 
 type Date struct {
-    Year        int `json:"year,omitempty"`
-    Month       int `json:"month,omitempty"`
-    Day         int `json:"day,omitempty"`
+    Year  int `json:"year,omitempty"`
+    Month int `json:"month,omitempty"`
+    Day   int `json:"day,omitempty"`
 }
 
 func (p *Date) FromJSON(o jsonhelper.JSONObject) {
@@ -90,12 +90,12 @@ func (p *Date) FromJSON(o jsonhelper.JSONObject) {
 }
 
 type Address struct {
-    Street              string `json:"street,omitempty"`
-    City                string `json:"city,omitempty"`
-    StateOrProvince     string `json:"stateOrProvince,omitempty"`
-    PostalCode          string `json:"postalCode,omitempty"`
-    Country             string `json:"country,omitempty"`
-    CountryCode         string `json:"countryCode,omitempty"`
+    Street          string `json:"street,omitempty"`
+    City            string `json:"city,omitempty"`
+    StateOrProvince string `json:"stateOrProvince,omitempty"`
+    PostalCode      string `json:"postalCode,omitempty"`
+    Country         string `json:"country,omitempty"`
+    CountryCode     string `json:"countryCode,omitempty"`
 }
 
 func (p *Address) FromJSON(o jsonhelper.JSONObject) {

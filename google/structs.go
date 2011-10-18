@@ -129,6 +129,7 @@ type Contact struct {
     UserDefinedFields         []UserDefinedField        `json:"gContact$userDefinedField,omitempty"`
     Websites                  []Website                 `json:"gContact$website,omitempty"`
 }
+
 func (p *Contact) ContactId() string {
     arr := strings.Split(p.Id.Value, "/")
     if len(arr) > 0 {
@@ -342,6 +343,7 @@ type ContactGroup struct {
     ExtendedProperties []ExtendedProperty `json:"gd$extendedProperty,omitempty"`
     SystemGroup        SystemGroup        `json:"gContact$systemGroup,omitempty"`
 }
+
 func (p *ContactGroup) GroupId() string {
     arr := strings.Split(p.Id.Value, "/")
     if len(arr) > 0 {
@@ -463,16 +465,16 @@ type GroupsFeed struct {
     ItemsPerPage    AtomText       `json:"openSearch$itemsPerPage,omitempty"`
     Entries         []ContactGroup `json:"entry,omitempty"`
 }
+
 func NewGroupsFeed() *GroupsFeed {
     return &GroupsFeed{
-        Xmlns:XMLNS_ATOM,
-        XmlnsOpenSearch:XMLNS_OPENSEARCH,
-        XmlnsGcontact:XMLNS_GCONTACT,
-        XmlnsBatch:XMLNS_GDATA_BATCH,
-        XmlnsGd:XMLNS_GD,
+        Xmlns:           XMLNS_ATOM,
+        XmlnsOpenSearch: XMLNS_OPENSEARCH,
+        XmlnsGcontact:   XMLNS_GCONTACT,
+        XmlnsBatch:      XMLNS_GDATA_BATCH,
+        XmlnsGd:         XMLNS_GD,
     }
 }
-
 
 type GroupResponse struct {
     Version  string        `json:"version,omitempty"`
@@ -480,34 +482,32 @@ type GroupResponse struct {
     Entry    *ContactGroup `json:"entry,omitempty"`
 }
 
-
 type ContactEntryInsertRequest ContactEntryResponse
 type ContactEntryUpdateRequest ContactEntryResponse
 type GroupEntryInsertRequest GroupResponse
 type GroupEntryUpdateRequest GroupResponse
 
 type ContactQuery struct {
-    Alt                 string      `json:"alt,omitempty"`
-    Q                   string      `json:"q,omitempty"`
-    MaxResults          int64       `json:"max-results,omitempty"`
-    StartIndex          int64       `json:"start-index,omitempty"`
-    UpdatedMin          string      `json:"updated-min,omitempty"`
-    OrderBy             string      `json:"orderby,omitempty"`
-    ShowDeleted         bool        `json:"showdeleted,omitempty"`
-    RequireAllDeleted   bool        `json:"requiredalldeleted,omitempty"`
-    SortOrder           string      `json:"sortorder,omitempty"`
-    Group               string      `json:"group,omitempty"`
+    Alt               string `json:"alt,omitempty"`
+    Q                 string `json:"q,omitempty"`
+    MaxResults        int64  `json:"max-results,omitempty"`
+    StartIndex        int64  `json:"start-index,omitempty"`
+    UpdatedMin        string `json:"updated-min,omitempty"`
+    OrderBy           string `json:"orderby,omitempty"`
+    ShowDeleted       bool   `json:"showdeleted,omitempty"`
+    RequireAllDeleted bool   `json:"requiredalldeleted,omitempty"`
+    SortOrder         string `json:"sortorder,omitempty"`
+    Group             string `json:"group,omitempty"`
 }
 
 type GroupQuery struct {
-    Alt                 string      `json:"alt,omitempty"`
-    Q                   string      `json:"q,omitempty"`
-    MaxResults          int64       `json:"max-results,omitempty"`
-    StartIndex          int64       `json:"start-index,omitempty"`
-    UpdatedMin          string      `json:"updated-min,omitempty"`
-    OrderBy             string      `json:"orderby,omitempty"`
-    ShowDeleted         bool        `json:"showdeleted,omitempty"`
-    RequireAllDeleted   bool        `json:"requiredalldeleted,omitempty"`
-    SortOrder           string      `json:"sortorder,omitempty"`
+    Alt               string `json:"alt,omitempty"`
+    Q                 string `json:"q,omitempty"`
+    MaxResults        int64  `json:"max-results,omitempty"`
+    StartIndex        int64  `json:"start-index,omitempty"`
+    UpdatedMin        string `json:"updated-min,omitempty"`
+    OrderBy           string `json:"orderby,omitempty"`
+    ShowDeleted       bool   `json:"showdeleted,omitempty"`
+    RequireAllDeleted bool   `json:"requiredalldeleted,omitempty"`
+    SortOrder         string `json:"sortorder,omitempty"`
 }
-
