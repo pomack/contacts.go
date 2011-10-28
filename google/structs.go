@@ -65,23 +65,68 @@ type ContactFeedResponse struct {
     Feed     *ContactFeed `json:"feed,omitempty"`
 }
 
+func NewContactFeedResponse() *ContactFeedResponse {
+    return &ContactFeedResponse{
+        Version:  "1.0",
+        Encoding: "UTF-8",
+        Feed:     NewContactFeed(),
+    }
+}
+
 type ContactEntryResponse struct {
     Version  string   `json:"version,omitempty"`
     Encoding string   `json:"encoding,omitempty"`
     Entry    *Contact `json:"entry,omitempty"`
 }
 
+func NewContactEntryResponse() *ContactEntryResponse {
+    return &ContactEntryResponse{
+        Version:  "1.0",
+        Encoding: "UTF-8",
+    }
+}
+
 type ContactFeed struct {
     Id           AtomId         `json:"id,omitempty"`
+    Xmlns        string         `json:"xmlns,omitempty"`
+    XmlnsOpenSearch string      `json:"xmlns$openSearch,omitempty"`
+    XmlnsGcontact string        `json:"xmlns$gContact,omitempty"`
+    XmlnsBatch   string         `json:"xmlns$batch,omitempty"`
+    XmlnsGd      string         `json:"xmlns$gd,omitempty"`
     Updated      AtomUpdated    `json:"updated,omitempty"`
     Categories   []AtomCategory `json:"category,omitempty"`
     Title        AtomTitle      `json:"title,omitempty"`
     Links        []AtomLink     `json:"link,omitempty"`
+    Author       []AtomAuthor   `json:"author,omitempty"`
     Generator    AtomGenerator  `json:"generator,omitempty"`
     TotalResults AtomText       `json:"openSearch$totalResults,omitempty"`
     StartIndex   AtomText       `json:"openSearch$startIndex,omitempty"`
     ItemsPerPage AtomText       `json:"openSearch$itemsPerPage,omitempty"`
     Entries      []Contact      `json:"entry,omitempty"`
+}
+
+func NewContactFeed() *ContactFeed {
+    return &ContactFeed{
+        Xmlns:           XMLNS_ATOM,
+        XmlnsOpenSearch: XMLNS_OPENSEARCH,
+        XmlnsGcontact:   XMLNS_GCONTACT,
+        XmlnsBatch:      XMLNS_GDATA_BATCH,
+        XmlnsGd:         XMLNS_GD,
+        Categories:      []AtomCategory{
+            AtomCategory{
+                Scheme: ATOM_CATEGORY_SCHEME_KIND,
+                Term:   ATOM_CATEGORY_TERM_CONTACT,
+            },
+        },
+        Title:           AtomTitle{
+            Type:        "text",
+        },
+        Generator:       AtomGenerator{
+            Version:     "1.0",
+            Uri:         GOOGLE_FEEDS_API_ENDPOINT[0:len(GOOGLE_FEEDS_API_ENDPOINT)-1],
+            Value:       "Contacts",
+        },
+    }
 }
 
 type Contact struct {
@@ -130,13 +175,37 @@ type Contact struct {
     Websites                  []Website                 `json:"gContact$website,omitempty"`
 }
 
+func NewContact() *Contact {
+    return &Contact{
+        Xmlns:           XMLNS_ATOM,
+        XmlnsGcontact:   XMLNS_GCONTACT,
+        XmlnsBatch:      XMLNS_GDATA_BATCH,
+        XmlnsGd:         XMLNS_GD,
+    }
+}
+
 func (p *Contact) ContactId() string {
+    //http://www.google.com/m8/feeds/contacts/some_email_address/base/some_id_number
     arr := strings.Split(p.Id.Value, "/")
     if len(arr) > 0 {
         return arr[len(arr)-1]
     }
     return ""
 }
+
+func (p *Contact) ContactUserId() string {
+    //http://www.google.com/m8/feeds/contacts/some_email_address/base/some_id_number
+    arr := strings.Split(p.Id.Value, "/")
+    if len(arr) > 3 {
+        s, err := url.QueryUnescape(arr[len(arr)-3])
+        if err != nil {
+            return arr[len(arr)-3]
+        }
+        return s
+    }
+    return ""
+}
+
 func (p *Contact) SetContactId(contactId string) {
     p.Id.Value = strings.Join([]string{GOOGLE_CONTACTS_API_ENDPOINT, "default/full/", url.QueryEscape(contactId)}, "")
 }
@@ -351,6 +420,21 @@ func (p *ContactGroup) GroupId() string {
     }
     return ""
 }
+
+
+func (p *ContactGroup) GroupUserId() string {
+    //http://www.google.com/m8/feeds/groups/some_email_address/base/some_id_number
+    arr := strings.Split(p.Id.Value, "/")
+    if len(arr) > 3 {
+        s, err := url.QueryUnescape(arr[len(arr)-3])
+        if err != nil {
+            return arr[len(arr)-3]
+        }
+        return s
+    }
+    return ""
+}
+
 func (p *ContactGroup) SetGroupId(groupId string) {
     p.Id.Value = strings.Join([]string{GOOGLE_GROUPS_API_ENDPOINT, "default/full/", url.QueryEscape(groupId)}, "")
 }
@@ -447,6 +531,14 @@ type GroupsFeedResponse struct {
     Feed     *GroupsFeed `json:"feed,omitempty"`
 }
 
+func NewGroupsFeedResponse() *GroupsFeedResponse {
+    return &GroupsFeedResponse{
+        Version:  "1.0",
+        Encoding: "UTF-8",
+        Feed:     NewGroupsFeed(),
+    }
+}
+
 type GroupsFeed struct {
     Id              AtomId         `json:"id,omitempty"`
     Xmlns           string         `json:"xmlns,omitempty"`
@@ -473,6 +565,20 @@ func NewGroupsFeed() *GroupsFeed {
         XmlnsGcontact:   XMLNS_GCONTACT,
         XmlnsBatch:      XMLNS_GDATA_BATCH,
         XmlnsGd:         XMLNS_GD,
+        Category:        []AtomCategory{
+            AtomCategory{
+                Scheme: ATOM_CATEGORY_SCHEME_KIND,
+                Term:   ATOM_CATEGORY_TERM_GROUP,
+            },
+        },
+        Title:           AtomTitle{
+            Type:        "text",
+        },
+        Generator:       AtomGenerator{
+            Version:     "1.0",
+            Uri:         GOOGLE_FEEDS_API_ENDPOINT[0:len(GOOGLE_FEEDS_API_ENDPOINT)-1],
+            Value:       "Contacts",
+        },
     }
 }
 
@@ -480,6 +586,13 @@ type GroupResponse struct {
     Version  string        `json:"version,omitempty"`
     Encoding string        `json:"encoding,omitempty"`
     Entry    *ContactGroup `json:"entry,omitempty"`
+}
+
+func NewGroupResponse() *GroupResponse {
+    return &GroupResponse{
+        Version:  "1.0",
+        Encoding: "UTF-8",
+    }
 }
 
 type ContactEntryInsertRequest ContactEntryResponse
