@@ -4,6 +4,7 @@ import (
     "github.com/pomack/jsonhelper.go/jsonhelper"
     "github.com/pomack/oauth2_client.go/oauth2_client"
     "bytes"
+    //"fmt"
     "http"
     "io/ioutil"
     "json"
@@ -13,79 +14,91 @@ import (
     "time"
 )
 
-var (
+type MockGoogleClient struct {
+    oauth2_client.MockClient
     contactsById map[string]*Contact
     groupsById map[string]*ContactGroup
-)
+}
 
-func NewMockGoogleClient() oauth2_client.MockClient {
+func NewMockGoogleClient() *MockGoogleClient {
     client := oauth2_client.NewMockOAuthClient()
-    client.SetRequestHandler(handleGoogleClientRequests)
-    if contactsById == nil {
-        contactsById = make(map[string]*Contact)
+    m := &MockGoogleClient{
+        MockClient: client,
+        contactsById: make(map[string]*Contact),
+        groupsById: make(map[string]*ContactGroup),
     }
-    if groupsById == nil {
-        groupsById = make(map[string]*ContactGroup)
-    }
-    return client
+    gclient := oauth2_client.NewGoogleClient()
+    client.SetServiceId(gclient.ServiceId())
+    client.SetRequestHandler(makeHandlerForGoogleClientRequests(m))
+    return m
 }
 
-func AddMockContact(contact *Contact) {
+func makeHandlerForGoogleClientRequests(gclient *MockGoogleClient) oauth2_client.MockRequestHandler {
+    return func(client oauth2_client.MockClient, req *http.Request) (*http.Response, os.Error) {
+        return gclient.handleGoogleClientRequests(req)
+    }
+}
+
+func (p* MockGoogleClient) AddMockContact(contact *Contact) {
     if contact != nil && contact.Id.Value != "" {
-        contactsById[contact.Id.Value] = contact
+        c := new(Contact)
+        *c = *contact
+        p.contactsById[contact.Id.Value] = c
     }
 }
 
-func AddMockGroup(group *ContactGroup) {
+func (p* MockGoogleClient) AddMockGroup(group *ContactGroup) {
     if group != nil && group.Id.Value != "" {
-        groupsById[group.Id.Value] = group
+        g := new(ContactGroup)
+        *g = *group
+        p.groupsById[group.Id.Value] = g
     }
 }
 
-func AddMockContactJSON(s string) {
+func (p* MockGoogleClient) AddMockContactJSON(s string) {
     c := new(Contact)
     if err := json.Unmarshal([]byte(s), c); err == nil {
-        AddMockContact(c)
+        p.AddMockContact(c)
     }
 }
 
-func AddMockContactJSONEntry(s string) {
+func (p* MockGoogleClient) AddMockContactJSONEntry(s string) {
     c := new(ContactEntryResponse)
     if err := json.Unmarshal([]byte(s), c); err == nil {
-        AddMockContact(c.Entry)
+        p.AddMockContact(c.Entry)
     }
 }
 
-func AddMockContactJSONFeed(s string) {
+func (p* MockGoogleClient) AddMockContactJSONFeed(s string) {
     f := new(ContactFeedResponse)
     if err := json.Unmarshal([]byte(s), f); err == nil {
         if f.Feed != nil && f.Feed.Entries != nil {
             for _, c := range f.Feed.Entries {
-                AddMockContact(&c)
+                p.AddMockContact(&c)
             }
         }
     }
 }
 
-func AddMockGroupJSONEntry(s string) {
+func (p* MockGoogleClient) AddMockGroupJSONEntry(s string) {
     c := new(GroupResponse)
     if err := json.Unmarshal([]byte(s), c); err == nil {
-        AddMockGroup(c.Entry)
+        p.AddMockGroup(c.Entry)
     }
 }
 
-func AddMockGroupJSONFeed(s string) {
+func (p* MockGoogleClient) AddMockGroupJSONFeed(s string) {
     f := new(GroupsFeedResponse)
     if err := json.Unmarshal([]byte(s), f); err == nil {
         if f.Feed != nil && f.Feed.Entries != nil {
             for _, g := range f.Feed.Entries {
-                AddMockGroup(&g)
+                p.AddMockGroup(&g)
             }
         }
     }
 }
 
-func handleGoogleClientRequests(client oauth2_client.MockClient, req *http.Request) (resp *http.Response, err os.Error) {
+func (p* MockGoogleClient) handleGoogleClientRequests(req *http.Request) (resp *http.Response, err os.Error) {
     if req == nil {
         return nil, nil
     }
@@ -94,38 +107,40 @@ func handleGoogleClientRequests(client oauth2_client.MockClient, req *http.Reque
     }
     pathParts := strings.Split(req.URL.Path, "/")
     pathPartsLen := len(pathParts)
+    //fmt.Printf("Mock handling %s with parts: %v\n", req.URL.String(), pathParts)
     if strings.HasPrefix(req.URL.Path, "/m8/feeds/contacts/") {
         if req.Method == oauth2_client.GET {
             if pathParts[0] == "" {
                 switch pathPartsLen {
                 // handle /m8/feeds/contacts/default/full or
-                case 5: return handleGetContactList(client, req)
+                case 6:
+                    resp, err = p.handleGetContactList(req)
                 // handle /m8/feeds/contacts/default/full/34535483485345384
-                case 6: return handleGetContact(client, req, pathParts[5])
+                case 7:
+                    resp, err = p.handleGetContact(req, pathParts[5])
                 }
             }
         }
-        return nil, nil
-    }
-    if strings.HasPrefix(req.URL.Path, "/m8/feeds/groups/") {
+    } else if strings.HasPrefix(req.URL.Path, "/m8/feeds/groups/") {
         if req.Method == oauth2_client.GET {
             // handle /m8/feeds/contacts/default/full or
             // handle /m8/feeds/contacts/default/full/ or
             if pathParts[0] == "" {
                 switch pathPartsLen {
                 // handle /m8/feeds/groups/default/full or
-                case 5: return handleGetGroupList(client, req)
+                case 6: 
+                    resp, err = p.handleGetGroupList(req)
                 // handle /m8/feeds/groups/default/full/34535483485345384
-                case 6: return handleGetGroup(client, req, pathParts[5])
+                case 7: 
+                    resp, err = p.handleGetGroup(req, pathParts[5])
                 }
             }
         }
-        return nil, nil
-    }
-    if strings.HasPrefix(req.URL.Path, "/m8/feeds/photos/") {
+    } else if strings.HasPrefix(req.URL.Path, "/m8/feeds/photos/") {
         
     }
-    return nil, nil
+    //fmt.Printf("Done mock handle %s\n", req.URL.String())
+    return
 }
 
 func createJSONHttpResponseFromObj(req *http.Request, obj interface{}) (resp *http.Response, err os.Error) {
@@ -156,18 +171,19 @@ func createJSONHttpResponseFromObj(req *http.Request, obj interface{}) (resp *ht
     return
 }
 
-func handleGetContactList(client oauth2_client.MockClient, req *http.Request) (resp *http.Response, err os.Error) {
-    numContacts := len(contactsById)
+func (p* MockGoogleClient) handleGetContactList(req *http.Request) (resp *http.Response, err os.Error) {
+    //fmt.Printf("calling handleGetContactList\n")
+    numContacts := len(p.contactsById)
     entries := make([]Contact, numContacts)
     r := NewContactFeedResponse()
     f := r.Feed
     f.Entries = entries
     i := 0
-    for _, v := range contactsById {
+    for _, v := range p.contactsById {
         entries[i] = *v
         i++
     }
-    userInfo, _ := client.RetrieveUserInfo()
+    userInfo, _ := p.RetrieveUserInfo()
     if userInfo != nil {
         f.Id.Value = userInfo.Guid()
         f.Author = make([]AtomAuthor, 1)
@@ -179,11 +195,13 @@ func handleGetContactList(client oauth2_client.MockClient, req *http.Request) (r
     f.TotalResults.Value = strconv.Itoa(numContacts)
     f.StartIndex.Value = "1"
     f.ItemsPerPage.Value = "25"
+    //fmt.Printf("Contact List Entry Count: %d\n", numContacts)
     return createJSONHttpResponseFromObj(req, r)
 }
 
-func handleGetContact(client oauth2_client.MockClient, req *http.Request, contactId string) (resp *http.Response, err os.Error) {
-    c, ok := contactsById[contactId]
+func (p* MockGoogleClient) handleGetContact(req *http.Request, contactId string) (resp *http.Response, err os.Error) {
+    //fmt.Printf("calling handleGetContact\n")
+    c, ok := p.contactsById[contactId]
     if !ok {
         resp, err = createJSONHttpResponseFromObj(req, NewContactEntryResponse())
         resp.Status = "404 NOT FOUND"
@@ -196,21 +214,22 @@ func handleGetContact(client oauth2_client.MockClient, req *http.Request, contac
     r.Entry.XmlnsGcontact = XMLNS_GCONTACT
     r.Entry.XmlnsBatch = XMLNS_GDATA_BATCH
     r.Entry.XmlnsGd = XMLNS_GD
+    //fmt.Printf("Contact Entry: %v\n", c.Name)
     return createJSONHttpResponseFromObj(req, r)
 }
 
-func handleGetGroupList(client oauth2_client.MockClient, req *http.Request) (resp *http.Response, err os.Error) {
-    numGroups := len(groupsById)
+func (p* MockGoogleClient) handleGetGroupList(req *http.Request) (resp *http.Response, err os.Error) {
+    numGroups := len(p.groupsById)
     entries := make([]ContactGroup, numGroups)
     r := NewGroupsFeedResponse()
     f := r.Feed
     f.Entries = entries
     i := 0
-    for _, v := range groupsById {
+    for _, v := range p.groupsById {
         entries[i] = *v
         i++
     }
-    userInfo, _ := client.RetrieveUserInfo()
+    userInfo, _ := p.RetrieveUserInfo()
     if userInfo != nil {
         f.Id.Value = userInfo.Guid()
         f.Author = make([]AtomAuthor, 1)
@@ -222,11 +241,12 @@ func handleGetGroupList(client oauth2_client.MockClient, req *http.Request) (res
     f.TotalResults.Value = strconv.Itoa(numGroups)
     f.StartIndex.Value = "1"
     f.ItemsPerPage.Value = "25"
+    //fmt.Printf("Group List Entry Count: %d\n", numGroups)
     return createJSONHttpResponseFromObj(req, r)
 }
 
-func handleGetGroup(client oauth2_client.MockClient, req *http.Request, groupId string) (resp *http.Response, err os.Error) {
-    g, ok := groupsById[groupId]
+func (p* MockGoogleClient) handleGetGroup(req *http.Request, groupId string) (resp *http.Response, err os.Error) {
+    g, ok := p.groupsById[groupId]
     if !ok {
         resp, err = createJSONHttpResponseFromObj(req, NewGroupResponse())
         resp.Status = "404 NOT FOUND"
@@ -239,6 +259,7 @@ func handleGetGroup(client oauth2_client.MockClient, req *http.Request, groupId 
     r.Entry.XmlnsGcontact = XMLNS_GCONTACT
     r.Entry.XmlnsBatch = XMLNS_GDATA_BATCH
     r.Entry.XmlnsGd = XMLNS_GD
+    //fmt.Printf("Group Entry: %s\n", g.Title.Value)
     return createJSONHttpResponseFromObj(req, r)
 }
 
