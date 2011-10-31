@@ -4,7 +4,7 @@ import (
     "github.com/pomack/jsonhelper.go/jsonhelper"
     "github.com/pomack/oauth2_client.go/oauth2_client"
     "bytes"
-    //"fmt"
+    "fmt"
     "http"
     "io/ioutil"
     "json"
@@ -57,44 +57,59 @@ func (p* MockGoogleClient) AddMockGroup(group *ContactGroup) {
 
 func (p* MockGoogleClient) AddMockContactJSON(s string) {
     c := new(Contact)
-    if err := json.Unmarshal([]byte(s), c); err == nil {
+    var err os.Error
+    if err = json.Unmarshal([]byte(s), c); err == nil {
         p.AddMockContact(c)
+    } else {
+        fmt.Printf("error adding mock contact JSON: %s\n\n", err.String())
     }
 }
 
 func (p* MockGoogleClient) AddMockContactJSONEntry(s string) {
     c := new(ContactEntryResponse)
-    if err := json.Unmarshal([]byte(s), c); err == nil {
+    var err os.Error
+    if err = json.Unmarshal([]byte(s), c); err == nil {
         p.AddMockContact(c.Entry)
+    } else {
+        fmt.Printf("error adding mock contact JSON Entry: %s\n\n", err.String())
     }
 }
 
 func (p* MockGoogleClient) AddMockContactJSONFeed(s string) {
     f := new(ContactFeedResponse)
-    if err := json.Unmarshal([]byte(s), f); err == nil {
+    var err os.Error
+    if err = json.Unmarshal([]byte(s), f); err == nil {
         if f.Feed != nil && f.Feed.Entries != nil {
             for _, c := range f.Feed.Entries {
                 p.AddMockContact(&c)
             }
         }
+    } else {
+        fmt.Printf("error adding mock contact json feed: %s\n\n", err.String())
     }
 }
 
 func (p* MockGoogleClient) AddMockGroupJSONEntry(s string) {
     c := new(GroupResponse)
-    if err := json.Unmarshal([]byte(s), c); err == nil {
+    var err os.Error
+    if err = json.Unmarshal([]byte(s), c); err == nil {
         p.AddMockGroup(c.Entry)
+    } else {
+        fmt.Printf("error adding mock group json entry: %s\n\n", err.String())
     }
 }
 
 func (p* MockGoogleClient) AddMockGroupJSONFeed(s string) {
     f := new(GroupsFeedResponse)
-    if err := json.Unmarshal([]byte(s), f); err == nil {
+    var err os.Error
+    if err = json.Unmarshal([]byte(s), f); err == nil {
         if f.Feed != nil && f.Feed.Entries != nil {
             for _, g := range f.Feed.Entries {
                 p.AddMockGroup(&g)
             }
         }
+    } else {
+        fmt.Printf("error adding mock group json feed: %s\n\n", err.String())
     }
 }
 
