@@ -22,6 +22,12 @@ type Person struct {
     Urls               []Url          `json:"urls,omitempty"`
 }
 
+func NewPerson() *Person {
+    return &Person{
+        Kind: PERSON_KIND,
+    }
+}
+
 type Email struct {
     Type    string `json:"type,omitempty"`
     Value   string `json:"value,omitempty"`
