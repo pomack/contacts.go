@@ -9,6 +9,7 @@ import (
     "io/ioutil"
     "json"
     "os"
+    "rand"
     "strconv"
     "strings"
     "time"
@@ -135,11 +136,35 @@ func (p* MockGoogleClient) handleGoogleClientRequests(req *http.Request) (resp *
                     resp, err = p.handleGetContact(req, pathParts[5])
                 }
             }
+        } else if req.Method == oauth2_client.POST {
+            if pathParts[0] == "" {
+                switch pathPartsLen {
+                // handle /m8/feeds/contacts/default/full or
+                case 6:
+                    resp, err = p.handleCreateContact(req)
+                }
+            }
+        } else if req.Method == oauth2_client.PUT {
+            if pathParts[0] == "" {
+                switch pathPartsLen {
+                // handle /m8/feeds/contacts/default/full/34535483485345384
+                case 7:
+                    resp, err = p.handleUpdateContact(req, pathParts[5])
+                }
+            }
+        } else if req.Method == oauth2_client.DELETE {
+            if pathParts[0] == "" {
+                switch pathPartsLen {
+                // handle /m8/feeds/contacts/default/full/34535483485345384
+                case 7:
+                    resp, err = p.handleDeleteContact(req, pathParts[5])
+                }
+            }
         }
     } else if strings.HasPrefix(req.URL.Path, "/m8/feeds/groups/") {
         if req.Method == oauth2_client.GET {
-            // handle /m8/feeds/contacts/default/full or
-            // handle /m8/feeds/contacts/default/full/ or
+            // handle /m8/feeds/groups/default/full or
+            // handle /m8/feeds/groups/default/full/ or
             if pathParts[0] == "" {
                 switch pathPartsLen {
                 // handle /m8/feeds/groups/default/full or
@@ -150,11 +175,35 @@ func (p* MockGoogleClient) handleGoogleClientRequests(req *http.Request) (resp *
                     resp, err = p.handleGetGroup(req, pathParts[5])
                 }
             }
+        } else if req.Method == oauth2_client.POST {
+            if pathParts[0] == "" {
+                switch pathPartsLen {
+                // handle /m8/feeds/groups/default/full or
+                case 6:
+                    resp, err = p.handleCreateGroup(req)
+                }
+            }
+        } else if req.Method == oauth2_client.PUT {
+            if pathParts[0] == "" {
+                switch pathPartsLen {
+                // handle /m8/feeds/groups/default/full/34535483485345384
+                case 7:
+                    resp, err = p.handleUpdateGroup(req, pathParts[5])
+                }
+            }
+        } else if req.Method == oauth2_client.DELETE {
+            if pathParts[0] == "" {
+                switch pathPartsLen {
+                // handle /m8/feeds/groups/default/full/34535483485345384
+                case 7:
+                    resp, err = p.handleDeleteGroup(req, pathParts[5])
+                }
+            }
         }
     } else if strings.HasPrefix(req.URL.Path, "/m8/feeds/photos/") {
         
     }
-    //fmt.Printf("Done mock handle %s\n", req.URL.String())
+    fmt.Printf("[MOCK-GOOGLE]: Done mock handle %s %s\n", req.Method, req.URL.String())
     return
 }
 
@@ -233,6 +282,123 @@ func (p* MockGoogleClient) handleGetContact(req *http.Request, contactId string)
     return createJSONHttpResponseFromObj(req, r)
 }
 
+func (p *MockGoogleClient) generateId() string {
+    arr := make([]string, 8)
+    for i := 0; i < 8; i++ {
+        arr[i] = fmt.Sprintf("%02x", rand.Intn(256))
+    }
+    return strings.Join(arr, "")
+}
+
+func (p *MockGoogleClient) generateEtag() string {
+    arr := make([]string, 14)
+    for i := 0; i < 14; i++ {
+        arr[i] = fmt.Sprintf("%02x", rand.Intn(256))
+    }
+    return "\"" + strings.Join(arr, "") + "\""
+}
+
+func (p* MockGoogleClient) handleCreateContact(req *http.Request) (resp *http.Response, err os.Error) {
+    //fmt.Printf("calling handleCreateContact\n")
+    b := NewContactEntryResponse()
+    err = json.NewDecoder(req.Body).Decode(b)
+    if err != nil {
+        panic(fmt.Sprintf("Error creating contact: %s\n", err.String()))
+        resp, _ = createJSONHttpResponseFromObj(req, NewContactEntryResponse())
+        resp.Status = "500 INTERNAL SERVER ERROR"
+        resp.StatusCode = http.StatusInternalServerError
+        return
+    }
+    if b.Entry == nil {
+        resp, err = createJSONHttpResponseFromObj(req, NewContactEntryResponse())
+        resp.Status = "400 BAD REQUEST"
+        resp.StatusCode = http.StatusBadRequest
+        return
+    }
+    e := b.Entry
+    contactId := p.generateId()
+    e.Id.Value = contactId
+    e.Etag = p.generateEtag()
+    e.Updated.Value = time.UTC().Format(GOOGLE_DATETIME_FORMAT)
+    p.contactsById[contactId] = e
+    r := NewContactEntryResponse()
+    r.Entry = e
+    r.Entry.Xmlns = XMLNS_ATOM
+    r.Entry.XmlnsGcontact = XMLNS_GCONTACT
+    r.Entry.XmlnsBatch = XMLNS_GDATA_BATCH
+    r.Entry.XmlnsGd = XMLNS_GD
+    //fmt.Printf("Contact Entry: %v\n", c.Name)
+    return createJSONHttpResponseFromObj(req, r)
+}
+
+func (p* MockGoogleClient) handleUpdateContact(req *http.Request, contactId string) (resp *http.Response, err os.Error) {
+    //fmt.Printf("calling handleUpdateContact\n")
+    c, ok := p.contactsById[contactId]
+    if !ok {
+        resp, err = createJSONHttpResponseFromObj(req, NewContactEntryResponse())
+        resp.Status = "404 NOT FOUND"
+        resp.StatusCode = http.StatusNotFound
+        return
+    }
+    ifmatch := req.Header.Get("If-Match")
+    if ifmatch != "*" && ifmatch != c.Etag {
+        resp, err = createJSONHttpResponseFromObj(req, NewContactEntryResponse())
+        resp.Status = "412 PRECONDITION FAILED"
+        resp.StatusCode = http.StatusPreconditionFailed
+        return
+    }
+    b := NewContactEntryResponse()
+    err = json.NewDecoder(req.Body).Decode(b)
+    if err != nil {
+        panic(fmt.Sprintf("Error updating contact: %s\n", err.String()))
+        resp, _ = createJSONHttpResponseFromObj(req, NewContactEntryResponse())
+        resp.Status = "500 INTERNAL SERVER ERROR"
+        resp.StatusCode = http.StatusInternalServerError
+        return
+    }
+    if b.Entry == nil {
+        resp, err = createJSONHttpResponseFromObj(req, NewContactEntryResponse())
+        resp.Status = "400 BAD REQUEST"
+        resp.StatusCode = http.StatusBadRequest
+        return
+    }
+    e := b.Entry
+    e.Id.Value = contactId
+    e.Etag = p.generateEtag()
+    e.Updated.Value = time.UTC().Format(GOOGLE_DATETIME_FORMAT)
+    p.contactsById[contactId] = e
+    r := NewContactEntryResponse()
+    r.Entry = e
+    r.Entry.Xmlns = XMLNS_ATOM
+    r.Entry.XmlnsGcontact = XMLNS_GCONTACT
+    r.Entry.XmlnsBatch = XMLNS_GDATA_BATCH
+    r.Entry.XmlnsGd = XMLNS_GD
+    //fmt.Printf("Contact Entry: %v\n", c.Name)
+    return createJSONHttpResponseFromObj(req, r)
+}
+
+
+func (p* MockGoogleClient) handleDeleteContact(req *http.Request, contactId string) (resp *http.Response, err os.Error) {
+    //fmt.Printf("calling handleDeleteContact\n")
+    c, ok := p.contactsById[contactId]
+    if !ok {
+        resp, err = createJSONHttpResponseFromObj(req, nil)
+        resp.Status = "404 NOT FOUND"
+        resp.StatusCode = http.StatusNotFound
+        return
+    }
+    ifmatch := req.Header.Get("If-Match")
+    if ifmatch != "*" && ifmatch != c.Etag {
+        resp, err = createJSONHttpResponseFromObj(req, nil)
+        resp.Status = "412 PRECONDITION FAILED"
+        resp.StatusCode = http.StatusPreconditionFailed
+        return
+    }
+    p.contactsById[contactId] = c, false
+    resp, err = createJSONHttpResponseFromObj(req, nil)
+    return
+}
+
 func (p* MockGoogleClient) handleGetGroupList(req *http.Request) (resp *http.Response, err os.Error) {
     numGroups := len(p.groupsById)
     entries := make([]ContactGroup, numGroups)
@@ -277,4 +443,106 @@ func (p* MockGoogleClient) handleGetGroup(req *http.Request, groupId string) (re
     //fmt.Printf("Group Entry: %s\n", g.Title.Value)
     return createJSONHttpResponseFromObj(req, r)
 }
+
+func (p* MockGoogleClient) handleCreateGroup(req *http.Request) (resp *http.Response, err os.Error) {
+    //fmt.Printf("calling handleCreateGroup\n")
+    b := NewGroupResponse()
+    err = json.NewDecoder(req.Body).Decode(b)
+    if err != nil {
+        panic(fmt.Sprintf("Error creating group: %s\n", err.String()))
+        resp, _ = createJSONHttpResponseFromObj(req, NewGroupResponse())
+        resp.Status = "500 INTERNAL SERVER ERROR"
+        resp.StatusCode = http.StatusInternalServerError
+        return
+    }
+    if b.Entry == nil {
+        resp, err = createJSONHttpResponseFromObj(req, NewGroupResponse())
+        resp.Status = "400 BAD REQUEST"
+        resp.StatusCode = http.StatusBadRequest
+        return
+    }
+    e := b.Entry
+    groupId := p.generateId()
+    e.Id.Value = groupId
+    e.Etag = p.generateEtag()
+    e.Updated.Value = time.UTC().Format(GOOGLE_DATETIME_FORMAT)
+    p.groupsById[groupId] = e
+    r := NewGroupResponse()
+    r.Entry = e
+    r.Entry.Xmlns = XMLNS_ATOM
+    r.Entry.XmlnsGcontact = XMLNS_GCONTACT
+    r.Entry.XmlnsBatch = XMLNS_GDATA_BATCH
+    r.Entry.XmlnsGd = XMLNS_GD
+    //fmt.Printf("Contact Entry: %v\n", c.Name)
+    return createJSONHttpResponseFromObj(req, r)
+}
+
+func (p* MockGoogleClient) handleUpdateGroup(req *http.Request, groupId string) (resp *http.Response, err os.Error) {
+    //fmt.Printf("calling handleUpdateGroup\n")
+    g, ok := p.groupsById[groupId]
+    if !ok {
+        resp, err = createJSONHttpResponseFromObj(req, NewGroupResponse())
+        resp.Status = "404 NOT FOUND"
+        resp.StatusCode = http.StatusNotFound
+        return
+    }
+    ifmatch := req.Header.Get("If-Match")
+    if ifmatch != "*" && ifmatch != g.Etag {
+        resp, err = createJSONHttpResponseFromObj(req, NewGroupResponse())
+        resp.Status = "412 PRECONDITION FAILED"
+        resp.StatusCode = http.StatusPreconditionFailed
+        return
+    }
+    b := NewGroupResponse()
+    err = json.NewDecoder(req.Body).Decode(b)
+    if err != nil {
+        panic(fmt.Sprintf("Error updating group: %s\n", err.String()))
+        resp, _ = createJSONHttpResponseFromObj(req, NewGroupResponse())
+        resp.Status = "500 INTERNAL SERVER ERROR"
+        resp.StatusCode = http.StatusInternalServerError
+        return
+    }
+    if b.Entry == nil {
+        resp, err = createJSONHttpResponseFromObj(req, NewGroupResponse())
+        resp.Status = "400 BAD REQUEST"
+        resp.StatusCode = http.StatusBadRequest
+        return
+    }
+    e := b.Entry
+    e.Id.Value = groupId
+    e.Etag = p.generateEtag()
+    e.Updated.Value = time.UTC().Format(GOOGLE_DATETIME_FORMAT)
+    p.groupsById[groupId] = e
+    r := NewGroupResponse()
+    r.Entry = e
+    r.Entry.Xmlns = XMLNS_ATOM
+    r.Entry.XmlnsGcontact = XMLNS_GCONTACT
+    r.Entry.XmlnsBatch = XMLNS_GDATA_BATCH
+    r.Entry.XmlnsGd = XMLNS_GD
+    //fmt.Printf("Contact Entry: %v\n", c.Name)
+    return createJSONHttpResponseFromObj(req, r)
+}
+
+
+func (p* MockGoogleClient) handleDeleteGroup(req *http.Request, groupId string) (resp *http.Response, err os.Error) {
+    //fmt.Printf("calling handleDeleteGroup\n")
+    g, ok := p.groupsById[groupId]
+    if !ok {
+        resp, err = createJSONHttpResponseFromObj(req, nil)
+        resp.Status = "404 NOT FOUND"
+        resp.StatusCode = http.StatusNotFound
+        return
+    }
+    ifmatch := req.Header.Get("If-Match")
+    if ifmatch != "*" && ifmatch != g.Etag {
+        resp, err = createJSONHttpResponseFromObj(req, nil)
+        resp.Status = "412 PRECONDITION FAILED"
+        resp.StatusCode = http.StatusPreconditionFailed
+        return
+    }
+    p.groupsById[groupId] = g, false
+    resp, err = createJSONHttpResponseFromObj(req, nil)
+    return
+}
+
 
