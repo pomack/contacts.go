@@ -18,15 +18,15 @@ import (
 type MockGoogleClient struct {
     oauth2_client.MockClient
     contactsById map[string]*Contact
-    groupsById map[string]*ContactGroup
+    groupsById   map[string]*ContactGroup
 }
 
 func NewMockGoogleClient() *MockGoogleClient {
     client := oauth2_client.NewMockOAuthClient()
     m := &MockGoogleClient{
-        MockClient: client,
+        MockClient:   client,
         contactsById: make(map[string]*Contact),
-        groupsById: make(map[string]*ContactGroup),
+        groupsById:   make(map[string]*ContactGroup),
     }
     gclient := oauth2_client.NewGoogleClient()
     client.SetServiceId(gclient.ServiceId())
@@ -40,7 +40,7 @@ func makeHandlerForGoogleClientRequests(gclient *MockGoogleClient) oauth2_client
     }
 }
 
-func (p* MockGoogleClient) AddMockContact(contact *Contact) {
+func (p *MockGoogleClient) AddMockContact(contact *Contact) {
     if contact != nil && contact.Id.Value != "" {
         c := new(Contact)
         *c = *contact
@@ -48,7 +48,7 @@ func (p* MockGoogleClient) AddMockContact(contact *Contact) {
     }
 }
 
-func (p* MockGoogleClient) AddMockGroup(group *ContactGroup) {
+func (p *MockGoogleClient) AddMockGroup(group *ContactGroup) {
     if group != nil && group.Id.Value != "" {
         g := new(ContactGroup)
         *g = *group
@@ -56,7 +56,7 @@ func (p* MockGoogleClient) AddMockGroup(group *ContactGroup) {
     }
 }
 
-func (p* MockGoogleClient) AddMockContactJSON(s string) {
+func (p *MockGoogleClient) AddMockContactJSON(s string) {
     c := new(Contact)
     var err os.Error
     if err = json.Unmarshal([]byte(s), c); err == nil {
@@ -66,7 +66,7 @@ func (p* MockGoogleClient) AddMockContactJSON(s string) {
     }
 }
 
-func (p* MockGoogleClient) AddMockContactJSONEntry(s string) {
+func (p *MockGoogleClient) AddMockContactJSONEntry(s string) {
     c := new(ContactEntryResponse)
     var err os.Error
     if err = json.Unmarshal([]byte(s), c); err == nil {
@@ -76,7 +76,7 @@ func (p* MockGoogleClient) AddMockContactJSONEntry(s string) {
     }
 }
 
-func (p* MockGoogleClient) AddMockContactJSONFeed(s string) {
+func (p *MockGoogleClient) AddMockContactJSONFeed(s string) {
     f := new(ContactFeedResponse)
     var err os.Error
     if err = json.Unmarshal([]byte(s), f); err == nil {
@@ -90,7 +90,7 @@ func (p* MockGoogleClient) AddMockContactJSONFeed(s string) {
     }
 }
 
-func (p* MockGoogleClient) AddMockGroupJSONEntry(s string) {
+func (p *MockGoogleClient) AddMockGroupJSONEntry(s string) {
     c := new(GroupResponse)
     var err os.Error
     if err = json.Unmarshal([]byte(s), c); err == nil {
@@ -100,7 +100,7 @@ func (p* MockGoogleClient) AddMockGroupJSONEntry(s string) {
     }
 }
 
-func (p* MockGoogleClient) AddMockGroupJSONFeed(s string) {
+func (p *MockGoogleClient) AddMockGroupJSONFeed(s string) {
     f := new(GroupsFeedResponse)
     var err os.Error
     if err = json.Unmarshal([]byte(s), f); err == nil {
@@ -114,7 +114,7 @@ func (p* MockGoogleClient) AddMockGroupJSONFeed(s string) {
     }
 }
 
-func (p* MockGoogleClient) handleGoogleClientRequests(req *http.Request) (resp *http.Response, err os.Error) {
+func (p *MockGoogleClient) handleGoogleClientRequests(req *http.Request) (resp *http.Response, err os.Error) {
     if req == nil {
         return nil, nil
     }
@@ -168,10 +168,10 @@ func (p* MockGoogleClient) handleGoogleClientRequests(req *http.Request) (resp *
             if pathParts[0] == "" {
                 switch pathPartsLen {
                 // handle /m8/feeds/groups/default/full or
-                case 6: 
+                case 6:
                     resp, err = p.handleGetGroupList(req)
                 // handle /m8/feeds/groups/default/full/34535483485345384
-                case 7: 
+                case 7:
                     resp, err = p.handleGetGroup(req, pathParts[5])
                 }
             }
@@ -201,7 +201,7 @@ func (p* MockGoogleClient) handleGoogleClientRequests(req *http.Request) (resp *
             }
         }
     } else if strings.HasPrefix(req.URL.Path, "/m8/feeds/photos/") {
-        
+
     }
     fmt.Printf("[MOCK-GOOGLE]: Done mock handle %s %s\n", req.Method, req.URL.String())
     return
@@ -235,7 +235,7 @@ func createJSONHttpResponseFromObj(req *http.Request, obj interface{}) (resp *ht
     return
 }
 
-func (p* MockGoogleClient) handleGetContactList(req *http.Request) (resp *http.Response, err os.Error) {
+func (p *MockGoogleClient) handleGetContactList(req *http.Request) (resp *http.Response, err os.Error) {
     //fmt.Printf("calling handleGetContactList\n")
     numContacts := len(p.contactsById)
     entries := make([]Contact, numContacts)
@@ -263,7 +263,7 @@ func (p* MockGoogleClient) handleGetContactList(req *http.Request) (resp *http.R
     return createJSONHttpResponseFromObj(req, r)
 }
 
-func (p* MockGoogleClient) handleGetContact(req *http.Request, contactId string) (resp *http.Response, err os.Error) {
+func (p *MockGoogleClient) handleGetContact(req *http.Request, contactId string) (resp *http.Response, err os.Error) {
     //fmt.Printf("calling handleGetContact\n")
     c, ok := p.contactsById[contactId]
     if !ok {
@@ -298,7 +298,7 @@ func (p *MockGoogleClient) generateEtag() string {
     return "\"" + strings.Join(arr, "") + "\""
 }
 
-func (p* MockGoogleClient) handleCreateContact(req *http.Request) (resp *http.Response, err os.Error) {
+func (p *MockGoogleClient) handleCreateContact(req *http.Request) (resp *http.Response, err os.Error) {
     //fmt.Printf("calling handleCreateContact\n")
     b := NewContactEntryResponse()
     err = json.NewDecoder(req.Body).Decode(b)
@@ -331,7 +331,7 @@ func (p* MockGoogleClient) handleCreateContact(req *http.Request) (resp *http.Re
     return createJSONHttpResponseFromObj(req, r)
 }
 
-func (p* MockGoogleClient) handleUpdateContact(req *http.Request, contactId string) (resp *http.Response, err os.Error) {
+func (p *MockGoogleClient) handleUpdateContact(req *http.Request, contactId string) (resp *http.Response, err os.Error) {
     //fmt.Printf("calling handleUpdateContact\n")
     c, ok := p.contactsById[contactId]
     if !ok {
@@ -377,8 +377,7 @@ func (p* MockGoogleClient) handleUpdateContact(req *http.Request, contactId stri
     return createJSONHttpResponseFromObj(req, r)
 }
 
-
-func (p* MockGoogleClient) handleDeleteContact(req *http.Request, contactId string) (resp *http.Response, err os.Error) {
+func (p *MockGoogleClient) handleDeleteContact(req *http.Request, contactId string) (resp *http.Response, err os.Error) {
     //fmt.Printf("calling handleDeleteContact\n")
     c, ok := p.contactsById[contactId]
     if !ok {
@@ -399,7 +398,7 @@ func (p* MockGoogleClient) handleDeleteContact(req *http.Request, contactId stri
     return
 }
 
-func (p* MockGoogleClient) handleGetGroupList(req *http.Request) (resp *http.Response, err os.Error) {
+func (p *MockGoogleClient) handleGetGroupList(req *http.Request) (resp *http.Response, err os.Error) {
     numGroups := len(p.groupsById)
     entries := make([]ContactGroup, numGroups)
     r := NewGroupsFeedResponse()
@@ -426,7 +425,7 @@ func (p* MockGoogleClient) handleGetGroupList(req *http.Request) (resp *http.Res
     return createJSONHttpResponseFromObj(req, r)
 }
 
-func (p* MockGoogleClient) handleGetGroup(req *http.Request, groupId string) (resp *http.Response, err os.Error) {
+func (p *MockGoogleClient) handleGetGroup(req *http.Request, groupId string) (resp *http.Response, err os.Error) {
     g, ok := p.groupsById[groupId]
     if !ok {
         resp, err = createJSONHttpResponseFromObj(req, NewGroupResponse())
@@ -444,7 +443,7 @@ func (p* MockGoogleClient) handleGetGroup(req *http.Request, groupId string) (re
     return createJSONHttpResponseFromObj(req, r)
 }
 
-func (p* MockGoogleClient) handleCreateGroup(req *http.Request) (resp *http.Response, err os.Error) {
+func (p *MockGoogleClient) handleCreateGroup(req *http.Request) (resp *http.Response, err os.Error) {
     //fmt.Printf("calling handleCreateGroup\n")
     b := NewGroupResponse()
     err = json.NewDecoder(req.Body).Decode(b)
@@ -477,7 +476,7 @@ func (p* MockGoogleClient) handleCreateGroup(req *http.Request) (resp *http.Resp
     return createJSONHttpResponseFromObj(req, r)
 }
 
-func (p* MockGoogleClient) handleUpdateGroup(req *http.Request, groupId string) (resp *http.Response, err os.Error) {
+func (p *MockGoogleClient) handleUpdateGroup(req *http.Request, groupId string) (resp *http.Response, err os.Error) {
     //fmt.Printf("calling handleUpdateGroup\n")
     g, ok := p.groupsById[groupId]
     if !ok {
@@ -523,8 +522,7 @@ func (p* MockGoogleClient) handleUpdateGroup(req *http.Request, groupId string) 
     return createJSONHttpResponseFromObj(req, r)
 }
 
-
-func (p* MockGoogleClient) handleDeleteGroup(req *http.Request, groupId string) (resp *http.Response, err os.Error) {
+func (p *MockGoogleClient) handleDeleteGroup(req *http.Request, groupId string) (resp *http.Response, err os.Error) {
     //fmt.Printf("calling handleDeleteGroup\n")
     g, ok := p.groupsById[groupId]
     if !ok {
@@ -544,5 +542,3 @@ func (p* MockGoogleClient) handleDeleteGroup(req *http.Request, groupId string) 
     resp, err = createJSONHttpResponseFromObj(req, nil)
     return
 }
-
-

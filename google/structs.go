@@ -87,22 +87,22 @@ func NewContactEntryResponse() *ContactEntryResponse {
 }
 
 type ContactFeed struct {
-    Id           AtomId         `json:"id,omitempty"`
-    Xmlns        string         `json:"xmlns,omitempty"`
-    XmlnsOpenSearch string      `json:"xmlns$openSearch,omitempty"`
-    XmlnsGcontact string        `json:"xmlns$gContact,omitempty"`
-    XmlnsBatch   string         `json:"xmlns$batch,omitempty"`
-    XmlnsGd      string         `json:"xmlns$gd,omitempty"`
-    Updated      AtomUpdated    `json:"updated,omitempty"`
-    Categories   []AtomCategory `json:"category,omitempty"`
-    Title        AtomTitle      `json:"title,omitempty"`
-    Links        []AtomLink     `json:"link,omitempty"`
-    Author       []AtomAuthor   `json:"author,omitempty"`
-    Generator    AtomGenerator  `json:"generator,omitempty"`
-    TotalResults AtomText       `json:"openSearch$totalResults,omitempty"`
-    StartIndex   AtomText       `json:"openSearch$startIndex,omitempty"`
-    ItemsPerPage AtomText       `json:"openSearch$itemsPerPage,omitempty"`
-    Entries      []Contact      `json:"entry,omitempty"`
+    Id              AtomId         `json:"id,omitempty"`
+    Xmlns           string         `json:"xmlns,omitempty"`
+    XmlnsOpenSearch string         `json:"xmlns$openSearch,omitempty"`
+    XmlnsGcontact   string         `json:"xmlns$gContact,omitempty"`
+    XmlnsBatch      string         `json:"xmlns$batch,omitempty"`
+    XmlnsGd         string         `json:"xmlns$gd,omitempty"`
+    Updated         AtomUpdated    `json:"updated,omitempty"`
+    Categories      []AtomCategory `json:"category,omitempty"`
+    Title           AtomTitle      `json:"title,omitempty"`
+    Links           []AtomLink     `json:"link,omitempty"`
+    Author          []AtomAuthor   `json:"author,omitempty"`
+    Generator       AtomGenerator  `json:"generator,omitempty"`
+    TotalResults    AtomText       `json:"openSearch$totalResults,omitempty"`
+    StartIndex      AtomText       `json:"openSearch$startIndex,omitempty"`
+    ItemsPerPage    AtomText       `json:"openSearch$itemsPerPage,omitempty"`
+    Entries         []Contact      `json:"entry,omitempty"`
 }
 
 func NewContactFeed() *ContactFeed {
@@ -112,19 +112,19 @@ func NewContactFeed() *ContactFeed {
         XmlnsGcontact:   XMLNS_GCONTACT,
         XmlnsBatch:      XMLNS_GDATA_BATCH,
         XmlnsGd:         XMLNS_GD,
-        Categories:      []AtomCategory{
-            AtomCategory{
+        Categories: []AtomCategory{
+            {
                 Scheme: ATOM_CATEGORY_SCHEME_KIND,
                 Term:   ATOM_CATEGORY_TERM_CONTACT,
             },
         },
-        Title:           AtomTitle{
-            Type:        "text",
+        Title: AtomTitle{
+            Type: "text",
         },
-        Generator:       AtomGenerator{
-            Version:     "1.0",
-            Uri:         GOOGLE_FEEDS_API_ENDPOINT[0:len(GOOGLE_FEEDS_API_ENDPOINT)-1],
-            Value:       "Contacts",
+        Generator: AtomGenerator{
+            Version: "1.0",
+            Uri:     GOOGLE_FEEDS_API_ENDPOINT[0 : len(GOOGLE_FEEDS_API_ENDPOINT)-1],
+            Value:   "Contacts",
         },
     }
 }
@@ -177,10 +177,10 @@ type Contact struct {
 
 func NewContact() *Contact {
     return &Contact{
-        Xmlns:           XMLNS_ATOM,
-        XmlnsGcontact:   XMLNS_GCONTACT,
-        XmlnsBatch:      XMLNS_GDATA_BATCH,
-        XmlnsGd:         XMLNS_GD,
+        Xmlns:         XMLNS_ATOM,
+        XmlnsGcontact: XMLNS_GCONTACT,
+        XmlnsBatch:    XMLNS_GDATA_BATCH,
+        XmlnsGd:       XMLNS_GD,
     }
 }
 
@@ -421,7 +421,6 @@ func (p *ContactGroup) GroupId() string {
     return ""
 }
 
-
 func (p *ContactGroup) GroupUserId() string {
     //http://www.google.com/m8/feeds/groups/some_email_address/base/some_id_number
     arr := strings.Split(p.Id.Value, "/")
@@ -565,19 +564,19 @@ func NewGroupsFeed() *GroupsFeed {
         XmlnsGcontact:   XMLNS_GCONTACT,
         XmlnsBatch:      XMLNS_GDATA_BATCH,
         XmlnsGd:         XMLNS_GD,
-        Category:        []AtomCategory{
-            AtomCategory{
+        Category: []AtomCategory{
+            {
                 Scheme: ATOM_CATEGORY_SCHEME_KIND,
                 Term:   ATOM_CATEGORY_TERM_GROUP,
             },
         },
-        Title:           AtomTitle{
-            Type:        "text",
+        Title: AtomTitle{
+            Type: "text",
         },
-        Generator:       AtomGenerator{
-            Version:     "1.0",
-            Uri:         GOOGLE_FEEDS_API_ENDPOINT[0:len(GOOGLE_FEEDS_API_ENDPOINT)-1],
-            Value:       "Contacts",
+        Generator: AtomGenerator{
+            Version: "1.0",
+            Uri:     GOOGLE_FEEDS_API_ENDPOINT[0 : len(GOOGLE_FEEDS_API_ENDPOINT)-1],
+            Value:   "Contacts",
         },
     }
 }

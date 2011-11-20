@@ -18,5 +18,4 @@ const (
     PHONE_TYPE_HOME   = "home"
     PHONE_TYPE_WORK   = "work"
     PHONE_TYPE_MOBILE = "mobile"
-
 )
