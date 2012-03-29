@@ -9,7 +9,6 @@ DIRS=\
 	smugmug\
 	twitter\
 	yahoo\
-	dsocial\
 
 TEST=\
 	$(filter-out $(NOTEST),$(DIRS))
