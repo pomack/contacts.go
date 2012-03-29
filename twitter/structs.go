@@ -148,8 +148,9 @@ type BoundingBox struct {
 }
 
 type ErrorResponse struct {
-    Error   string `json:"error,omitempty"`
-    Request string `json:"request,omitempty"`
+    ErrorField string `json:"error,omitempty"`
+    Request    string `json:"request,omitempty"`
 }
 
-func (p *ErrorResponse) String() string { return p.Error }
+func (p *ErrorResponse) String() string { return p.ErrorField }
+func (p *ErrorResponse) Error() string  { return p.ErrorField }

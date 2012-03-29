@@ -1,8 +1,8 @@
 package google
 
 import (
+    "net/url"
     "strings"
-    "url"
 )
 
 type AtomEntry interface{}

@@ -1,14 +1,14 @@
 package googleplus
 
 import (
+    "encoding/json"
+    "errors"
     "github.com/pomack/oauth2_client.go/oauth2_client"
     "io/ioutil"
-    "json"
-    "os"
-    "url"
+    "net/url"
 )
 
-func retrieveInfo(client oauth2_client.OAuth2Client, uri string, m url.Values, value interface{}) (err os.Error) {
+func retrieveInfo(client oauth2_client.OAuth2Client, uri string, m url.Values, value interface{}) (err error) {
     resp, _, err := oauth2_client.AuthorizedGetRequest(client, nil, uri, m)
     if err != nil {
         return err
@@ -16,7 +16,7 @@ func retrieveInfo(client oauth2_client.OAuth2Client, uri string, m url.Values, v
     if resp != nil {
         if resp.StatusCode >= 400 {
             b, _ := ioutil.ReadAll(resp.Body)
-            err = os.NewError(string(b))
+            err = errors.New(string(b))
         } else {
             err = json.NewDecoder(resp.Body).Decode(value)
         }
@@ -24,11 +24,11 @@ func retrieveInfo(client oauth2_client.OAuth2Client, uri string, m url.Values, v
     return err
 }
 
-func RetrieveSelfContact(client oauth2_client.OAuth2Client, m url.Values) (*Person, os.Error) {
+func RetrieveSelfContact(client oauth2_client.OAuth2Client, m url.Values) (*Person, error) {
     return RetrieveContact(client, "", m)
 }
 
-func RetrieveContact(client oauth2_client.OAuth2Client, userId string, m url.Values) (*Person, os.Error) {
+func RetrieveContact(client oauth2_client.OAuth2Client, userId string, m url.Values) (*Person, error) {
     if userId == "" {
         userId = "me"
     }
@@ -38,15 +38,15 @@ func RetrieveContact(client oauth2_client.OAuth2Client, userId string, m url.Val
     return p, err
 }
 
-func RetrieveSelfPublicActivityList(client oauth2_client.OAuth2Client, m url.Values) (*ActivityListResponse, os.Error) {
+func RetrieveSelfPublicActivityList(client oauth2_client.OAuth2Client, m url.Values) (*ActivityListResponse, error) {
     return RetrieveActivityList(client, "", "", m)
 }
 
-func RetrievePublicActivityList(client oauth2_client.OAuth2Client, userId string, m url.Values) (*ActivityListResponse, os.Error) {
+func RetrievePublicActivityList(client oauth2_client.OAuth2Client, userId string, m url.Values) (*ActivityListResponse, error) {
     return RetrieveActivityList(client, userId, "", m)
 }
 
-func RetrieveActivityList(client oauth2_client.OAuth2Client, userId, collection string, m url.Values) (*ActivityListResponse, os.Error) {
+func RetrieveActivityList(client oauth2_client.OAuth2Client, userId, collection string, m url.Values) (*ActivityListResponse, error) {
     if userId == "" {
         userId = "me"
     }
@@ -59,9 +59,9 @@ func RetrieveActivityList(client oauth2_client.OAuth2Client, userId, collection 
     return p, err
 }
 
-func RetrieveActivity(client oauth2_client.OAuth2Client, activityId string, m url.Values) (*Activity, os.Error) {
+func RetrieveActivity(client oauth2_client.OAuth2Client, activityId string, m url.Values) (*Activity, error) {
     if activityId == "" {
-        return nil, os.NewError("activityId cannot be empty")
+        return nil, errors.New("activityId cannot be empty")
     }
     p := new(Activity)
     uri := ACTIVITY_ENDPOINT + url.QueryEscape(activityId)

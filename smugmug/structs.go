@@ -236,6 +236,7 @@ type ErrorResponse struct {
     Message string `json:"message,omitempty"`
 }
 
+func (p *ErrorResponse) Error() string  { return p.Message }
 func (p *ErrorResponse) String() string { return p.Message }
 
 type GetCategoriesResponse struct {

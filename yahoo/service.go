@@ -1,20 +1,20 @@
 package yahoo
 
 import (
+    "encoding/json"
+    "errors"
     "github.com/pomack/oauth2_client.go/oauth2_client"
-    "http"
     "io/ioutil"
-    "json"
-    "os"
+    "net/http"
+    "net/url"
     "strconv"
-    "url"
 )
 
 type Guider interface {
     Guid() string
 }
 
-func getGuid(client oauth2_client.OAuth2Client) (string, os.Error) {
+func getGuid(client oauth2_client.OAuth2Client) (string, error) {
     var guid string
     if guider, ok := client.(Guider); ok {
         guid = guider.Guid()
@@ -28,13 +28,13 @@ func getGuid(client oauth2_client.OAuth2Client) (string, os.Error) {
             guid = resp.Guid.Value
         }
         if len(guid) <= 0 {
-            return "", os.NewError("Cannot determine GUID for the current user")
+            return "", errors.New("Cannot determine GUID for the current user")
         }
     }
     return guid, nil
 }
 
-func retrieveInfo(client oauth2_client.OAuth2Client, scope, userId, resourceName, resourceId, subcategory, subcategoryId string, m url.Values, value interface{}) (err os.Error) {
+func retrieveInfo(client oauth2_client.OAuth2Client, scope, userId, resourceName, resourceId, subcategory, subcategoryId string, m url.Values, value interface{}) (err error) {
     var useUserId string
     if len(userId) <= 0 {
         useUserId = YAHOO_DEFAULT_USER_ID
@@ -64,10 +64,10 @@ func retrieveInfo(client oauth2_client.OAuth2Client, scope, userId, resourceName
             e := new(ErrorResponse)
             b, _ := ioutil.ReadAll(resp.Body)
             json.Unmarshal(b, e)
-            if len(e.Error.Description) > 0 {
+            if len(e.ErrorField.Description) > 0 {
                 err = e
             } else {
-                err = os.NewError(string(b))
+                err = errors.New(string(b))
             }
         } else {
             err = json.NewDecoder(resp.Body).Decode(value)
@@ -76,68 +76,68 @@ func retrieveInfo(client oauth2_client.OAuth2Client, scope, userId, resourceName
     return err
 }
 
-func RetrieveMeGuid(client oauth2_client.OAuth2Client, m url.Values) (*MeGuidResponse, os.Error) {
+func RetrieveMeGuid(client oauth2_client.OAuth2Client, m url.Values) (*MeGuidResponse, error) {
     resp := new(MeGuidResponse)
     err := retrieveInfo(client, "", "me", "guid", "", "", "", m, resp)
     return resp, err
 }
 
-func RetrieveContacts(client oauth2_client.OAuth2Client, m url.Values) (*ContactsResponse, os.Error) {
+func RetrieveContacts(client oauth2_client.OAuth2Client, m url.Values) (*ContactsResponse, error) {
     return RetrieveContactsForUser(client, "", m)
 }
 
-func RetrieveContactsForUser(client oauth2_client.OAuth2Client, userId string, m url.Values) (*ContactsResponse, os.Error) {
+func RetrieveContactsForUser(client oauth2_client.OAuth2Client, userId string, m url.Values) (*ContactsResponse, error) {
     resp := new(ContactsResponse)
     err := retrieveInfo(client, "user", userId, "contacts", "", "", "", m, resp)
     return resp, err
 }
 
-func RetrieveContact(client oauth2_client.OAuth2Client, id string, m url.Values) (*ContactResponse, os.Error) {
+func RetrieveContact(client oauth2_client.OAuth2Client, id string, m url.Values) (*ContactResponse, error) {
     return RetrieveContactForUser(client, "", id, m)
 }
 
-func RetrieveContactForUser(client oauth2_client.OAuth2Client, userId, id string, m url.Values) (*ContactResponse, os.Error) {
+func RetrieveContactForUser(client oauth2_client.OAuth2Client, userId, id string, m url.Values) (*ContactResponse, error) {
     resp := new(ContactResponse)
     err := retrieveInfo(client, "user", userId, "contact", id, "", "", m, resp)
     return resp, err
 }
 
-func RetrieveCategories(client oauth2_client.OAuth2Client, m url.Values) (*CategoriesResponse, os.Error) {
+func RetrieveCategories(client oauth2_client.OAuth2Client, m url.Values) (*CategoriesResponse, error) {
     return RetrieveCategoriesForUser(client, "", m)
 }
 
-func RetrieveCategoriesForUser(client oauth2_client.OAuth2Client, userId string, m url.Values) (*CategoriesResponse, os.Error) {
+func RetrieveCategoriesForUser(client oauth2_client.OAuth2Client, userId string, m url.Values) (*CategoriesResponse, error) {
     resp := new(CategoriesResponse)
     err := retrieveInfo(client, "user", userId, "categories", "", "", "", m, resp)
     return resp, err
 }
 
-func RetrieveCategory(client oauth2_client.OAuth2Client, categoryId string, m url.Values) (*CategoryResponse, os.Error) {
+func RetrieveCategory(client oauth2_client.OAuth2Client, categoryId string, m url.Values) (*CategoryResponse, error) {
     return RetrieveCategoryForUser(client, "", categoryId, m)
 }
 
-func RetrieveCategoryForUser(client oauth2_client.OAuth2Client, userId, categoryId string, m url.Values) (*CategoryResponse, os.Error) {
+func RetrieveCategoryForUser(client oauth2_client.OAuth2Client, userId, categoryId string, m url.Values) (*CategoryResponse, error) {
     resp := new(CategoryResponse)
     err := retrieveInfo(client, "user", userId, "category", categoryId, "", "", m, resp)
     return resp, err
 }
 
-func RetrieveContactSync(client oauth2_client.OAuth2Client, revno int64, m url.Values) (*ContactSyncResponse, os.Error) {
+func RetrieveContactSync(client oauth2_client.OAuth2Client, revno int64, m url.Values) (*ContactSyncResponse, error) {
     return RetrieveContactSyncForUser(client, "", revno, m)
 }
 
-func RetrieveContactSyncForUser(client oauth2_client.OAuth2Client, userId string, revno int64, m url.Values) (*ContactSyncResponse, os.Error) {
+func RetrieveContactSyncForUser(client oauth2_client.OAuth2Client, userId string, revno int64, m url.Values) (*ContactSyncResponse, error) {
     resp := new(ContactSyncResponse)
     if m == nil {
         m = make(url.Values)
     }
     m.Set("view", "sync")
-    m.Set("rev", strconv.Itoa64(revno))
+    m.Set("rev", strconv.FormatInt(revno, 10))
     err := retrieveInfo(client, "user", userId, "contacts", "", "", "", m, resp)
     return resp, err
 }
 
-func RetrieveSelfProfile(client oauth2_client.OAuth2Client, m url.Values) (*ProfileResponse, os.Error) {
+func RetrieveSelfProfile(client oauth2_client.OAuth2Client, m url.Values) (*ProfileResponse, error) {
     guid, err := getGuid(client)
     if err != nil {
         return nil, err
@@ -145,13 +145,13 @@ func RetrieveSelfProfile(client oauth2_client.OAuth2Client, m url.Values) (*Prof
     return RetrieveProfile(client, guid, m)
 }
 
-func RetrieveProfile(client oauth2_client.OAuth2Client, userId string, m url.Values) (*ProfileResponse, os.Error) {
+func RetrieveProfile(client oauth2_client.OAuth2Client, userId string, m url.Values) (*ProfileResponse, error) {
     resp := new(ProfileResponse)
     err := retrieveInfo(client, "user", userId, "profile", "", "", "", m, resp)
     return resp, err
 }
 
-func RetrieveNotifications(client oauth2_client.OAuth2Client, m url.Values) (*NotificationsResponse, os.Error) {
+func RetrieveNotifications(client oauth2_client.OAuth2Client, m url.Values) (*NotificationsResponse, error) {
     guid, err := getGuid(client)
     if err != nil {
         return nil, err
@@ -159,19 +159,19 @@ func RetrieveNotifications(client oauth2_client.OAuth2Client, m url.Values) (*No
     return RetrieveNotificationsForUser(client, guid, m)
 }
 
-func RetrieveNotificationsForUser(client oauth2_client.OAuth2Client, userId string, m url.Values) (*NotificationsResponse, os.Error) {
+func RetrieveNotificationsForUser(client oauth2_client.OAuth2Client, userId string, m url.Values) (*NotificationsResponse, error) {
     resp := new(NotificationsResponse)
     err := retrieveInfo(client, "user", userId, "received_notifications", "", "", "", m, resp)
     return resp, err
 }
 
-func RetrieveNotification(client oauth2_client.OAuth2Client, id string, m url.Values) (*NotificationResponse, os.Error) {
+func RetrieveNotification(client oauth2_client.OAuth2Client, id string, m url.Values) (*NotificationResponse, error) {
     resp := new(NotificationResponse)
     err := retrieveInfo(client, "notification", id, "", "", "", "", m, resp)
     return resp, err
 }
 
-func RetrieveConnections(client oauth2_client.OAuth2Client, m url.Values) (*ConnectionsResponse, os.Error) {
+func RetrieveConnections(client oauth2_client.OAuth2Client, m url.Values) (*ConnectionsResponse, error) {
     guid, err := getGuid(client)
     if err != nil {
         return nil, err
@@ -179,13 +179,13 @@ func RetrieveConnections(client oauth2_client.OAuth2Client, m url.Values) (*Conn
     return RetrieveConnectionsForUser(client, guid, m)
 }
 
-func RetrieveConnectionsForUser(client oauth2_client.OAuth2Client, userId string, m url.Values) (*ConnectionsResponse, os.Error) {
+func RetrieveConnectionsForUser(client oauth2_client.OAuth2Client, userId string, m url.Values) (*ConnectionsResponse, error) {
     resp := new(ConnectionsResponse)
     err := retrieveInfo(client, "user", userId, "connections", "", "", "", m, resp)
     return resp, err
 }
 
-func RetrieveConnection(client oauth2_client.OAuth2Client, connectionId string, m url.Values) (*ConnectionResponse, os.Error) {
+func RetrieveConnection(client oauth2_client.OAuth2Client, connectionId string, m url.Values) (*ConnectionResponse, error) {
     guid, err := getGuid(client)
     if err != nil {
         return nil, err
@@ -193,13 +193,13 @@ func RetrieveConnection(client oauth2_client.OAuth2Client, connectionId string, 
     return RetrieveConnectionForUser(client, guid, connectionId, m)
 }
 
-func RetrieveConnectionForUser(client oauth2_client.OAuth2Client, userId, connectionId string, m url.Values) (*ConnectionResponse, os.Error) {
+func RetrieveConnectionForUser(client oauth2_client.OAuth2Client, userId, connectionId string, m url.Values) (*ConnectionResponse, error) {
     resp := new(ConnectionResponse)
     err := retrieveInfo(client, "user", userId, "connection", connectionId, "", "", m, resp)
     return resp, err
 }
 
-func CreateContact(client oauth2_client.OAuth2Client, userId string, contact *Contact) (err os.Error) {
+func CreateContact(client oauth2_client.OAuth2Client, userId string, contact *Contact) (err error) {
     if userId == "" {
         userId = "me"
     }
@@ -238,17 +238,17 @@ func CreateContact(client oauth2_client.OAuth2Client, userId string, contact *Co
             e := new(ErrorResponse)
             b, _ := ioutil.ReadAll(resp.Body)
             json.Unmarshal(b, e)
-            if len(e.Error.Description) > 0 {
+            if len(e.ErrorField.Description) > 0 {
                 err = e
             } else {
-                err = os.NewError(string(b))
+                err = errors.New(string(b))
             }
         }
     }
     return err
 }
 
-func UpdateContact(client oauth2_client.OAuth2Client, userId, contactId string, contact *Contact) (err os.Error) {
+func UpdateContact(client oauth2_client.OAuth2Client, userId, contactId string, contact *Contact) (err error) {
     if userId == "" {
         userId = "me"
     }
@@ -288,17 +288,17 @@ func UpdateContact(client oauth2_client.OAuth2Client, userId, contactId string, 
             e := new(ErrorResponse)
             b, _ := ioutil.ReadAll(resp.Body)
             json.Unmarshal(b, e)
-            if len(e.Error.Description) > 0 {
+            if len(e.ErrorField.Description) > 0 {
                 err = e
             } else {
-                err = os.NewError(string(b))
+                err = errors.New(string(b))
             }
         }
     }
     return err
 }
 
-func DeleteContact(client oauth2_client.OAuth2Client, userId, contactId string) (err os.Error) {
+func DeleteContact(client oauth2_client.OAuth2Client, userId, contactId string) (err error) {
     if userId == "" {
         userId = "me"
     }
@@ -331,10 +331,10 @@ func DeleteContact(client oauth2_client.OAuth2Client, userId, contactId string) 
             e := new(ErrorResponse)
             b, _ := ioutil.ReadAll(resp.Body)
             json.Unmarshal(b, e)
-            if len(e.Error.Description) > 0 {
+            if len(e.ErrorField.Description) > 0 {
                 err = e
             } else {
-                err = os.NewError(string(b))
+                err = errors.New(string(b))
             }
         }
     }

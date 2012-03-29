@@ -1,16 +1,16 @@
 package twitter
 
 import (
+    "encoding/json"
+    "errors"
     "github.com/pomack/oauth2_client.go/oauth2_client"
-    "http"
     "io/ioutil"
-    "json"
-    "os"
+    "net/http"
+    "net/url"
     "strconv"
-    "url"
 )
 
-func retrieveInfo(client oauth2_client.OAuth2Client, apiUrl, id string, m url.Values, value interface{}) (err os.Error) {
+func retrieveInfo(client oauth2_client.OAuth2Client, apiUrl, id string, m url.Values, value interface{}) (err error) {
     uri := TWITTER_API_ENDPOINT
     for _, s := range []string{apiUrl, id} {
         if len(s) > 0 {
@@ -34,10 +34,10 @@ func retrieveInfo(client oauth2_client.OAuth2Client, apiUrl, id string, m url.Va
             var e ErrorResponse
             b, _ := ioutil.ReadAll(resp.Body)
             json.Unmarshal(b, &e)
-            if len(e.Error) > 0 {
-                err = os.NewError(e.Error)
+            if len(e.ErrorField) > 0 {
+                err = errors.New(e.ErrorField)
             } else {
-                err = os.NewError(string(b))
+                err = errors.New(string(b))
             }
         } else {
             err = json.NewDecoder(resp.Body).Decode(value)
@@ -46,7 +46,7 @@ func retrieveInfo(client oauth2_client.OAuth2Client, apiUrl, id string, m url.Va
     return err
 }
 
-func RetrieveSelfUser(client oauth2_client.OAuth2Client, m url.Values) (*User, os.Error) {
+func RetrieveSelfUser(client oauth2_client.OAuth2Client, m url.Values) (*User, error) {
     resp := new(User)
     if m == nil {
         m = make(url.Values)
@@ -56,17 +56,17 @@ func RetrieveSelfUser(client oauth2_client.OAuth2Client, m url.Values) (*User, o
     return resp, err
 }
 
-func RetrieveUser(client oauth2_client.OAuth2Client, screenName string, userId int64, includeEntities bool, m url.Values) (*User, os.Error) {
+func RetrieveUser(client oauth2_client.OAuth2Client, screenName string, userId int64, includeEntities bool, m url.Values) (*User, error) {
     resp := new(User)
     if m == nil {
         m = make(url.Values)
     }
     if userId > 0 {
-        m.Set("user_id", strconv.Itoa64(userId))
+        m.Set("user_id", strconv.FormatInt(userId, 10))
     } else if len(screenName) > 0 {
         m.Set("screen_name", screenName)
     } else {
-        return nil, os.NewError("Must specify either userId or screenName in twitter.RetrieveUser()")
+        return nil, errors.New("Must specify either userId or screenName in twitter.RetrieveUser()")
     }
     if includeEntities {
         m.Set("include_entities", "true")
@@ -75,7 +75,7 @@ func RetrieveUser(client oauth2_client.OAuth2Client, screenName string, userId i
     return resp, err
 }
 
-func RetrieveProfileImage(client oauth2_client.OAuth2Client, screenName, size string, userId int64, includeEntities bool, m url.Values) (*http.Response, os.Error) {
+func RetrieveProfileImage(client oauth2_client.OAuth2Client, screenName, size string, userId int64, includeEntities bool, m url.Values) (*http.Response, error) {
     uri := TWITTER_API_ENDPOINT + "users/profile_image"
     if m == nil {
         m = make(url.Values)
@@ -83,21 +83,21 @@ func RetrieveProfileImage(client oauth2_client.OAuth2Client, screenName, size st
     if len(screenName) > 0 {
         m.Set("screen_name", screenName)
     } else {
-        return nil, os.NewError("Must specify either screenName in twitter.RetrieveProfileImage()")
+        return nil, errors.New("Must specify either screenName in twitter.RetrieveProfileImage()")
     }
     resp, _, err := oauth2_client.AuthorizedGetRequest(client, nil, uri, m)
     return resp, err
 }
 
-func RetrieveStatus(client oauth2_client.OAuth2Client, id int64, trimUser, includeEntities bool, m url.Values) (*Status, os.Error) {
+func RetrieveStatus(client oauth2_client.OAuth2Client, id int64, trimUser, includeEntities bool, m url.Values) (*Status, error) {
     resp := new(Status)
     if m == nil {
         m = make(url.Values)
     }
     if id > 0 {
-        m.Set("id", strconv.Itoa64(id))
+        m.Set("id", strconv.FormatInt(id, 10))
     } else {
-        return nil, os.NewError("Must specify either status Id in twitter.RetrieveStatus()")
+        return nil, errors.New("Must specify either status Id in twitter.RetrieveStatus()")
     }
     if trimUser {
         m.Set("trim_user", "true")
@@ -109,33 +109,33 @@ func RetrieveStatus(client oauth2_client.OAuth2Client, id int64, trimUser, inclu
     return resp, err
 }
 
-func RetrieveStatuses(client oauth2_client.OAuth2Client, screenName string, userId int64, trimUser, includeRts, includeEntities bool, m url.Values) (*[]Status, os.Error) {
+func RetrieveStatuses(client oauth2_client.OAuth2Client, screenName string, userId int64, trimUser, includeRts, includeEntities bool, m url.Values) (*[]Status, error) {
     return RetrieveStatusesWithOptions(client, screenName, userId, 0, 0, 0, 0, trimUser, includeRts, includeEntities, true, true, m)
 }
 
-func RetrieveStatusesWithOptions(client oauth2_client.OAuth2Client, screenName string, userId, sinceId, count, maxId, page int64, trimUser, includeRts, includeEntities, excludeReplies, contributorDetails bool, m url.Values) (*[]Status, os.Error) {
+func RetrieveStatusesWithOptions(client oauth2_client.OAuth2Client, screenName string, userId, sinceId, count, maxId, page int64, trimUser, includeRts, includeEntities, excludeReplies, contributorDetails bool, m url.Values) (*[]Status, error) {
     resp := new([]Status)
     if m == nil {
         m = make(url.Values)
     }
     if userId > 0 {
-        m.Set("user_id", strconv.Itoa64(userId))
+        m.Set("user_id", strconv.FormatInt(userId, 10))
     } else if len(screenName) > 0 {
         m.Set("screen_name", screenName)
     } else {
-        return nil, os.NewError("Must specify either userId or screenName in twitter.RetrieveStatus()")
+        return nil, errors.New("Must specify either userId or screenName in twitter.RetrieveStatus()")
     }
     if sinceId > 0 {
-        m.Set("since_id", strconv.Itoa64(sinceId))
+        m.Set("since_id", strconv.FormatInt(sinceId, 10))
     }
     if count > 0 {
-        m.Set("count", strconv.Itoa64(count))
+        m.Set("count", strconv.FormatInt(count, 10))
     }
     if maxId > 0 {
-        m.Set("max_id", strconv.Itoa64(maxId))
+        m.Set("max_id", strconv.FormatInt(maxId, 10))
     }
     if page > 0 {
-        m.Set("page", strconv.Itoa64(page))
+        m.Set("page", strconv.FormatInt(page, 10))
     }
     if trimUser {
         m.Set("trim_user", "true")

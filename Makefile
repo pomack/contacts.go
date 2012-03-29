@@ -1,7 +1,5 @@
 
-include $(GOROOT)/src/Make.inc
-
-all: Make.deps install
+all: install
 
 DIRS=\
 	facebook\
@@ -11,6 +9,7 @@ DIRS=\
 	smugmug\
 	twitter\
 	yahoo\
+	dsocial\
 
 TEST=\
 	$(filter-out $(NOTEST),$(DIRS))
@@ -22,19 +21,19 @@ nuke.dirs: $(addsuffix .nuke, $(DIRS))
 test.dirs: $(addsuffix .test, $(TEST))
 
 %.clean:
-	+cd $* && gomake clean
+	+cd $* && make clean
 
 %.install:
-	+cd $* && gomake install
+	+cd $* && make install
 
 %.nuke:
-	+cd $* && gomake nuke
+	+cd $* && make nuke
 
 %.test:
-	+cd $* && gomake test
+	+cd $* && make test
 
 %.check:
-	+cd $* && gomake check
+	+cd $* && make check
 
 clean: clean.dirs
 
@@ -44,16 +43,7 @@ test:   test.dirs
 
 check:	check.dirs
 
-#nuke: nuke.dirs
-#   rm -rf "$(GOROOT)"/pkg/*
+nuke: nuke.dirs
 
 echo-dirs:
 	@echo $(DIRS)
-
-Make.deps:
-	./deps.bash
-
-deps:
-	./deps.bash
-
-#-include Make.deps

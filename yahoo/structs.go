@@ -1,9 +1,8 @@
 package yahoo
 
 import (
+    "encoding/json"
     "github.com/pomack/jsonhelper.go/jsonhelper"
-    "json"
-    "os"
 )
 
 type ContactsResponse struct {
@@ -119,7 +118,7 @@ type ContactField struct {
     Value      interface{} `json:"value,omitempty"`
 }
 
-func (p *ContactField) UnmarshalJSON(data []byte) os.Error {
+func (p *ContactField) UnmarshalJSON(data []byte) error {
     o := jsonhelper.NewJSONObject()
     err := json.Unmarshal(data, &o)
     p.Uri = o.GetAsString("uri")
@@ -415,10 +414,11 @@ type Connection struct {
 }
 
 type ErrorResponse struct {
-    Error Error `json:"error,omitempty"`
+    ErrorField Error `json:"error,omitempty"`
 }
 
-func (p *ErrorResponse) String() string { return p.Error.Description }
+func (p *ErrorResponse) String() string { return p.ErrorField.Description }
+func (p *ErrorResponse) Error() string  { return p.ErrorField.Description }
 
 type Error struct {
     Uri         string `json:"uri,omitempty"`
@@ -427,3 +427,4 @@ type Error struct {
 }
 
 func (p *Error) String() string { return p.Description }
+func (p *Error) Error() string  { return p.Description }

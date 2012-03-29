@@ -320,14 +320,16 @@ type TelevisionResponse struct {
 type TVShow StandardMedia
 
 type ErrorResponse struct {
-    Error Error `json:"error,omitempty"`
+    ErrorField Error `json:"error,omitempty"`
 }
 
-func (p *ErrorResponse) String() string { return p.Error.Message }
+func (p *ErrorResponse) Error() string  { return p.ErrorField.Message }
+func (p *ErrorResponse) String() string { return p.ErrorField.Message }
 
 type Error struct {
     Message string `json:"message,omitempty"`
     Type    string `json:"type,omitempty"`
 }
 
+func (p *Error) Error() string  { return p.Message }
 func (p *Error) String() string { return p.Message }

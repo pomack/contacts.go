@@ -2,14 +2,13 @@ package google
 
 import (
     "bytes"
+    "encoding/json"
     "fmt"
     "github.com/pomack/jsonhelper.go/jsonhelper"
     "github.com/pomack/oauth2_client.go/oauth2_client"
-    "http"
     "io/ioutil"
-    "json"
-    "os"
-    "rand"
+    "math/rand"
+    "net/http"
     "strconv"
     "strings"
     "time"
@@ -35,7 +34,7 @@ func NewMockGoogleClient() *MockGoogleClient {
 }
 
 func makeHandlerForGoogleClientRequests(gclient *MockGoogleClient) oauth2_client.MockRequestHandler {
-    return func(client oauth2_client.MockClient, req *http.Request) (*http.Response, os.Error) {
+    return func(client oauth2_client.MockClient, req *http.Request) (*http.Response, error) {
         return gclient.handleGoogleClientRequests(req)
     }
 }
@@ -58,27 +57,27 @@ func (p *MockGoogleClient) AddMockGroup(group *ContactGroup) {
 
 func (p *MockGoogleClient) AddMockContactJSON(s string) {
     c := new(Contact)
-    var err os.Error
+    var err error
     if err = json.Unmarshal([]byte(s), c); err == nil {
         p.AddMockContact(c)
     } else {
-        fmt.Printf("error adding mock contact JSON: %s\n\n", err.String())
+        fmt.Printf("error adding mock contact JSON: %s\n\n", err.Error())
     }
 }
 
 func (p *MockGoogleClient) AddMockContactJSONEntry(s string) {
     c := new(ContactEntryResponse)
-    var err os.Error
+    var err error
     if err = json.Unmarshal([]byte(s), c); err == nil {
         p.AddMockContact(c.Entry)
     } else {
-        fmt.Printf("error adding mock contact JSON Entry: %s\n\n", err.String())
+        fmt.Printf("error adding mock contact JSON Entry: %s\n\n", err.Error())
     }
 }
 
 func (p *MockGoogleClient) AddMockContactJSONFeed(s string) {
     f := new(ContactFeedResponse)
-    var err os.Error
+    var err error
     if err = json.Unmarshal([]byte(s), f); err == nil {
         if f.Feed != nil && f.Feed.Entries != nil {
             for _, c := range f.Feed.Entries {
@@ -86,23 +85,23 @@ func (p *MockGoogleClient) AddMockContactJSONFeed(s string) {
             }
         }
     } else {
-        fmt.Printf("error adding mock contact json feed: %s\n\n", err.String())
+        fmt.Printf("error adding mock contact json feed: %s\n\n", err.Error())
     }
 }
 
 func (p *MockGoogleClient) AddMockGroupJSONEntry(s string) {
     c := new(GroupResponse)
-    var err os.Error
+    var err error
     if err = json.Unmarshal([]byte(s), c); err == nil {
         p.AddMockGroup(c.Entry)
     } else {
-        fmt.Printf("error adding mock group json entry: %s\n\n", err.String())
+        fmt.Printf("error adding mock group json entry: %s\n\n", err.Error())
     }
 }
 
 func (p *MockGoogleClient) AddMockGroupJSONFeed(s string) {
     f := new(GroupsFeedResponse)
-    var err os.Error
+    var err error
     if err = json.Unmarshal([]byte(s), f); err == nil {
         if f.Feed != nil && f.Feed.Entries != nil {
             for _, g := range f.Feed.Entries {
@@ -110,11 +109,11 @@ func (p *MockGoogleClient) AddMockGroupJSONFeed(s string) {
             }
         }
     } else {
-        fmt.Printf("error adding mock group json feed: %s\n\n", err.String())
+        fmt.Printf("error adding mock group json feed: %s\n\n", err.Error())
     }
 }
 
-func (p *MockGoogleClient) handleGoogleClientRequests(req *http.Request) (resp *http.Response, err os.Error) {
+func (p *MockGoogleClient) handleGoogleClientRequests(req *http.Request) (resp *http.Response, err error) {
     if req == nil {
         return nil, nil
     }
@@ -207,7 +206,7 @@ func (p *MockGoogleClient) handleGoogleClientRequests(req *http.Request) (resp *
     return
 }
 
-func createJSONHttpResponseFromObj(req *http.Request, obj interface{}) (resp *http.Response, err os.Error) {
+func createJSONHttpResponseFromObj(req *http.Request, obj interface{}) (resp *http.Response, err error) {
     var b []byte
     if obj != nil {
         obj1, _ := jsonhelper.MarshalWithOptions(obj, GOOGLE_DATETIME_FORMAT)
@@ -235,7 +234,7 @@ func createJSONHttpResponseFromObj(req *http.Request, obj interface{}) (resp *ht
     return
 }
 
-func (p *MockGoogleClient) handleGetContactList(req *http.Request) (resp *http.Response, err os.Error) {
+func (p *MockGoogleClient) handleGetContactList(req *http.Request) (resp *http.Response, err error) {
     //fmt.Printf("calling handleGetContactList\n")
     numContacts := len(p.contactsById)
     entries := make([]Contact, numContacts)
@@ -255,7 +254,7 @@ func (p *MockGoogleClient) handleGetContactList(req *http.Request) (resp *http.R
         f.Author[0].Name.Value = userInfo.GivenName()
         f.Title.Value = userInfo.GivenName() + "'s Contacts"
     }
-    f.Updated.Value = time.UTC().Format(GOOGLE_DATETIME_FORMAT)
+    f.Updated.Value = time.Now().UTC().Format(GOOGLE_DATETIME_FORMAT)
     f.TotalResults.Value = strconv.Itoa(numContacts)
     f.StartIndex.Value = "1"
     f.ItemsPerPage.Value = "25"
@@ -263,7 +262,7 @@ func (p *MockGoogleClient) handleGetContactList(req *http.Request) (resp *http.R
     return createJSONHttpResponseFromObj(req, r)
 }
 
-func (p *MockGoogleClient) handleGetContact(req *http.Request, contactId string) (resp *http.Response, err os.Error) {
+func (p *MockGoogleClient) handleGetContact(req *http.Request, contactId string) (resp *http.Response, err error) {
     //fmt.Printf("calling handleGetContact\n")
     c, ok := p.contactsById[contactId]
     if !ok {
@@ -298,12 +297,12 @@ func (p *MockGoogleClient) generateEtag() string {
     return "\"" + strings.Join(arr, "") + "\""
 }
 
-func (p *MockGoogleClient) handleCreateContact(req *http.Request) (resp *http.Response, err os.Error) {
+func (p *MockGoogleClient) handleCreateContact(req *http.Request) (resp *http.Response, err error) {
     //fmt.Printf("calling handleCreateContact\n")
     b := NewContactEntryResponse()
     err = json.NewDecoder(req.Body).Decode(b)
     if err != nil {
-        panic(fmt.Sprintf("Error creating contact: %s\n", err.String()))
+        panic(fmt.Sprintf("Error creating contact: %s\n", err.Error()))
         resp, _ = createJSONHttpResponseFromObj(req, NewContactEntryResponse())
         resp.Status = "500 INTERNAL SERVER ERROR"
         resp.StatusCode = http.StatusInternalServerError
@@ -319,7 +318,7 @@ func (p *MockGoogleClient) handleCreateContact(req *http.Request) (resp *http.Re
     contactId := p.generateId()
     e.Id.Value = contactId
     e.Etag = p.generateEtag()
-    e.Updated.Value = time.UTC().Format(GOOGLE_DATETIME_FORMAT)
+    e.Updated.Value = time.Now().UTC().Format(GOOGLE_DATETIME_FORMAT)
     p.contactsById[contactId] = e
     r := NewContactEntryResponse()
     r.Entry = e
@@ -331,7 +330,7 @@ func (p *MockGoogleClient) handleCreateContact(req *http.Request) (resp *http.Re
     return createJSONHttpResponseFromObj(req, r)
 }
 
-func (p *MockGoogleClient) handleUpdateContact(req *http.Request, contactId string) (resp *http.Response, err os.Error) {
+func (p *MockGoogleClient) handleUpdateContact(req *http.Request, contactId string) (resp *http.Response, err error) {
     //fmt.Printf("calling handleUpdateContact\n")
     c, ok := p.contactsById[contactId]
     if !ok {
@@ -350,7 +349,7 @@ func (p *MockGoogleClient) handleUpdateContact(req *http.Request, contactId stri
     b := NewContactEntryResponse()
     err = json.NewDecoder(req.Body).Decode(b)
     if err != nil {
-        panic(fmt.Sprintf("Error updating contact: %s\n", err.String()))
+        panic(fmt.Sprintf("Error updating contact: %s\n", err.Error()))
         resp, _ = createJSONHttpResponseFromObj(req, NewContactEntryResponse())
         resp.Status = "500 INTERNAL SERVER ERROR"
         resp.StatusCode = http.StatusInternalServerError
@@ -365,7 +364,7 @@ func (p *MockGoogleClient) handleUpdateContact(req *http.Request, contactId stri
     e := b.Entry
     e.Id.Value = contactId
     e.Etag = p.generateEtag()
-    e.Updated.Value = time.UTC().Format(GOOGLE_DATETIME_FORMAT)
+    e.Updated.Value = time.Now().UTC().Format(GOOGLE_DATETIME_FORMAT)
     p.contactsById[contactId] = e
     r := NewContactEntryResponse()
     r.Entry = e
@@ -377,7 +376,7 @@ func (p *MockGoogleClient) handleUpdateContact(req *http.Request, contactId stri
     return createJSONHttpResponseFromObj(req, r)
 }
 
-func (p *MockGoogleClient) handleDeleteContact(req *http.Request, contactId string) (resp *http.Response, err os.Error) {
+func (p *MockGoogleClient) handleDeleteContact(req *http.Request, contactId string) (resp *http.Response, err error) {
     //fmt.Printf("calling handleDeleteContact\n")
     c, ok := p.contactsById[contactId]
     if !ok {
@@ -393,12 +392,12 @@ func (p *MockGoogleClient) handleDeleteContact(req *http.Request, contactId stri
         resp.StatusCode = http.StatusPreconditionFailed
         return
     }
-    p.contactsById[contactId] = c, false
+    delete(p.contactsById, contactId)
     resp, err = createJSONHttpResponseFromObj(req, nil)
     return
 }
 
-func (p *MockGoogleClient) handleGetGroupList(req *http.Request) (resp *http.Response, err os.Error) {
+func (p *MockGoogleClient) handleGetGroupList(req *http.Request) (resp *http.Response, err error) {
     numGroups := len(p.groupsById)
     entries := make([]ContactGroup, numGroups)
     r := NewGroupsFeedResponse()
@@ -417,7 +416,7 @@ func (p *MockGoogleClient) handleGetGroupList(req *http.Request) (resp *http.Res
         f.Author[0].Name.Value = userInfo.GivenName()
         f.Title.Value = userInfo.GivenName() + "'s Contact Groups"
     }
-    f.Updated.Value = time.UTC().Format(GOOGLE_DATETIME_FORMAT)
+    f.Updated.Value = time.Now().UTC().Format(GOOGLE_DATETIME_FORMAT)
     f.TotalResults.Value = strconv.Itoa(numGroups)
     f.StartIndex.Value = "1"
     f.ItemsPerPage.Value = "25"
@@ -425,7 +424,7 @@ func (p *MockGoogleClient) handleGetGroupList(req *http.Request) (resp *http.Res
     return createJSONHttpResponseFromObj(req, r)
 }
 
-func (p *MockGoogleClient) handleGetGroup(req *http.Request, groupId string) (resp *http.Response, err os.Error) {
+func (p *MockGoogleClient) handleGetGroup(req *http.Request, groupId string) (resp *http.Response, err error) {
     g, ok := p.groupsById[groupId]
     if !ok {
         resp, err = createJSONHttpResponseFromObj(req, NewGroupResponse())
@@ -443,12 +442,12 @@ func (p *MockGoogleClient) handleGetGroup(req *http.Request, groupId string) (re
     return createJSONHttpResponseFromObj(req, r)
 }
 
-func (p *MockGoogleClient) handleCreateGroup(req *http.Request) (resp *http.Response, err os.Error) {
+func (p *MockGoogleClient) handleCreateGroup(req *http.Request) (resp *http.Response, err error) {
     //fmt.Printf("calling handleCreateGroup\n")
     b := NewGroupResponse()
     err = json.NewDecoder(req.Body).Decode(b)
     if err != nil {
-        panic(fmt.Sprintf("Error creating group: %s\n", err.String()))
+        panic(fmt.Sprintf("Error creating group: %s\n", err.Error()))
         resp, _ = createJSONHttpResponseFromObj(req, NewGroupResponse())
         resp.Status = "500 INTERNAL SERVER ERROR"
         resp.StatusCode = http.StatusInternalServerError
@@ -464,7 +463,7 @@ func (p *MockGoogleClient) handleCreateGroup(req *http.Request) (resp *http.Resp
     groupId := p.generateId()
     e.Id.Value = groupId
     e.Etag = p.generateEtag()
-    e.Updated.Value = time.UTC().Format(GOOGLE_DATETIME_FORMAT)
+    e.Updated.Value = time.Now().UTC().Format(GOOGLE_DATETIME_FORMAT)
     p.groupsById[groupId] = e
     r := NewGroupResponse()
     r.Entry = e
@@ -476,7 +475,7 @@ func (p *MockGoogleClient) handleCreateGroup(req *http.Request) (resp *http.Resp
     return createJSONHttpResponseFromObj(req, r)
 }
 
-func (p *MockGoogleClient) handleUpdateGroup(req *http.Request, groupId string) (resp *http.Response, err os.Error) {
+func (p *MockGoogleClient) handleUpdateGroup(req *http.Request, groupId string) (resp *http.Response, err error) {
     //fmt.Printf("calling handleUpdateGroup\n")
     g, ok := p.groupsById[groupId]
     if !ok {
@@ -495,7 +494,7 @@ func (p *MockGoogleClient) handleUpdateGroup(req *http.Request, groupId string) 
     b := NewGroupResponse()
     err = json.NewDecoder(req.Body).Decode(b)
     if err != nil {
-        panic(fmt.Sprintf("Error updating group: %s\n", err.String()))
+        panic(fmt.Sprintf("Error updating group: %s\n", err.Error()))
         resp, _ = createJSONHttpResponseFromObj(req, NewGroupResponse())
         resp.Status = "500 INTERNAL SERVER ERROR"
         resp.StatusCode = http.StatusInternalServerError
@@ -510,7 +509,7 @@ func (p *MockGoogleClient) handleUpdateGroup(req *http.Request, groupId string) 
     e := b.Entry
     e.Id.Value = groupId
     e.Etag = p.generateEtag()
-    e.Updated.Value = time.UTC().Format(GOOGLE_DATETIME_FORMAT)
+    e.Updated.Value = time.Now().UTC().Format(GOOGLE_DATETIME_FORMAT)
     p.groupsById[groupId] = e
     r := NewGroupResponse()
     r.Entry = e
@@ -522,7 +521,7 @@ func (p *MockGoogleClient) handleUpdateGroup(req *http.Request, groupId string) 
     return createJSONHttpResponseFromObj(req, r)
 }
 
-func (p *MockGoogleClient) handleDeleteGroup(req *http.Request, groupId string) (resp *http.Response, err os.Error) {
+func (p *MockGoogleClient) handleDeleteGroup(req *http.Request, groupId string) (resp *http.Response, err error) {
     //fmt.Printf("calling handleDeleteGroup\n")
     g, ok := p.groupsById[groupId]
     if !ok {
@@ -538,7 +537,7 @@ func (p *MockGoogleClient) handleDeleteGroup(req *http.Request, groupId string) 
         resp.StatusCode = http.StatusPreconditionFailed
         return
     }
-    p.groupsById[groupId] = g, false
+    delete(p.groupsById, groupId)
     resp, err = createJSONHttpResponseFromObj(req, nil)
     return
 }

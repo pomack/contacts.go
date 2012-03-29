@@ -199,3 +199,7 @@ type ErrorResponse struct {
 func (p *ErrorResponse) String() string {
     return p.Message
 }
+
+func (p *ErrorResponse) Error() string {
+    return p.Message
+}

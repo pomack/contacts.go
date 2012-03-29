@@ -1,16 +1,16 @@
 package linkedin
 
 import (
+    "encoding/json"
+    "errors"
     "github.com/pomack/oauth2_client.go/oauth2_client"
-    "http"
     "io/ioutil"
-    "json"
-    "os"
+    "net/http"
+    "net/url"
     "strings"
-    "url"
 )
 
-func retrieveInfo(client oauth2_client.OAuth2Client, scope, userId, resourceName, resourceId, subcategory, subcategoryId, projection string, m url.Values, value interface{}) (err os.Error) {
+func retrieveInfo(client oauth2_client.OAuth2Client, scope, userId, resourceName, resourceId, subcategory, subcategoryId, projection string, m url.Values, value interface{}) (err error) {
     var useUserId string
     if len(userId) <= 0 {
         useUserId = LINKEDIN_DEFAULT_USER_ID
@@ -47,7 +47,7 @@ func retrieveInfo(client oauth2_client.OAuth2Client, scope, userId, resourceName
             if len(e.Message) > 0 {
                 err = e
             } else {
-                err = os.NewError(string(b))
+                err = errors.New(string(b))
             }
         } else {
             err = json.NewDecoder(resp.Body).Decode(value)
@@ -56,11 +56,11 @@ func retrieveInfo(client oauth2_client.OAuth2Client, scope, userId, resourceName
     return err
 }
 
-func RetrieveSelfProfile(client oauth2_client.OAuth2Client, fields []string, m url.Values) (*Contact, os.Error) {
+func RetrieveSelfProfile(client oauth2_client.OAuth2Client, fields []string, m url.Values) (*Contact, error) {
     return RetrieveProfile(client, "", fields, m)
 }
 
-func RetrieveProfile(client oauth2_client.OAuth2Client, userId string, fields []string, m url.Values) (*Contact, os.Error) {
+func RetrieveProfile(client oauth2_client.OAuth2Client, userId string, fields []string, m url.Values) (*Contact, error) {
     resp := new(Contact)
     var projection string
     if fields == nil || len(fields) == 0 {
@@ -72,11 +72,11 @@ func RetrieveProfile(client oauth2_client.OAuth2Client, userId string, fields []
     return resp, err
 }
 
-func RetrieveConnections(client oauth2_client.OAuth2Client, fields []string, m url.Values) (*ContactList, os.Error) {
+func RetrieveConnections(client oauth2_client.OAuth2Client, fields []string, m url.Values) (*ContactList, error) {
     return RetrieveConnectionsForUser(client, "", fields, m)
 }
 
-func RetrieveConnectionsForUser(client oauth2_client.OAuth2Client, userId string, fields []string, m url.Values) (*ContactList, os.Error) {
+func RetrieveConnectionsForUser(client oauth2_client.OAuth2Client, userId string, fields []string, m url.Values) (*ContactList, error) {
     resp := new(ContactList)
     var projection string
     if fields == nil || len(fields) == 0 {
